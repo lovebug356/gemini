@@ -8,14 +8,12 @@ namespace Gemini {
     bool is_fullscreen;
 
     const ActionEntry[] action_entries = {
-      {"FullscreenF11", null, null, "F11", null, fullscreen_f11_action_cb},
-      {"AddTerminal", null, null, "c", null, add_terminal_action_cb}
+      {"FullscreenF11", null, null, "F11", null, fullscreen_f11_action_cb}
     };
 
     static const string MAIN_UI = """
       <ui>
         <accelerator action="FullscreenF11" />
-        <accelerator action="AddTerminal" />
       </ui>
     """;
 
@@ -32,7 +30,27 @@ namespace Gemini {
       add_accel_group (ui_manager.get_accel_group ());
     }
 
-    void add_terminal_cb (Gtk.Action action) {
+    void add_new_terminal () {
+            message ("spawn a new terminal");
+    }
+
+    bool terminal_key_press_event (Gemini.Terminal terminal, Gdk.EventKey event_key) {
+      if ((event_key.state & Gdk.ModifierType.MOD4_MASK) == Gdk.ModifierType.MOD4_MASK)
+      {
+        string name = Gdk.keyval_name (event_key.keyval);
+        switch (name) {
+          case "Return":
+            add_new_terminal ();
+            return true;
+            break;
+          default:
+            break;
+        }
+      }
+      return false;
+    }
+
+    void add_terminal_action_cb (Gtk.Action action) {
       message ("adding a terminal");
     }
 
@@ -49,6 +67,7 @@ namespace Gemini {
       is_fullscreen = false;
 
       var terminal = new Gemini.Terminal ();
+      terminal.key_press_event += terminal_key_press_event;
       terminal.child_exited += Gtk.main_quit;
       add (terminal);
       destroy += Gtk.main_quit;
