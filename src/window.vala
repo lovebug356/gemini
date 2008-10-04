@@ -8,12 +8,14 @@ namespace Gemini {
     bool is_fullscreen;
 
     const ActionEntry[] action_entries = {
-      {"FullscreenF11", null, null, "F11", null, fullscreen_f11_action_cb}
+      {"FullscreenF11", null, null, "F11", null, fullscreen_f11_action_cb},
+      {"AddTerminal", null, null, "c", null, add_terminal_action_cb}
     };
 
     static const string MAIN_UI = """
       <ui>
         <accelerator action="FullscreenF11" />
+        <accelerator action="AddTerminal" />
       </ui>
     """;
 
@@ -28,6 +30,10 @@ namespace Gemini {
         warning ("Error while reading the main ui: %s", err.message);
       }
       add_accel_group (ui_manager.get_accel_group ());
+    }
+
+    void add_terminal_cb (Gtk.Action action) {
+      message ("adding a terminal");
     }
 
     void fullscreen_f11_action_cb (Gtk.Action action) {
