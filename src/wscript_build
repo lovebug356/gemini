@@ -1,0 +1,8 @@
+#!/usr/bin/env python
+
+gemini = bld.new_task_gen ('cc', 'program')
+gemini.find_sources_in_dirs ('.')
+gemini.uselib='GLIB VTE'
+gemini.packages = 'vte'
+gemini.target='gemini'
+gemini.threading = True
