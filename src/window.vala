@@ -7,6 +7,8 @@ namespace Gemini {
     ActionGroup menu_actions;
     bool is_fullscreen;
 
+    Gemini.Layout layout;
+
     const ActionEntry[] action_entries = {
       {"FullscreenF11", null, null, "F11", null, fullscreen_f11_action_cb}
     };
@@ -31,27 +33,26 @@ namespace Gemini {
     }
 
     void add_new_terminal () {
-            message ("spawn a new terminal");
+      layout.add_new_terminal ();
     }
 
-    bool terminal_key_press_event (Gemini.Terminal terminal, Gdk.EventKey event_key) {
+    bool terminal_key_press_event (Gemini.Layout terminal, Gdk.EventKey event_key) {
       if ((event_key.state & Gdk.ModifierType.MOD4_MASK) == Gdk.ModifierType.MOD4_MASK)
       {
+        bool valid = false;
         string name = Gdk.keyval_name (event_key.keyval);
         switch (name) {
           case "Return":
             add_new_terminal ();
-            return true;
+            valid = true;
             break;
           default:
             break;
         }
+        if (valid)
+          return true;
       }
       return false;
-    }
-
-    void add_terminal_action_cb (Gtk.Action action) {
-      message ("adding a terminal");
     }
 
     void fullscreen_f11_action_cb (Gtk.Action action) {
@@ -66,19 +67,22 @@ namespace Gemini {
       set_title ("Gemini Terminal");
       is_fullscreen = false;
 
-      var terminal = new Gemini.Terminal ();
-      terminal.key_press_event += terminal_key_press_event;
-      terminal.child_exited += Gtk.main_quit;
-      add (terminal);
+      layout = new Gemini.TileLayout ();
+      layout.add_new_terminal ();
+      layout.key_press_event += terminal_key_press_event;
+      add ((Gtk.Widget) layout);
+
       destroy += Gtk.main_quit;
       setup_ui_manager ();
+
+      set_default_size (640, 480);
+      show ();
     }
   }
   
   public static void main (string[] args) {
     Gtk.init (ref args);
     var gemini = new Gemini.Window ();
-    gemini.show ();
     Gtk.main ();
   }
 }
