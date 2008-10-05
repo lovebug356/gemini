@@ -63,6 +63,10 @@ namespace Gemini {
       is_fullscreen = !is_fullscreen;
     }
 
+    void quit_action_cb (Gemini.Layout layout) {
+      Gtk.main_quit ();
+    }
+
     construct {
       set_title ("Gemini Terminal");
       is_fullscreen = false;
@@ -70,6 +74,7 @@ namespace Gemini {
       layout = new Gemini.TileLayout ();
       layout.add_new_terminal ();
       layout.key_press_event += terminal_key_press_event;
+      layout.all_childs_exited += quit_action_cb;
       add ((Gtk.Widget) layout);
 
       destroy += Gtk.main_quit;
