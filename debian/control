@@ -1,0 +1,12 @@
+Source: gemini
+Section: unknown
+Priority: extra
+Maintainer: Thijs Vermeir <thijsvermeir@gmail.com>
+Build-Depends: debhelper (>= 5)
+Standards-Version: 3.7.2
+
+Package: gemini
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: The gemini terminal freighter
+ The gemini terminal freighter
