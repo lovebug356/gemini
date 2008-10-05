@@ -46,6 +46,14 @@ namespace Gemini {
             layout.close_current_terminal ();
             valid = true;
             break;
+          case "j":
+            layout.terminal_resize (30, 0);
+            valid = true;
+            break;
+          case "k":
+            layout.terminal_resize (-30, 0);
+            valid = true;
+            break;
           default:
             message (name);
             break;
