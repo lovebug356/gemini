@@ -33,9 +33,21 @@ namespace Gemini {
     }
 
     bool terminal_key_press_event (Gemini.Layout layout, Gdk.EventKey event_key) {
+      bool valid = false;
+      if ((event_key.state & Gdk.ModifierType.MOD1_MASK) == Gdk.ModifierType.MOD1_MASK)
+      {
+        string name = Gdk.keyval_name (event_key.keyval);
+        switch (name) {
+          case "Return":
+            layout.set_focus_next ();
+            valid = true;
+            break;
+          default:
+            break;
+        }
+      }
       if ((event_key.state & Gdk.ModifierType.MOD4_MASK) == Gdk.ModifierType.MOD4_MASK)
       {
-        bool valid = false;
         string name = Gdk.keyval_name (event_key.keyval);
         switch (name) {
           case "o":
@@ -59,12 +71,11 @@ namespace Gemini {
             valid = true;
             break;
           default:
-            message (name);
             break;
         }
-        if (valid)
-          return true;
       }
+      if (valid)
+        return true;
       return false;
     }
 

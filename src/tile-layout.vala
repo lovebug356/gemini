@@ -63,6 +63,14 @@ namespace Gemini {
       zoom_terminal = null;
     }
 
+    public void set_focus_next () {
+      if (zoom_terminal.is_focus) {
+        tile_box.set_focus_first ();
+      } else if (!tile_box.set_focus_next ()) {
+        zoom_terminal.grab_focus ();
+      }
+    }
+
     public void add_new_terminal () {
       if (zoom_terminal != null)
         set_zoom_ontop_off_tile ();
@@ -79,12 +87,24 @@ namespace Gemini {
         return;
 
       Gemini.Terminal terminal;
-      terminal = tile_box.remove_first_terminal ();
-      remove (zoom_terminal);
-      tile_box.add_terminal (zoom_terminal, true);
-      zoom_terminal = terminal;
-      pack_end (zoom_terminal, true, true, 0);
-      zoom_terminal.grab_focus ();
+      terminal = tile_box.get_first_terminal ();
+
+      if (terminal == last_terminal || zoom_terminal == last_terminal) {
+        remove (zoom_terminal);
+        tile_box.remove (terminal);
+        tile_box.add_terminal (zoom_terminal, true);
+        zoom_terminal = terminal;
+        pack_end (zoom_terminal, true, true, 0);
+        zoom_terminal.grab_focus ();
+      } else {
+        lock (last_terminal) {
+          set_zoom_ontop_off_tile ();
+          tile_box.remove (last_terminal);
+          zoom_terminal = last_terminal;
+          pack_end (zoom_terminal, true, true, 0);
+          zoom_terminal.grab_focus ();
+        }
+      }
     }
 
     public void close_terminal () {
