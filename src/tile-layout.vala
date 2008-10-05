@@ -44,5 +44,20 @@ namespace Gemini {
       terminal.child_exited += terminal_child_exited_cb;
       pack_start (terminal, true, true, 0);
     }
+
+    public void close_current_terminal () {
+      weak List<Gemini.Terminal> list = get_children ();
+      Gemini.Terminal terminal = null;
+
+      foreach (Gemini.Terminal term in list) {
+        if (term.is_focus) {
+          terminal = term;
+        }
+      }
+      if (terminal != null) {
+        terminal_child_exited_cb (terminal);
+        terminal.destroy ();
+      }
+    }
   }
 }

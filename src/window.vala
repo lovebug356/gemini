@@ -32,10 +32,6 @@ namespace Gemini {
       add_accel_group (ui_manager.get_accel_group ());
     }
 
-    void add_new_terminal () {
-      layout.add_new_terminal ();
-    }
-
     bool terminal_key_press_event (Gemini.Layout terminal, Gdk.EventKey event_key) {
       if ((event_key.state & Gdk.ModifierType.MOD4_MASK) == Gdk.ModifierType.MOD4_MASK)
       {
@@ -43,10 +39,15 @@ namespace Gemini {
         string name = Gdk.keyval_name (event_key.keyval);
         switch (name) {
           case "Return":
-            add_new_terminal ();
+            layout.add_new_terminal ();
+            valid = true;
+            break;
+          case "x":
+            layout.close_current_terminal ();
             valid = true;
             break;
           default:
+            message (name);
             break;
         }
         if (valid)
