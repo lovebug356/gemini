@@ -70,6 +70,14 @@ namespace Gemini {
             layout.terminal_resize (-30, 0);
             valid = true;
             break;
+          case "f":
+            layout.set_fullscreen_mode (true);
+            valid =true;
+            break;
+          case "space":
+            layout.set_fullscreen_mode (false);
+            valid = true;
+            break;
           default:
             break;
         }

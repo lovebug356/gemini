@@ -8,6 +8,7 @@ namespace Gemini {
     Gemini.Terminal zoom_terminal;
     Gemini.TileBox tile_box;
     int tile_width;
+    bool fullscreen_mode;
 
     construct {
       set_homogeneous (false);
@@ -16,6 +17,7 @@ namespace Gemini {
       tile_width = 200;
       pack_end (tile_box, false, false, 0);
       tile_box.set_size_request (0, 0);
+      fullscreen_mode = false;
       show_all ();
     }
 
@@ -30,11 +32,23 @@ namespace Gemini {
       return tile_box.get_length () + 1;
     }
 
+    public void set_fullscreen_mode (bool mode) {
+      if (fullscreen_mode == mode)
+        return;
+
+      fullscreen_mode = mode;
+      terminal_resize (0, 0);
+    }
+
     public void terminal_resize (int delta_x, int delta_y) {
-      tile_width += delta_x;
-      if (tile_width < 0)
-        tile_width = 0;
-      tile_box.set_size_request ((length () > 1 ? tile_width : 0), 0);
+      if (!fullscreen_mode) {
+        tile_width += delta_x;
+        if (tile_width < 0)
+          tile_width = 0;
+        tile_box.set_size_request ((length () > 1 ? tile_width : 0), 0);
+      } else {
+        tile_box.set_size_request (0, 0);
+      }
     }
 
     void terminal_child_exited_cb (Gemini.Terminal terminal) {
