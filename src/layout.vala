@@ -4,7 +4,7 @@ using GLib;
 namespace Gemini {
   public interface Layout : GLib.Object {
     public abstract void add_new_terminal ();
-    public abstract void close_current_terminal ();
+    public abstract void close_terminal ();
     public abstract void terminal_resize (int delta_x, int delta_y);
     public abstract void zoom ();
     public abstract int length ();

@@ -32,7 +32,7 @@ namespace Gemini {
       add_accel_group (ui_manager.get_accel_group ());
     }
 
-    bool terminal_key_press_event (Gemini.Layout terminal, Gdk.EventKey event_key) {
+    bool terminal_key_press_event (Gemini.Layout layout, Gdk.EventKey event_key) {
       if ((event_key.state & Gdk.ModifierType.MOD4_MASK) == Gdk.ModifierType.MOD4_MASK)
       {
         bool valid = false;
@@ -47,7 +47,7 @@ namespace Gemini {
             valid = true;
             break;
           case "x":
-            layout.close_current_terminal ();
+            layout.close_terminal ();
             valid = true;
             break;
           case "j":

@@ -4,6 +4,7 @@ using GLib;
 namespace Gemini {
   public class TileLayout : Gtk.HBox, Gemini.Layout {
 
+    Gemini.Terminal last_terminal;
     Gemini.Terminal zoom_terminal;
     Gemini.TileBox tile_box;
     int tile_width;
@@ -19,6 +20,9 @@ namespace Gemini {
     }
 
     bool terminal_key_press_event_cb (Gemini.Terminal terminal, Gdk.EventKey key) {
+      lock (last_terminal) {
+        last_terminal = terminal;
+      }
       return key_press_event (key);
     }
 
@@ -83,17 +87,13 @@ namespace Gemini {
       zoom_terminal.grab_focus ();
     }
 
-    public void close_current_terminal () {
-      Gemini.Terminal terminal = null;
-
-      if (zoom_terminal.is_focus) {
-        terminal = zoom_terminal;
-      } else {
-      }
-
-      if (terminal != null) {
-        terminal_child_exited_cb (terminal);
-        terminal.destroy ();
+    public void close_terminal () {
+      lock (last_terminal) {
+        if (last_terminal != null) {
+          terminal_child_exited_cb (last_terminal);
+          last_terminal.destroy ();
+          last_terminal = null;
+        }
       }
     }
   }
