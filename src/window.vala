@@ -38,8 +38,12 @@ namespace Gemini {
         bool valid = false;
         string name = Gdk.keyval_name (event_key.keyval);
         switch (name) {
-          case "Return":
+          case "o":
             layout.add_new_terminal ();
+            valid = true;
+            break;
+          case "Return":
+            layout.zoom ();
             valid = true;
             break;
           case "x":

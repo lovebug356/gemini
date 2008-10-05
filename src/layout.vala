@@ -6,6 +6,7 @@ namespace Gemini {
     public abstract void add_new_terminal ();
     public abstract void close_current_terminal ();
     public abstract void terminal_resize (int delta_x, int delta_y);
+    public abstract void zoom ();
     public abstract int length ();
     /* ADD a signal for all exited */
     public signal bool key_press_event (Gdk.EventKey event);

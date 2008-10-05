@@ -70,6 +70,19 @@ namespace Gemini {
       zoom_terminal.grab_focus ();
     }
 
+    public void zoom () {
+      if (length () <=1)
+        return;
+
+      Gemini.Terminal terminal;
+      terminal = tile_box.remove_first_terminal ();
+      remove (zoom_terminal);
+      tile_box.add_terminal (zoom_terminal, true);
+      zoom_terminal = terminal;
+      pack_end (zoom_terminal, true, true, 0);
+      zoom_terminal.grab_focus ();
+    }
+
     public void close_current_terminal () {
       Gemini.Terminal terminal = null;
 
