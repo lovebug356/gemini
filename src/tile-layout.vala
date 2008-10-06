@@ -73,8 +73,8 @@ namespace Gemini {
     void set_zoom_ontop_off_tile () {
       remove (zoom_terminal);
       tile_box.add_terminal (zoom_terminal, true);
-      tile_box.set_size_request (tile_width, 0);
       zoom_terminal = null;
+      terminal_resize (0, 0);
     }
 
     public void set_focus_next () {
