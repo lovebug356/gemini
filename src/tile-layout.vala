@@ -2,133 +2,85 @@ using Gtk;
 using GLib;
 
 namespace Gemini {
-  public class TileLayout : Gtk.HBox, Gemini.Layout {
-
-    Gemini.Terminal last_terminal;
+  public class TileLayout : Gemini.Layout {
     Gemini.Terminal zoom_terminal;
     Gemini.TileBox tile_box;
     int tile_width;
-    bool fullscreen_mode;
+    Gtk.Box layout_box;
 
     construct {
-      set_homogeneous (false);
+      layout_widget = (Gtk.Widget) new Gtk.HBox (false, 0);
+      layout_box = (Gtk.Box) layout_widget;
+      layout_box.set_homogeneous (false);
       zoom_terminal = null;
       tile_box = new Gemini.TileBox ();
       tile_width = 200;
-      pack_end (tile_box, false, false, 0);
+      layout_box.pack_end (tile_box, false, false, 0);
       tile_box.set_size_request (0, 0);
-      fullscreen_mode = false;
-      show_all ();
-    }
-
-    bool terminal_key_press_event_cb (Gemini.Terminal terminal, Gdk.EventKey key) {
-      lock (last_terminal) {
-        last_terminal = terminal;
-      }
-      return key_press_event (key);
-    }
-
-    public int length () {
-      return tile_box.get_length () + 1;
-    }
-
-    public void set_fullscreen_mode (bool mode) {
-      if (fullscreen_mode == mode)
-        return;
-
-      fullscreen_mode = mode;
-      terminal_resize (0, 0);
-    }
-
-    public void terminal_resize (int delta_x, int delta_y) {
-      if (!fullscreen_mode) {
-        tile_width += delta_x;
-        if (tile_width < 0)
-          tile_width = 0;
-        tile_box.set_size_request ((length () > 1 ? tile_width : 0), 0);
-      } else {
-        tile_box.set_size_request (0, 0);
-      }
-    }
-
-    void terminal_child_exited_cb (Gemini.Terminal terminal) {
-      if (terminal == zoom_terminal) {
-        remove (terminal);
-        Gemini.Terminal new_terminal;
-        new_terminal = tile_box.remove_first_terminal ();
-        if (new_terminal == null) {
-          all_childs_exited ();
-        } else {
-          zoom_terminal = new_terminal;
-          pack_end (zoom_terminal, true, true, 0);
-          zoom_terminal.grab_focus ();
-        }
-      } else {
-        tile_box.remove (terminal);
-        zoom_terminal.grab_focus ();
-      }
-      terminal_resize (0, 0);
+      layout_box.show_all ();
     }
 
     void set_zoom_ontop_off_tile () {
-      remove (zoom_terminal);
+      layout_box.remove (zoom_terminal);
       tile_box.add_terminal (zoom_terminal, true);
       zoom_terminal = null;
-      terminal_resize (0, 0);
+      resize (0, 0);
     }
 
-    public void set_focus_next () {
-      if (zoom_terminal.is_focus) {
+    void resize (int delta_x, int delta_y) {
+      tile_width += delta_x;
+      if (tile_width < 0)
+        tile_width = 0;
+      tile_box.set_size_request ((terminal_list.size > 1 ? tile_width : 0), 0);
+    }
+
+    protected override void terminal_resize (Gemini.Terminal terminal, int delta_x, int delta_y) {
+      resize (delta_x, delta_y);
+    }
+
+    protected override void terminal_new_widget (Gemini.Terminal terminal) {
+      if (zoom_terminal != null)
+        set_zoom_ontop_off_tile ();
+      zoom_terminal = terminal;
+      layout_box.pack_end (zoom_terminal, true, true, 0);
+      zoom_terminal.grab_focus ();
+    }
+
+    protected override void focus_next (Gemini.Terminal terminal) {
+      if (zoom_terminal == terminal) {
         tile_box.set_focus_first ();
       } else if (!tile_box.set_focus_next ()) {
         zoom_terminal.grab_focus ();
       }
     }
 
-    public void add_new_terminal () {
-      if (zoom_terminal != null)
-        set_zoom_ontop_off_tile ();
-      var terminal = new Gemini.Terminal ();
-      terminal.key_press_event += terminal_key_press_event_cb;
-      terminal.child_exited += terminal_child_exited_cb;
-      zoom_terminal = terminal;
-      pack_end (zoom_terminal, true, true, 0);
-      zoom_terminal.grab_focus ();
-    }
-
-    public void zoom () {
-      if (length () <=1)
-        return;
-
-      Gemini.Terminal terminal;
-      terminal = tile_box.get_first_terminal ();
-
-      if (terminal == last_terminal || zoom_terminal == last_terminal) {
-        remove (zoom_terminal);
-        tile_box.remove (terminal);
-        tile_box.add_terminal (zoom_terminal, true);
-        zoom_terminal = terminal;
-        pack_end (zoom_terminal, true, true, 0);
-        zoom_terminal.grab_focus ();
+    protected override void terminal_zoom (Gemini.Terminal terminal) {
+      if (zoom_terminal != terminal) {
+        terminal_remove_widget (terminal);
+        terminal_new_widget (terminal);
       } else {
-        lock (last_terminal) {
-          set_zoom_ontop_off_tile ();
-          tile_box.remove (last_terminal);
-          zoom_terminal = last_terminal;
-          pack_end (zoom_terminal, true, true, 0);
-          zoom_terminal.grab_focus ();
+        var top_terminal = tile_box.remove_first_terminal ();
+        if (top_terminal != null) {
+          terminal_new_widget (top_terminal);
         }
       }
     }
 
-    public void close_terminal () {
-      lock (last_terminal) {
-        if (last_terminal != null) {
-          terminal_child_exited_cb (last_terminal);
-          last_terminal.destroy ();
-          last_terminal = null;
+    protected override void terminal_remove_widget (Gemini.Terminal terminal) {
+      if (zoom_terminal == terminal) {
+        layout_box.remove (terminal);
+        zoom_terminal = tile_box.remove_first_terminal ();
+        if (zoom_terminal == null)
+        {
+          all_terminals_exited ();
+          return;
         }
+        layout_box.pack_start(zoom_terminal, true, true, 0);
+      } else {
+        tile_box.remove_terminal (terminal);
       }
+      resize (0, 0);
+      zoom_terminal.grab_focus ();
     }
   }
 }

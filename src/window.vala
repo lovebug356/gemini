@@ -32,14 +32,14 @@ namespace Gemini {
       add_accel_group (ui_manager.get_accel_group ());
     }
 
-    bool terminal_key_press_event (Gemini.Layout layout, Gdk.EventKey event_key) {
+    bool key_press_event_cb (Gemini.Terminal terminal, Gdk.EventKey event_key) {
       bool valid = false;
       if ((event_key.state & Gdk.ModifierType.MOD1_MASK) == Gdk.ModifierType.MOD1_MASK)
       {
         string name = Gdk.keyval_name (event_key.keyval);
         switch (name) {
           case "Return":
-            layout.set_focus_next ();
+            layout.terminal_focus_next (terminal);
             valid = true;
             break;
           default:
@@ -51,31 +51,31 @@ namespace Gemini {
         string name = Gdk.keyval_name (event_key.keyval);
         switch (name) {
           case "o":
-            layout.add_new_terminal ();
+            add_new_terminal ();
             valid = true;
             break;
           case "Return":
-            layout.zoom ();
+            layout.terminal_zoom (terminal);
             valid = true;
             break;
           case "x":
-            layout.close_terminal ();
+            layout.terminal_close (terminal);
             valid = true;
             break;
           case "j":
-            layout.terminal_resize (30, 0);
+            layout.terminal_resize (terminal, 30, 0);
             valid = true;
             break;
           case "k":
-            layout.terminal_resize (-30, 0);
+            layout.terminal_resize (terminal, -30, 0);
             valid = true;
             break;
           case "f":
-            layout.set_fullscreen_mode (true);
+            // layout.set_fullscreen_mode (true);
             valid =true;
             break;
           case "space":
-            layout.set_fullscreen_mode (false);
+            // layout.set_fullscreen_mode (false);
             valid = true;
             break;
           default:
@@ -85,6 +85,10 @@ namespace Gemini {
       if (valid)
         return true;
       return false;
+    }
+
+    void child_exited_cb (Gemini.Terminal terminal) {
+      layout.terminal_close (terminal);
     }
 
     void fullscreen_f11_action_cb (Gtk.Action action) {
@@ -99,16 +103,25 @@ namespace Gemini {
       Gtk.main_quit ();
     }
 
+    void add_new_terminal () {
+      Gemini.Terminal terminal = new Gemini.Terminal ();
+      terminal.key_press_event += key_press_event_cb;
+      terminal.child_exited += child_exited_cb;
+      layout.terminal_add (terminal);
+    }
+
+    void all_terminals_exited_cb (Gemini.Layout layout) {
+      Gtk.main_quit ();
+    }
+
     construct {
       set_title ("Gemini Terminal");
       is_fullscreen = false;
 
       layout = new Gemini.TileLayout ();
-      layout.add_new_terminal ();
-      layout.key_press_event += terminal_key_press_event;
-      layout.all_childs_exited += quit_action_cb;
-      add ((Gtk.Widget) layout);
-
+      layout.all_terminals_exited += all_terminals_exited_cb;
+      add (layout.layout_widget);
+      add_new_terminal ();
       destroy += Gtk.main_quit;
       setup_ui_manager ();
 
