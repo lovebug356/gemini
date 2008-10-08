@@ -3,7 +3,7 @@
 import Options
 
 VERSION="0.2.0"
-APPNAME="Gemini"
+APPNAME="gemini"
 
 srcdir = '.'
 blddir = 'build'
