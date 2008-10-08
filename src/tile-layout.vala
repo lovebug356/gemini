@@ -9,6 +9,7 @@ namespace Gemini {
     Gtk.Box layout_box;
 
     construct {
+      name = "tile";
       layout_widget = (Gtk.Widget) new Gtk.HBox (false, 0);
       layout_box = (Gtk.Box) layout_widget;
       layout_box.set_homogeneous (false);
@@ -32,6 +33,12 @@ namespace Gemini {
       if (tile_width < 0)
         tile_width = 0;
       tile_box.set_size_request ((terminal_list.size > 1 ? tile_width : 0), 0);
+    }
+
+    protected override void remove_widgets () {
+      tile_box.remove_all_terminals ();
+      layout_box.remove (tile_box);
+      layout_box.remove (zoom_terminal);
     }
 
     protected override void terminal_resize (Gemini.Terminal terminal, int delta_x, int delta_y) {

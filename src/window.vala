@@ -71,11 +71,13 @@ namespace Gemini {
             valid = true;
             break;
           case "f":
-            // layout.set_fullscreen_mode (true);
+            change_layout (new FullscreenLayout ());
+            terminal.grab_focus ();
             valid =true;
             break;
           case "space":
-            // layout.set_fullscreen_mode (false);
+            change_layout (new TileLayout ());
+            terminal.grab_focus ();
             valid = true;
             break;
           default:
@@ -85,6 +87,18 @@ namespace Gemini {
       if (valid)
         return true;
       return false;
+    }
+
+    void change_layout (Gemini.Layout new_layout) {
+      if (layout != null) {
+        layout.remove_widgets ();
+        remove (layout.layout_widget);
+        new_layout.add_terminal_list (layout.terminal_list);
+      }
+      add (new_layout.layout_widget);
+      layout = new_layout;
+      layout.all_terminals_exited += all_terminals_exited_cb;
+      set_title ("Gemini Terminal [%s]".printf (layout.name));
     }
 
     void child_exited_cb (Gemini.Terminal terminal) {
@@ -115,12 +129,9 @@ namespace Gemini {
     }
 
     construct {
-      set_title ("Gemini Terminal");
       is_fullscreen = false;
 
-      layout = new Gemini.TileLayout ();
-      layout.all_terminals_exited += all_terminals_exited_cb;
-      add (layout.layout_widget);
+      change_layout (new Gemini.TileLayout ());
       add_new_terminal ();
       destroy += Gtk.main_quit;
       setup_ui_manager ();

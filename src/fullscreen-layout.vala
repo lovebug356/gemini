@@ -1,0 +1,52 @@
+using Gtk;
+using GLib;
+
+namespace Gemini {
+  public class FullscreenLayout : Gemini.Layout {
+    Gtk.Box layout_box;
+    Gemini.Terminal active_terminal;
+
+    construct {
+      name = "fullscreen";
+      layout_widget = (Gtk.Widget) new Gtk.HBox (false, 0);
+      layout_box = (Gtk.Box) layout_widget;
+      layout_box.show_all ();
+      active_terminal = null;
+    }
+
+    protected override void terminal_resize (Gemini.Terminal terminal, int delta_x, int delta_y) {
+      /* nothing todo in fullscreen */
+    }
+
+    protected override void terminal_new_widget (Gemini.Terminal terminal) {
+      if (active_terminal != null)
+        layout_box.remove (active_terminal);
+      layout_box.pack_start (terminal, true, true, 0);
+      active_terminal = terminal;
+      active_terminal.grab_focus ();
+    }
+
+    protected override void focus_next (Gemini.Terminal terminal) {
+      int position = terminal_list.index_of (terminal);
+      int next_position = (position < terminal_list.size -1 ? position + 1 : 0);
+      terminal_new_widget (terminal_list.get (next_position));
+    }
+
+    protected override void terminal_zoom (Gemini.Terminal terminal) {
+      /* don't zoom yet */
+    }
+
+    protected override void terminal_remove_widget (Gemini.Terminal terminal) {
+      if (terminal_list.size == 0) {
+        all_terminals_exited ();
+        return;
+      }
+      terminal_new_widget (terminal_list.get (0));
+    }
+
+    protected override void remove_widgets () {
+      layout_box.remove (active_terminal);
+      active_terminal = null;
+    }
+  }
+}

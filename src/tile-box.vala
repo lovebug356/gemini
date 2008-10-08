@@ -33,6 +33,13 @@ namespace Gemini {
       }
     }
 
+    public void remove_all_terminals () {
+      weak List<Gemini.Terminal> list = get_children ();
+      foreach (Gemini.Terminal term in list) {
+        remove (term);
+      }
+    }
+
     public bool set_focus_next () {
       Gemini.Terminal terminal;
       int length = get_length ();
