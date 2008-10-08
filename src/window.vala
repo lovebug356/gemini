@@ -60,6 +60,7 @@ namespace Gemini {
             break;
           case "x":
             layout.terminal_close (terminal);
+            update_title ();
             valid = true;
             break;
           case "l":
@@ -70,14 +71,20 @@ namespace Gemini {
             layout.terminal_resize (terminal, -30, 0);
             valid = true;
             break;
+          case "j":
+            layout.terminal_resize (terminal, 0, -30);
+            valid = true;
+            break;
+          case "k":
+            layout.terminal_resize (terminal, 0, 30);
+            valid = true;
+            break;
           case "f":
             change_layout (new FullscreenLayout ());
-            terminal.grab_focus ();
             valid =true;
             break;
           case "space":
             change_layout (new TileLayout ());
-            terminal.grab_focus ();
             valid = true;
             break;
           default:
@@ -93,16 +100,23 @@ namespace Gemini {
       if (layout != null) {
         layout.remove_widgets ();
         remove (layout.layout_widget);
+        add (new_layout.layout_widget);
         new_layout.add_terminal_list (layout.terminal_list);
+      } else {
+        add (new_layout.layout_widget);
       }
-      add (new_layout.layout_widget);
       layout = new_layout;
       layout.all_terminals_exited += all_terminals_exited_cb;
-      set_title ("Gemini Terminal [%s]".printf (layout.name));
+      update_title ();
     }
 
     void child_exited_cb (Gemini.Terminal terminal) {
       layout.terminal_close (terminal);
+      update_title ();
+    }
+
+    void update_title () {
+      set_title ("Gemini Terminal [%s-%dT]".printf (layout.name, layout.terminal_list.size));
     }
 
     void fullscreen_f11_action_cb (Gtk.Action action) {
@@ -122,6 +136,7 @@ namespace Gemini {
       terminal.key_press_event += key_press_event_cb;
       terminal.child_exited += child_exited_cb;
       layout.terminal_add (terminal);
+      update_title ();
     }
 
     void all_terminals_exited_cb (Gemini.Layout layout) {
