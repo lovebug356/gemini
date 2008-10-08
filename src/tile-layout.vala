@@ -42,7 +42,7 @@ namespace Gemini {
     }
 
     protected override void terminal_resize (Gemini.Terminal terminal, int delta_x, int delta_y) {
-      resize (delta_x, delta_y);
+      resize (-delta_x, delta_y);
     }
 
     protected override void terminal_new_widget (Gemini.Terminal terminal) {

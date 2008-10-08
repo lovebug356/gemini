@@ -7,6 +7,6 @@ Standards-Version: 3.7.2
 
 Package: gemini
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: libgee0, libvte9
 Description: The gemini terminal freighter
  The gemini terminal freighter

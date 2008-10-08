@@ -62,11 +62,11 @@ namespace Gemini {
             layout.terminal_close (terminal);
             valid = true;
             break;
-          case "j":
+          case "l":
             layout.terminal_resize (terminal, 30, 0);
             valid = true;
             break;
-          case "k":
+          case "h":
             layout.terminal_resize (terminal, -30, 0);
             valid = true;
             break;
