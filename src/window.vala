@@ -11,21 +11,35 @@ namespace Gemini {
     Gemini.Layout layout;
 
     const ActionEntry[] action_entries = {
-      {"File", null, null, null, null, null},
-      {"Quit", STOCK_QUIT, null, null, null, quit_action_cb},
-      {"FullscreenF11", null, null, "F11", null, fullscreen_f11_action_cb}
+      {"Terminal",      null,       "_Terminal",  null,   null, null},
+      {"NewTerminal",   null,       "_New",       null,   null, new_terminal_action_cb},
+      {"CloseTerminal", null,       "_Close terminal", null, null, close_terminal_action_cb},
+      {"Quit",          STOCK_QUIT, "_Quit",      null,   null, quit_action_cb},
+      {"FullscreenF11", null,       null,         "F11",  null, fullscreen_f11_action_cb}
     };
 
     static const string MAIN_UI = """
       <ui>
         <menubar name="MenuBar">
-          <menu action="File">
+          <menu action="Terminal">
+            <menuitem action ="NewTerminal" />
+            <menuitem action ="CloseTerminal" />
+            <separator />
             <menuitem action ="Quit" />
           </menu>
         </menubar>
         <accelerator action="FullscreenF11" />
       </ui>
     """;
+
+    void new_terminal_action_cb (Gtk.Action action) {
+      add_new_terminal ();
+    }
+
+    void close_terminal_action_cb (Gtk.Action action) {
+      var terminal = layout.get_active_terminal ();
+      child_exited_cb (terminal);
+    }
 
     void quit_action_cb (Gtk.Action action) {
       Gtk.main_quit ();

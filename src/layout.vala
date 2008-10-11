@@ -72,5 +72,14 @@ namespace Gemini {
       message ("implement me");
     }
 
+    protected virtual Gemini.Terminal? get_active_terminal () {
+      Gemini.Terminal temp = null;
+      foreach (Gemini.Terminal terminal in terminal_list) {
+        if (terminal.is_focus) {
+          temp = terminal;
+        }
+      }
+      return temp;
+    }
   }
 }
