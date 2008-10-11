@@ -45,6 +45,10 @@ namespace Gemini {
       resize (-delta_x, delta_y);
     }
 
+    protected override void terminal_focus (Gemini.Terminal terminal) {
+      terminal.grab_focus ();
+    }
+
     protected override void terminal_new_widget (Gemini.Terminal terminal) {
       if (zoom_terminal != null)
         set_zoom_ontop_off_tile ();

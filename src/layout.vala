@@ -37,6 +37,10 @@ namespace Gemini {
       }
     }
 
+    public virtual void terminal_focus (Gemini.Terminal terminal) {
+      message ("implement me");
+    }
+
     public void terminal_focus_next (Gemini.Terminal terminal) {
       if (terminal_list.size > 1) {
         focus_next (terminal);

@@ -26,6 +26,13 @@ namespace Gemini {
       active_terminal.grab_focus ();
     }
 
+    protected override void terminal_focus (Gemini.Terminal terminal) {
+      if (terminal != active_terminal) {
+        int position = terminal_list.index_of (terminal);
+        terminal_new_widget (terminal_list.get (position));
+      }
+    }
+
     protected override void focus_next (Gemini.Terminal terminal) {
       int position = terminal_list.index_of (terminal);
       int next_position = (position < terminal_list.size -1 ? position + 1 : 0);

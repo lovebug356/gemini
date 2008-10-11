@@ -81,10 +81,12 @@ namespace Gemini {
             break;
           case "f":
             change_layout (new FullscreenLayout ());
+            layout.terminal_focus (terminal);
             valid =true;
             break;
           case "space":
             change_layout (new TileLayout ());
+            layout.terminal_focus (terminal);
             valid = true;
             break;
           default:
