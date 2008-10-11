@@ -44,6 +44,7 @@ namespace Gemini {
       add_accel_group (ui_manager.get_accel_group ());
       var menubar = ui_manager.get_widget ("/MenuBar");
       vbox.pack_start (menubar, false, false, 0);
+      menubar.show_all ();
     }
 
     bool key_press_event_cb (Gemini.Terminal terminal, Gdk.EventKey event_key) {
