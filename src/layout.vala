@@ -17,6 +17,7 @@ namespace Gemini {
     public void terminal_add (Gemini.Terminal terminal) {
       lock (terminal_list) {
         terminal_list.insert (0, terminal);
+        terminal.show ();
         terminal_new_widget (terminal);
       }
     }

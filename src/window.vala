@@ -6,18 +6,30 @@ namespace Gemini {
     UIManager ui_manager;
     ActionGroup menu_actions;
     bool is_fullscreen;
+    Gtk.VBox vbox;
 
     Gemini.Layout layout;
 
     const ActionEntry[] action_entries = {
+      {"File", null, null, null, null, null},
+      {"Quit", STOCK_QUIT, null, null, null, quit_action_cb},
       {"FullscreenF11", null, null, "F11", null, fullscreen_f11_action_cb}
     };
 
     static const string MAIN_UI = """
       <ui>
+        <menubar name="MenuBar">
+          <menu action="File">
+            <menuitem action ="Quit" />
+          </menu>
+        </menubar>
         <accelerator action="FullscreenF11" />
       </ui>
     """;
+
+    void quit_action_cb (Gtk.Action action) {
+      Gtk.main_quit ();
+    }
 
     void setup_ui_manager () {
       ui_manager = new UIManager ();
@@ -30,6 +42,8 @@ namespace Gemini {
         warning ("Error while reading the main ui: %s", err.message);
       }
       add_accel_group (ui_manager.get_accel_group ());
+      var menubar = ui_manager.get_widget ("/MenuBar");
+      vbox.pack_start (menubar, false, false, 0);
     }
 
     bool key_press_event_cb (Gemini.Terminal terminal, Gdk.EventKey event_key) {
@@ -101,11 +115,11 @@ namespace Gemini {
     void change_layout (Gemini.Layout new_layout) {
       if (layout != null) {
         layout.remove_widgets ();
-        remove (layout.layout_widget);
-        add (new_layout.layout_widget);
+        vbox.remove (layout.layout_widget);
+        vbox.pack_start (new_layout.layout_widget, true, true, 0);
         new_layout.add_terminal_list (layout.terminal_list);
       } else {
-        add (new_layout.layout_widget);
+        vbox.pack_start (new_layout.layout_widget, true, true, 0);
       }
       layout = new_layout;
       layout.all_terminals_exited += all_terminals_exited_cb;
@@ -129,10 +143,6 @@ namespace Gemini {
       is_fullscreen = !is_fullscreen;
     }
 
-    void quit_action_cb (Gemini.Layout layout) {
-      Gtk.main_quit ();
-    }
-
     void add_new_terminal () {
       Gemini.Terminal terminal = new Gemini.Terminal ();
       terminal.key_press_event += key_press_event_cb;
@@ -147,11 +157,14 @@ namespace Gemini {
 
     construct {
       is_fullscreen = false;
+      vbox = new Gtk.VBox (false, 0);
+      add (vbox);
+      vbox.show ();
 
+      setup_ui_manager ();
       change_layout (new Gemini.TileLayout ());
       add_new_terminal ();
       destroy += Gtk.main_quit;
-      setup_ui_manager ();
 
       set_default_size (640, 480);
       show ();

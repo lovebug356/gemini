@@ -19,24 +19,24 @@ namespace Gemini {
     }
 
     protected override void terminal_new_widget (Gemini.Terminal terminal) {
-      if (active_terminal != null)
-        layout_box.remove (active_terminal);
       layout_box.pack_start (terminal, true, true, 0);
-      active_terminal = terminal;
-      active_terminal.grab_focus ();
+      terminal_focus (terminal);
     }
 
     protected override void terminal_focus (Gemini.Terminal terminal) {
       if (terminal != active_terminal) {
-        int position = terminal_list.index_of (terminal);
-        terminal_new_widget (terminal_list.get (position));
+        if (active_terminal != null)
+          active_terminal.hide ();
+        active_terminal = terminal;
+        active_terminal.show ();
+        active_terminal.grab_focus ();
       }
     }
 
     protected override void focus_next (Gemini.Terminal terminal) {
       int position = terminal_list.index_of (terminal);
       int next_position = (position < terminal_list.size -1 ? position + 1 : 0);
-      terminal_new_widget (terminal_list.get (next_position));
+      terminal_focus (terminal_list.get (next_position));
     }
 
     protected override void terminal_zoom (Gemini.Terminal terminal) {
@@ -44,15 +44,18 @@ namespace Gemini {
     }
 
     protected override void terminal_remove_widget (Gemini.Terminal terminal) {
+      layout_box.remove (terminal);
       if (terminal_list.size == 0) {
         all_terminals_exited ();
         return;
       }
-      terminal_new_widget (terminal_list.get (0));
+      terminal_focus (terminal_list.get (0));
     }
 
     protected override void remove_widgets () {
-      layout_box.remove (active_terminal);
+      foreach (Gemini.Terminal terminal in terminal_list) {
+        layout_box.remove (terminal);
+      }
       active_terminal = null;
     }
   }
