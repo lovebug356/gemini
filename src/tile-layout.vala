@@ -45,7 +45,7 @@ namespace Gemini {
       resize (-delta_x, delta_y);
     }
 
-    protected override void terminal_focus (Gemini.Terminal terminal) {
+    protected override void focus (Gemini.Terminal terminal) {
       terminal.grab_focus ();
     }
 

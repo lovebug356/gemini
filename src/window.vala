@@ -62,69 +62,63 @@ namespace Gemini {
     }
 
     bool key_press_event_cb (Gemini.Terminal terminal, Gdk.EventKey event_key) {
-      bool valid = false;
+      bool valid = true;
       if ((event_key.state & Gdk.ModifierType.MOD1_MASK) == Gdk.ModifierType.MOD1_MASK)
       {
         string name = Gdk.keyval_name (event_key.keyval);
         switch (name) {
           case "Return":
             layout.terminal_focus_next (terminal);
-            valid = true;
             break;
           default:
+            valid = false;
             break;
         }
-      }
-      if ((event_key.state & Gdk.ModifierType.MOD4_MASK) == Gdk.ModifierType.MOD4_MASK)
+
+      } else if ((event_key.state & Gdk.ModifierType.MOD4_MASK) == Gdk.ModifierType.MOD4_MASK)
       {
         string name = Gdk.keyval_name (event_key.keyval);
         switch (name) {
           case "o":
             add_new_terminal ();
-            valid = true;
             break;
           case "Return":
             layout.terminal_zoom (terminal);
-            valid = true;
             break;
           case "x":
             layout.terminal_close (terminal);
             update_title ();
-            valid = true;
             break;
           case "l":
             layout.terminal_resize (terminal, 30, 0);
-            valid = true;
             break;
           case "h":
             layout.terminal_resize (terminal, -30, 0);
-            valid = true;
             break;
           case "j":
             layout.terminal_resize (terminal, 0, -30);
-            valid = true;
             break;
           case "k":
             layout.terminal_resize (terminal, 0, 30);
-            valid = true;
             break;
           case "f":
             change_layout (new FullscreenLayout ());
             layout.terminal_focus (terminal);
-            valid =true;
             break;
           case "space":
             change_layout (new TileLayout ());
             layout.terminal_focus (terminal);
-            valid = true;
+            break;
+          case "b":
+            layout.terminal_focus_back ();
             break;
           default:
+            valid = false;
             break;
         }
-      }
-      if (valid)
-        return true;
-      return false;
+      } else
+        valid = false;
+      return valid;
     }
 
     void change_layout (Gemini.Layout new_layout) {

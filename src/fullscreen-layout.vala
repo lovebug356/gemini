@@ -23,7 +23,7 @@ namespace Gemini {
       terminal_focus (terminal);
     }
 
-    protected override void terminal_focus (Gemini.Terminal terminal) {
+    protected override void focus (Gemini.Terminal terminal) {
       if (terminal != active_terminal) {
         if (active_terminal != null)
           active_terminal.hide ();

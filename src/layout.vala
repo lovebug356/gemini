@@ -8,6 +8,7 @@ namespace Gemini {
     public ArrayList<Gemini.Terminal> terminal_list = new ArrayList<Gemini.Terminal> ();
     public Gtk.Widget layout_widget;
     public string name;
+    Gemini.Terminal last_active = null;
 
     public signal void all_terminals_exited ();
 
@@ -16,6 +17,7 @@ namespace Gemini {
 
     public void terminal_add (Gemini.Terminal terminal) {
       lock (terminal_list) {
+        last_active = get_active_terminal ();
         terminal_list.insert (0, terminal);
         terminal.show ();
         terminal_new_widget (terminal);
@@ -38,11 +40,27 @@ namespace Gemini {
       }
     }
 
+    public void terminal_focus_back () {
+      if (last_active == get_active_terminal () && terminal_list.size > 1) {
+        if (last_active == terminal_list.get (0))
+          last_active = terminal_list.get (1);
+        else
+          last_active = terminal_list.get (0);
+      }
+      terminal_focus (last_active);
+    }
+
     public virtual void terminal_focus (Gemini.Terminal terminal) {
+      last_active = get_active_terminal ();
+      focus (terminal);
+    }
+
+    public virtual void focus (Gemini.Terminal terminal) {
       message ("implement me");
     }
 
     public void terminal_focus_next (Gemini.Terminal terminal) {
+      last_active = get_active_terminal ();
       if (terminal_list.size > 1) {
         focus_next (terminal);
       }
