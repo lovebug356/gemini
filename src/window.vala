@@ -87,7 +87,6 @@ namespace Gemini {
             break;
           case "x":
             layout.terminal_close (terminal);
-            update_title ();
             break;
           case "l":
             layout.virt_terminal_resize (terminal, 30, 0);
@@ -122,6 +121,10 @@ namespace Gemini {
     }
 
     void change_layout (Gemini.Layout new_layout) {
+      /* connect the signals */
+      new_layout.all_terminals_exited += all_terminals_exited_cb;
+      new_layout.size_changed += (lay, size) => size_changed_cb (size);
+
       if (layout != null) {
         layout.virt_remove_widgets ();
         vbox.remove (layout.layout_widget);
@@ -131,17 +134,14 @@ namespace Gemini {
         vbox.pack_start (new_layout.layout_widget, true, true, 0);
       }
       layout = new_layout;
-      layout.all_terminals_exited += all_terminals_exited_cb;
-      update_title ();
     }
 
     void child_exited_cb (Gemini.Terminal terminal) {
       layout.terminal_close (terminal);
-      update_title ();
     }
 
-    void update_title () {
-      set_title ("Gemini Terminal [%s-%dT]".printf (layout.name, layout.terminal_list.size));
+    void size_changed_cb (int size) {
+      set_title ("Gemini Terminal [%s-%dT]".printf (layout.name, size));
     }
 
     void fullscreen_f11_action_cb (Gtk.Action action) {
@@ -166,7 +166,6 @@ namespace Gemini {
         terminal.child_exited += child_exited_cb;
         terminal.focus_out_event += focus_out_event;
         layout.terminal_add (terminal);
-        update_title ();
       }
     }
 

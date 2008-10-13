@@ -10,6 +10,7 @@ namespace Gemini {
     public string name;
     Gemini.Terminal last_terminal = null;
 
+    public signal void size_changed (int new_size);
     public signal void all_terminals_exited ();
 
     public void terminal_add (Gemini.Terminal terminal) {
@@ -17,6 +18,7 @@ namespace Gemini {
         terminal_list.insert (0, terminal);
         terminal.show ();
         virt_terminal_new_widget (terminal);
+        size_changed (terminal_list.size);
       }
     }
 
@@ -38,6 +40,7 @@ namespace Gemini {
         if (terminal in terminal_list) {
           terminal_list.remove (terminal);
           virt_terminal_remove_widget (terminal);
+          size_changed (terminal_list.size);
         } else {
           warning ("trying to remove a terminal that is not in this layout");
         }
