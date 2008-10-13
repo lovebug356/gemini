@@ -11,14 +11,22 @@ namespace Gemini {
     construct {
       name = "tile";
       layout_widget = (Gtk.Widget) new Gtk.HBox (false, 0);
+      layout_widget.size_allocate += size_allocate_cb;
       layout_box = (Gtk.Box) layout_widget;
       layout_box.set_homogeneous (false);
       zoom_terminal = null;
       tile_box = new Gemini.TileBox ();
-      tile_width = 200;
+      tile_width = 40;
       layout_box.pack_end (tile_box, false, false, 0);
       tile_box.set_size_request (0, 0);
       layout_box.show_all ();
+    }
+
+    void size_allocate_cb (Gtk.Widget wdg, Gdk.Rectangle alloc) {
+      if (tile_width > 95) {
+        tile_width = 95;
+      }
+      tile_box.set_size_request ((terminal_list.size > 1 ? (layout_widget.allocation.width * tile_width) / 100: 0), 0);
     }
 
     void set_zoom_ontop_off_tile () {
@@ -29,10 +37,10 @@ namespace Gemini {
     }
 
     void resize (int delta_x, int delta_y) {
-      tile_width += delta_x;
+      tile_width += ((delta_x * 100) / layout_widget.allocation.width);
       if (tile_width < 0)
         tile_width = 0;
-      tile_box.set_size_request ((terminal_list.size > 1 ? tile_width : 0), 0);
+      tile_box.set_size_request ((terminal_list.size > 1 ? (layout_widget.allocation.width * tile_width) / 100: 0), 0);
     }
 
     protected override void virt_remove_widgets () {
