@@ -83,31 +83,31 @@ namespace Gemini {
             add_new_terminal ();
             break;
           case "Return":
-            layout.terminal_zoom (terminal);
+            layout.virt_terminal_zoom (terminal);
             break;
           case "x":
             layout.terminal_close (terminal);
             update_title ();
             break;
           case "l":
-            layout.terminal_resize (terminal, 30, 0);
+            layout.virt_terminal_resize (terminal, 30, 0);
             break;
           case "h":
-            layout.terminal_resize (terminal, -30, 0);
+            layout.virt_terminal_resize (terminal, -30, 0);
             break;
           case "j":
-            layout.terminal_resize (terminal, 0, -30);
+            layout.virt_terminal_resize (terminal, 0, -30);
             break;
           case "k":
-            layout.terminal_resize (terminal, 0, 30);
+            layout.virt_terminal_resize (terminal, 0, 30);
             break;
           case "f":
             change_layout (new FullscreenLayout ());
-            layout.terminal_focus (terminal);
+            layout.virt_terminal_focus (terminal);
             break;
           case "space":
             change_layout (new TileLayout ());
-            layout.terminal_focus (terminal);
+            layout.virt_terminal_focus (terminal);
             break;
           case "b":
             layout.terminal_focus_back ();
@@ -123,10 +123,10 @@ namespace Gemini {
 
     void change_layout (Gemini.Layout new_layout) {
       if (layout != null) {
-        layout.remove_widgets ();
+        layout.virt_remove_widgets ();
         vbox.remove (layout.layout_widget);
         vbox.pack_start (new_layout.layout_widget, true, true, 0);
-        new_layout.add_terminal_list (layout.terminal_list);
+        new_layout.terminal_list_add (layout.terminal_list);
       } else {
         vbox.pack_start (new_layout.layout_widget, true, true, 0);
       }
