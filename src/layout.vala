@@ -47,10 +47,15 @@ namespace Gemini {
 
     public void terminal_focus_back () {
       lock (last_terminal) {
-        if (last_terminal == null || !terminal_list.containts (last_terminal)) {
-          if (get_active_terminal () == terminal_list.get (0))
+        if (terminal_list.size > 1) {
+          if (last_terminal == null || !terminal_list.contains (last_terminal)) {
+            if (get_active_terminal () == terminal_list.get(0))
+              last_terminal = terminal_list.get (1);
+            else
+              last_terminal = terminal_list.get (0);
+          }
+          terminal_focus (last_terminal);
         }
-        terminal_focus (last_terminal);
       }
     }
 
