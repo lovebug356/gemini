@@ -5,47 +5,79 @@ namespace Gemini {
   public class Window : Gtk.Window {
     UIManager ui_manager;
     ActionGroup menu_actions;
-    bool is_fullscreen;
     Gtk.VBox vbox;
+    Gtk.Widget menubar;
 
     Gemini.Layout layout;
 
+    ToggleAction fullscreen_action;
+    ToggleAction show_menubar_action;
+
     const ActionEntry[] action_entries = {
-      {"Terminal",      null,       "_Terminal",  null,   null, null},
-      {"NewTerminal",   null,       "_New",       "<control>o",   null, new_terminal_action_cb},
-      {"CloseTerminal", null,       "_Close terminal", "<control>x", null, close_terminal_action_cb},
+      {"File",      null,       "_File",  null,   null, null},
+      {"NewTerminal",   null,       "_Open terminal",       "<shift><control>n",   null, new_terminal_action_cb},
+      {"CloseTerminal", null,       "_Close terminal", "<shift><control>w", null, close_terminal_action_cb},
       {"Quit",          STOCK_QUIT, "_Quit",      null,   null, quit_action_cb},
 
-      {"View",          null,       "_View",      null,   null, null},
-      {"FocusNextTerminal", null,   "Focus _next terminal", "<control>n", null, focus_next_terminal_action_cb},
-      {"FocusLastTerminal", null,   "Focus _last terminal", "<control>b", null, focus_last_terminal_action_cb},
+      {"View",          null,       "_View",          null, null, null},
+
+      {"Terminal",          null,       "_Terminal",          null, null, null},
+      {"FocusNextTerminal", null,   "_Next terminal", "<control>n", null, focus_next_terminal_action_cb},
+      {"FocusLastTerminal", null,   "_Last terminal", "<control>b", null, focus_last_terminal_action_cb},
+      {"Zoom",              null,   "_Zoom",          "<control>z", null, zoom_action_cb},
 
       {"Help",          null,               "_Help",          null,   null, null},
-      {"About",         STOCK_ABOUT,        "_About",         null,   null, about_action_cb},
+      {"About",         STOCK_ABOUT,        "_About",         null,   null, about_action_cb}
+    };
 
-      {"FullscreenF11", null,       null,         "F11",  null, fullscreen_f11_action_cb}
+    const ToggleActionEntry[] toggle_entries = {
+      {"ShowMenubar",   null,       "Show Menu_bar",  "<shift><control>m", null, show_menubar_action_cb, true},
+      {"Fullscreen",    null,       "_Full screen",     "F11", null, fullscreen_action_cb, false}
     };
 
     static const string MAIN_UI = """
       <ui>
         <menubar name="MenuBar">
-          <menu action="Terminal">
+          <menu action="File">
             <menuitem action ="NewTerminal" />
             <menuitem action ="CloseTerminal" />
             <separator />
             <menuitem action ="Quit" />
           </menu>
           <menu action="View">
+            <menuitem action="ShowMenubar" />
+            <menuitem action="Fullscreen" />
+          </menu>
+          <menu action="Terminal">
             <menuitem action="FocusNextTerminal" />
             <menuitem action="FocusLastTerminal" />
+            <separator />
+            <menuitem action="Zoom" />
           </menu>
           <menu action="Help">
             <menuitem action="About" />
           </menu>
         </menubar>
-        <accelerator action="FullscreenF11" />
       </ui>
     """;
+
+    void zoom_action_cb (Gtk.Action action) {
+      layout.virt_terminal_zoom (layout.get_active_terminal ());
+    }
+
+    void show_menubar_action_cb (Gtk.Action action) {
+      if (show_menubar_action.get_active ())
+        menubar.show ();
+      else
+        menubar.hide ();
+    }
+
+    void fullscreen_action_cb (Gtk.Action action) {
+      if (fullscreen_action.get_active ())
+        fullscreen ();
+      else
+        unfullscreen ();
+    }
 
     void about_action_cb (Gtk.Action action) {
       var dialog = new AboutDialog ();
@@ -87,6 +119,9 @@ namespace Gemini {
       ui_manager = new UIManager ();
       menu_actions = new ActionGroup ("Actions");
       menu_actions.add_actions (action_entries, this);
+      menu_actions.add_toggle_actions (toggle_entries, this);
+      fullscreen_action = (Gtk.ToggleAction) menu_actions.get_action ("Fullscreen");
+      show_menubar_action = (Gtk.ToggleAction) menu_actions.get_action ("ShowMenubar");
       ui_manager.insert_action_group (menu_actions, 0);
       try {
         ui_manager.add_ui_from_string (MAIN_UI, MAIN_UI.length);
@@ -94,7 +129,7 @@ namespace Gemini {
         warning ("Error while reading the main ui: %s", err.message);
       }
       add_accel_group (ui_manager.get_accel_group ());
-      var menubar = ui_manager.get_widget ("/MenuBar");
+      menubar = ui_manager.get_widget ("/MenuBar");
       vbox.pack_start (menubar, false, false, 0);
       menubar.show_all ();
     }
@@ -203,14 +238,6 @@ namespace Gemini {
       }
     }
 
-    void fullscreen_f11_action_cb (Gtk.Action action) {
-      if (is_fullscreen)
-        unfullscreen ();
-      else
-        fullscreen ();
-      is_fullscreen = !is_fullscreen;
-    }
-
     bool focus_out_event (Gemini.Terminal terminal, Gdk.EventFocus event) {
       lock (layout) {
         layout.terminal_last_focus (terminal);
@@ -233,7 +260,6 @@ namespace Gemini {
     }
 
     construct {
-      is_fullscreen = false;
       vbox = new Gtk.VBox (false, 0);
       add (vbox);
       vbox.show ();
