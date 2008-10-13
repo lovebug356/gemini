@@ -16,7 +16,7 @@ namespace Gemini {
     public void terminal_add (Gemini.Terminal terminal) {
       lock (terminal_list) {
         terminal_list.insert (0, terminal);
-        terminal.show ();
+        terminal.show (); /* some layout's hide them */
         virt_terminal_new_widget (terminal);
         size_changed (terminal_list.size);
       }
