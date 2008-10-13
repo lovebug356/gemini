@@ -21,8 +21,8 @@ namespace Gemini {
       {"Quit",          STOCK_QUIT, "_Quit",      null,   null, quit_action_cb},
 
       {"Edit",          null,       "_Edit",          null, null, null},
-      {"Copy",          STOCK_COPY, "_Copy",          null, null, copy_action_cb},
-      {"Paste",         STOCK_PASTE,"_Paste",         null, null, paste_action_cb},
+      {"Copy",          STOCK_COPY, "_Copy",          "<shift><control>c", null, copy_action_cb},
+      {"Paste",         STOCK_PASTE,"_Paste",         "<shift><control>v", null, paste_action_cb},
 
       {"View",          null,       "_View",          null, null, null},
 
