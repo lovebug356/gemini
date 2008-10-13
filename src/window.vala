@@ -12,9 +12,13 @@ namespace Gemini {
 
     const ActionEntry[] action_entries = {
       {"Terminal",      null,       "_Terminal",  null,   null, null},
-      {"NewTerminal",   null,       "_New",       null,   null, new_terminal_action_cb},
-      {"CloseTerminal", null,       "_Close terminal", null, null, close_terminal_action_cb},
+      {"NewTerminal",   null,       "_New",       "<control>o",   null, new_terminal_action_cb},
+      {"CloseTerminal", null,       "_Close terminal", "<control>x", null, close_terminal_action_cb},
       {"Quit",          STOCK_QUIT, "_Quit",      null,   null, quit_action_cb},
+
+      {"View",          null,       "_View",      null,   null, null},
+      {"FocusNextTerminal", null,   "Focus _next terminal", "<control>n", null, focus_next_terminal_action_cb},
+      {"FocusLastTerminal", null,   "Focus _last terminal", "<control>b", null, focus_last_terminal_action_cb},
       {"FullscreenF11", null,       null,         "F11",  null, fullscreen_f11_action_cb}
     };
 
@@ -27,10 +31,26 @@ namespace Gemini {
             <separator />
             <menuitem action ="Quit" />
           </menu>
+          <menu action="View">
+            <menuitem action="FocusNextTerminal" />
+            <menuitem action="FocusLastTerminal" />
+          </menu>
         </menubar>
         <accelerator action="FullscreenF11" />
       </ui>
     """;
+
+    void focus_next_terminal_action_cb (Gtk.Action action) {
+      lock (layout) {
+        layout.terminal_focus_next (layout.get_active_terminal ());
+      }
+    }
+
+    void focus_last_terminal_action_cb (Gtk.Action action) {
+      lock (layout) {
+        layout.terminal_focus_back ();
+      }
+    }
 
     void new_terminal_action_cb (Gtk.Action action) {
       add_new_terminal ();
