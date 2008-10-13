@@ -152,12 +152,22 @@ namespace Gemini {
       is_fullscreen = !is_fullscreen;
     }
 
+    bool focus_out_event (Gemini.Terminal terminal, Gdk.EventFocus event) {
+      lock (layout) {
+        layout.terminal_last_focus (terminal);
+      }
+      return false;
+    }
+
     void add_new_terminal () {
-      Gemini.Terminal terminal = new Gemini.Terminal ();
-      terminal.key_press_event += key_press_event_cb;
-      terminal.child_exited += child_exited_cb;
-      layout.terminal_add (terminal);
-      update_title ();
+      lock (layout) {
+        Gemini.Terminal terminal = new Gemini.Terminal ();
+        terminal.key_press_event += key_press_event_cb;
+        terminal.child_exited += child_exited_cb;
+        terminal.focus_out_event += focus_out_event;
+        layout.terminal_add (terminal);
+        update_title ();
+      }
     }
 
     void all_terminals_exited_cb (Gemini.Layout layout) {
