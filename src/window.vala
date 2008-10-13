@@ -19,6 +19,10 @@ namespace Gemini {
       {"View",          null,       "_View",      null,   null, null},
       {"FocusNextTerminal", null,   "Focus _next terminal", "<control>n", null, focus_next_terminal_action_cb},
       {"FocusLastTerminal", null,   "Focus _last terminal", "<control>b", null, focus_last_terminal_action_cb},
+
+      {"Help",          null,               "_Help",          null,   null, null},
+      {"About",         STOCK_ABOUT,        "_About",         null,   null, about_action_cb},
+
       {"FullscreenF11", null,       null,         "F11",  null, fullscreen_f11_action_cb}
     };
 
@@ -35,10 +39,24 @@ namespace Gemini {
             <menuitem action="FocusNextTerminal" />
             <menuitem action="FocusLastTerminal" />
           </menu>
+          <menu action="Help">
+            <menuitem action="About" />
+          </menu>
         </menubar>
         <accelerator action="FullscreenF11" />
       </ui>
     """;
+
+    void about_action_cb (Gtk.Action action) {
+      var dialog = new AboutDialog ();
+      dialog.set_copyright ("Copyright (c) 2008 Thijs Vermeir");
+      dialog.set_program_name ("Gemini Terminal");
+      dialog.set_version ("0.3.0");
+      dialog.set_website ("http://lovebug356.blogspot.com");
+      dialog.run ();
+      dialog.hide ();
+      dialog.destroy ();
+    }
 
     void focus_next_terminal_action_cb (Gtk.Action action) {
       lock (layout) {
