@@ -7,6 +7,7 @@ namespace Gemini {
     ActionGroup menu_actions;
     Gtk.VBox vbox;
     Gtk.Widget menubar;
+    Gtk.Menu popup_menu;
 
     Gemini.Layout layout;
 
@@ -18,6 +19,10 @@ namespace Gemini {
       {"NewTerminal",   null,       "_Open terminal",       "<shift><control>n",   null, new_terminal_action_cb},
       {"CloseTerminal", null,       "_Close terminal", "<shift><control>w", null, close_terminal_action_cb},
       {"Quit",          STOCK_QUIT, "_Quit",      null,   null, quit_action_cb},
+
+      {"Edit",          null,       "_Edit",          null, null, null},
+      {"Copy",          STOCK_COPY, "_Copy",          null, null, copy_action_cb},
+      {"Paste",         STOCK_PASTE,"_Paste",         null, null, paste_action_cb},
 
       {"View",          null,       "_View",          null, null, null},
 
@@ -44,6 +49,10 @@ namespace Gemini {
             <separator />
             <menuitem action ="Quit" />
           </menu>
+          <menu action="Edit">
+            <menuitem action="Copy" />
+            <menuitem action="Paste" />
+          </menu>
           <menu action="View">
             <menuitem action="ShowMenubar" />
             <menuitem action="Fullscreen" />
@@ -58,8 +67,31 @@ namespace Gemini {
             <menuitem action="About" />
           </menu>
         </menubar>
+        <popup name="PopupMenu">
+          <menuitem action="Copy" />
+          <menuitem action="Paste" />
+          <separator />
+          <menuitem action="Zoom" />
+          <menuitem action="FocusNextTerminal" />
+          <menuitem action="FocusLastTerminal" />
+          <separator />
+          <menuitem action ="NewTerminal" />
+          <menuitem action ="CloseTerminal" />
+        </popup>
       </ui>
     """;
+
+    void copy_action_cb (Gtk.Action action) {
+      lock (layout) {
+        layout.get_active_terminal ().copy_clipboard ();
+      }
+    }
+
+    void paste_action_cb (Gtk.Action action) {
+      lock (layout) {
+        layout.get_active_terminal ().paste_clipboard ();
+      }
+    }
 
     void zoom_action_cb (Gtk.Action action) {
       layout.virt_terminal_zoom (layout.get_active_terminal ());
@@ -132,6 +164,7 @@ namespace Gemini {
       menubar = ui_manager.get_widget ("/MenuBar");
       vbox.pack_start (menubar, false, false, 0);
       menubar.show_all ();
+      popup_menu = (Gtk.Menu) ui_manager.get_widget ("/PopupMenu");
     }
 
     bool key_press_event_cb (Gemini.Terminal terminal, Gdk.EventKey event_key) {
@@ -251,6 +284,13 @@ namespace Gemini {
         terminal.key_press_event += key_press_event_cb;
         terminal.child_exited += child_exited_cb;
         terminal.focus_out_event += focus_out_event;
+        terminal.button_press_event += (btn, ev) => {
+          if (ev.button == 3) {
+            popup_menu.popup (null, null, null, ev.button, ev.time);
+            return true;
+          }
+          return false;
+        };
         layout.terminal_add (terminal);
       }
     }
