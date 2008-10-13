@@ -2,7 +2,7 @@
 
 import Options
 
-VERSION="0.2.3"
+VERSION="0.2.4"
 APPNAME="gemini"
 
 srcdir = '.'

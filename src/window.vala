@@ -139,11 +139,11 @@ namespace Gemini {
             layout.virt_terminal_resize (terminal, 0, 30);
             break;
           case "f":
-            change_layout (new FullscreenLayout ());
+            change_layout (typeof (FullscreenLayout));
             layout.virt_terminal_focus (terminal);
             break;
           case "space":
-            change_layout (new TileLayout ());
+            change_layout (typeof (TileLayout));
             layout.virt_terminal_focus (terminal);
             break;
           case "b":
@@ -158,28 +158,49 @@ namespace Gemini {
       return valid;
     }
 
-    void change_layout (Gemini.Layout new_layout) {
-      /* connect the signals */
-      new_layout.all_terminals_exited += all_terminals_exited_cb;
-      new_layout.size_changed += (lay, size) => size_changed_cb (size);
+    void change_layout (GLib.Type new_layout_type) {
+      lock (layout) {
+        if (layout == null || layout.get_type () != new_layout_type) {
+          Layout old_layout;
+          old_layout = layout;
+          switch (new_layout_type) {
+            case typeof (FullscreenLayout):
+              layout = new FullscreenLayout ();
+              break;
+            case typeof (TileLayout):
+              layout = new TileLayout ();
+              break;
+            default:
+              warning ("Didn't recognize the requested layout type");
+              break;
+          }
 
-      if (layout != null) {
-        layout.virt_remove_widgets ();
-        vbox.remove (layout.layout_widget);
-        vbox.pack_start (new_layout.layout_widget, true, true, 0);
-        new_layout.terminal_list_add (layout.terminal_list);
-      } else {
-        vbox.pack_start (new_layout.layout_widget, true, true, 0);
+          /* connect the signals */
+          layout.all_terminals_exited += all_terminals_exited_cb;
+          layout.size_changed += (lay, size) => size_changed_cb (size);
+
+          if (old_layout != null) {
+            old_layout.virt_remove_widgets ();
+            vbox.remove (old_layout.layout_widget);
+            vbox.pack_start (layout.layout_widget, true, true, 0);
+            layout.terminal_list_add (old_layout.terminal_list);
+          } else {
+            vbox.pack_start (layout.layout_widget, true, true, 0);
+          }
+        }
       }
-      layout = new_layout;
     }
 
     void child_exited_cb (Gemini.Terminal terminal) {
-      layout.terminal_close (terminal);
+      lock (layout) {
+        layout.terminal_close (terminal);
+      }
     }
 
     void size_changed_cb (int size) {
-      set_title ("Gemini Terminal [%s-%dT]".printf (layout.name, size));
+      lock (layout) {
+        set_title ("Gemini Terminal [%s-%dT]".printf (layout.name, size));
+      }
     }
 
     void fullscreen_f11_action_cb (Gtk.Action action) {
@@ -218,7 +239,7 @@ namespace Gemini {
       vbox.show ();
 
       setup_ui_manager ();
-      change_layout (new Gemini.TileLayout ());
+      change_layout (typeof (Gemini.TileLayout));
       add_new_terminal ();
       destroy += Gtk.main_quit;
 
@@ -226,7 +247,7 @@ namespace Gemini {
       show ();
     }
   }
-  
+
   public static void main (string[] args) {
     Gtk.init (ref args);
     var gemini = new Gemini.Window ();
