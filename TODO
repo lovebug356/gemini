@@ -1,8 +1,6 @@
 Gemini terminal freighter
 =========================
 - Add a right-click menu for copy/paste/show-menu/...
-- Add a menu entry
-- optimize layout changes
 - Add a preference pane
 - Add the vte buffer length to the preferences...
 - Add gconf information
