@@ -47,9 +47,6 @@ namespace Gemini {
 
     public void terminal_focus_back () {
       lock (last_terminal) {
-        if (last_terminal == null || !terminal_list.containts (last_terminal)) {
-          if (get_active_terminal () == terminal_list.get (0))
-        }
         terminal_focus (last_terminal);
       }
     }

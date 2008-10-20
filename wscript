@@ -13,10 +13,11 @@ def set_options (opt):
 
 def configure (conf):
   conf.check_tool ('compiler_cc vala')
-  conf.check_pkg ('gthread-2.0', destvar='GTHREAD', vnum='2.16', mandatory=True)
-  conf.check_pkg ('glib-2.0', destvar='GLIB', vnum='2.10.0', mandatory=True)
-  conf.check_pkg ('vte', destvar='VTE', vnum='0.16.13', mandatory=True)
-  conf.check_pkg ('gee-1.0', destvar='GEE', vnum='0.1.4', mandatory=True)
+  conf.check_cfg (package='gthread-2.0',mandatory=1, args='--cflags --libs')
+  conf.check_cfg (package='glib-2.0',mandatory=1, args='--cflags --libs')
+  conf.check_cfg (package='vte',mandatory=1, args='--cflags --libs')
+  conf.check_cfg (package='gee-1.0',mandatory=1, args='--cflags --libs')
+  conf.check_cfg (package='gtk+-2.0',mandatory=1, args='--cflags --libs')
 
 def build (bld):
   bld.add_subdirs ('src')
