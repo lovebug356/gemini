@@ -11,14 +11,22 @@ namespace Gemini {
     construct {
       name = "tile";
       layout_widget = (Gtk.Widget) new Gtk.HBox (false, 0);
+      layout_widget.size_allocate += size_allocate_cb;
       layout_box = (Gtk.Box) layout_widget;
       layout_box.set_homogeneous (false);
       zoom_terminal = null;
       tile_box = new Gemini.TileBox ();
-      tile_width = 200;
+      tile_width = 40;
       layout_box.pack_end (tile_box, false, false, 0);
       tile_box.set_size_request (0, 0);
       layout_box.show_all ();
+    }
+
+    void size_allocate_cb (Gtk.Widget wdg, Gdk.Rectangle alloc) {
+      if (tile_width > 95) {
+        tile_width = 95;
+      }
+      tile_box.set_size_request ((terminal_list.size > 1 ? (layout_widget.allocation.width * tile_width) / 100: 0), 0);
     }
 
     void set_zoom_ontop_off_tile () {
@@ -29,27 +37,27 @@ namespace Gemini {
     }
 
     void resize (int delta_x, int delta_y) {
-      tile_width += delta_x;
+      tile_width += ((delta_x * 100) / layout_widget.allocation.width);
       if (tile_width < 0)
         tile_width = 0;
-      tile_box.set_size_request ((terminal_list.size > 1 ? tile_width : 0), 0);
+      tile_box.set_size_request ((terminal_list.size > 1 ? (layout_widget.allocation.width * tile_width) / 100: 0), 0);
     }
 
-    protected override void remove_widgets () {
+    protected override void virt_remove_widgets () {
       tile_box.remove_all_terminals ();
       layout_box.remove (tile_box);
       layout_box.remove (zoom_terminal);
     }
 
-    protected override void terminal_resize (Gemini.Terminal terminal, int delta_x, int delta_y) {
+    protected override void virt_terminal_resize (Gemini.Terminal terminal, int delta_x, int delta_y) {
       resize (-delta_x, delta_y);
     }
 
-    protected override void focus (Gemini.Terminal terminal) {
+    protected override void virt_terminal_focus (Gemini.Terminal terminal) {
       terminal.grab_focus ();
     }
 
-    protected override void terminal_new_widget (Gemini.Terminal terminal) {
+    protected override void virt_terminal_new_widget (Gemini.Terminal terminal) {
       if (zoom_terminal != null)
         set_zoom_ontop_off_tile ();
       zoom_terminal = terminal;
@@ -57,7 +65,7 @@ namespace Gemini {
       zoom_terminal.grab_focus ();
     }
 
-    protected override void focus_next (Gemini.Terminal terminal) {
+    protected override void virt_terminal_focus_next (Gemini.Terminal terminal) {
       if (zoom_terminal == terminal) {
         tile_box.set_focus_first ();
       } else if (!tile_box.set_focus_next ()) {
@@ -65,19 +73,19 @@ namespace Gemini {
       }
     }
 
-    protected override void terminal_zoom (Gemini.Terminal terminal) {
+    protected override void virt_terminal_zoom (Gemini.Terminal terminal) {
       if (zoom_terminal != terminal) {
-        terminal_remove_widget (terminal);
-        terminal_new_widget (terminal);
+        virt_terminal_remove_widget (terminal);
+        virt_terminal_new_widget (terminal);
       } else {
         var top_terminal = tile_box.remove_first_terminal ();
         if (top_terminal != null) {
-          terminal_new_widget (top_terminal);
+          virt_terminal_new_widget (top_terminal);
         }
       }
     }
 
-    protected override void terminal_remove_widget (Gemini.Terminal terminal) {
+    protected override void virt_terminal_remove_widget (Gemini.Terminal terminal) {
       if (zoom_terminal == terminal) {
         layout_box.remove (terminal);
         zoom_terminal = tile_box.remove_first_terminal ();
