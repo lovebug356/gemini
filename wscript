@@ -18,6 +18,7 @@ def configure (conf):
   conf.check_cfg (package='vte',mandatory=1, args='--cflags --libs')
   conf.check_cfg (package='gee-1.0',mandatory=1, args='--cflags --libs')
   conf.check_cfg (package='gtk+-2.0',mandatory=1, args='--cflags --libs')
+  conf.check_cfg (package='gdk-pixbuf-2.0',mandatory=1, args='--cflags --libs')
 
 def build (bld):
   bld.add_subdirs ('src')

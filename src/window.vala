@@ -8,6 +8,7 @@ namespace Gemini {
     Gtk.VBox vbox;
     Gtk.Widget menubar;
     Gtk.Menu popup_menu;
+    Gdk.Pixbuf gemini_logo;
 
     Gemini.Layout layout;
 
@@ -113,6 +114,8 @@ namespace Gemini {
 
     void about_action_cb (Gtk.Action action) {
       var dialog = new AboutDialog ();
+      dialog.set_logo_icon_name ("gemini");
+      dialog.set_icon (gemini_logo);
       dialog.set_copyright ("Copyright (c) 2008 Thijs Vermeir");
       dialog.set_program_name ("Gemini Terminal");
       /* FIXME the version number needs to come from the build system */
@@ -311,6 +314,13 @@ namespace Gemini {
       destroy += Gtk.main_quit;
 
       set_default_size (640, 480);
+      string filename = Gemini.File.pixbufs ("gemini.svg");
+      try {
+        gemini_logo = new Gdk.Pixbuf.from_file (filename);
+        set_icon (gemini_logo);
+      } catch (Error e) {
+        gemini_logo = null;
+      }
       show ();
     }
   }
