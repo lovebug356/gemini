@@ -10,6 +10,8 @@ blddir = 'build'
 
 def set_options (opt):
   opt.tool_options ('compiler_cc')
+  opt.add_option ('--debian-only', action='store_true', default=False,
+      help='Only build the debian files')
 
 def configure (conf):
   conf.check_tool ('compiler_cc vala misc')
@@ -23,6 +25,8 @@ def configure (conf):
   conf.env['srcdir'] = srcdir
 
 def build (bld):
+  import Options
   bld.add_subdirs ('debian')
-  bld.add_subdirs ('src')
-  bld.add_subdirs ('share')
+  if not Options.options.debian_only:
+    bld.add_subdirs ('src')
+    bld.add_subdirs ('share')
