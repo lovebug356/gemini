@@ -47,8 +47,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="7.7781746"
-     inkscape:cx="17.494985"
-     inkscape:cy="30.01202"
+     inkscape:cx="37.957329"
+     inkscape:cy="29.74743"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:document-units="px"
@@ -72,47 +72,35 @@
      id="layer1"
      inkscape:label="Layer 1"
      inkscape:groupmode="layer">
-    <path
-       sodipodi:type="arc"
-       style="fill:#edd400;fill-opacity:1;stroke:#c4a000;stroke-opacity:1"
-       id="path3069"
-       sodipodi:cx="-1.0909091"
-       sodipodi:cy="74.090912"
-       sodipodi:rx="26.727272"
-       sodipodi:ry="9.545455"
-       d="M 25.636363,74.090912 A 26.727272,9.545455 0 1 1 -27.818181,74.090912 A 26.727272,9.545455 0 1 1 25.636363,74.090912 z"
-       transform="matrix(0.9976778,0,0,2.794022,33.588376,-175.51664)" />
-    <path
-       sodipodi:type="arc"
-       style="fill:#555753;fill-opacity:1;stroke:#2e3436;stroke-opacity:1"
-       id="path3071"
-       sodipodi:cx="-19.272728"
-       sodipodi:cy="-33.090908"
-       sodipodi:rx="23.272728"
-       sodipodi:ry="20"
-       d="M 4,-33.090908 A 23.272728,20 0 1 1 -42.545456,-33.090908 A 23.272728,20 0 1 1 4,-33.090908 z"
-       transform="matrix(0.8125415,0,0,0.9456805,48.15989,62.788403)" />
     <text
        xml:space="preserve"
        style="font-size:19.49128532px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#4e9a06;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier 10 Pitch;-inkscape-font-specification:Courier 10 Pitch Bold"
-       x="17.126135"
-       y="36.69553"
+       x="-71.055817"
+       y="33.095161"
        id="text2396"
        transform="scale(1.0001536,0.9998464)"><tspan
          sodipodi:role="line"
          id="tspan2398"
-         x="17.126135"
-         y="36.69553">Ge_</tspan></text>
+         x="-71.055817"
+         y="33.095161">Ge_</tspan></text>
+    <rect
+       style="fill:#555753;fill-opacity:1;stroke:#edd400;stroke-width:2.16871977;stroke-opacity:1"
+       id="rect2405"
+       width="52.83128"
+       height="52.83128"
+       x="5.5843601"
+       y="5.5843601"
+       ry="7.6570978" />
     <text
        xml:space="preserve"
-       style="font-size:19.49128532px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier 10 Pitch;-inkscape-font-specification:Courier 10 Pitch Bold"
-       x="15.713632"
-       y="35.793034"
+       style="font-size:40.75427628px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier 10 Pitch;-inkscape-font-specification:Courier 10 Pitch Bold"
+       x="8.5295372"
+       y="43.273472"
        id="text2387"
        transform="scale(1.0001536,0.9998464)"><tspan
          sodipodi:role="line"
          id="tspan2389"
-         x="15.713632"
-         y="35.793034">Ge_</tspan></text>
+         x="8.5295372"
+         y="43.273472">Ge</tspan></text>
   </g>
 </svg>
