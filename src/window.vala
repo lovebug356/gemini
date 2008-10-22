@@ -119,7 +119,7 @@ namespace Gemini {
       dialog.set_copyright ("Copyright (c) 2008 Thijs Vermeir");
       dialog.set_program_name ("Gemini Terminal");
       /* FIXME the version number needs to come from the build system */
-      dialog.set_version ("0.3.0");
+      dialog.set_version (Gemini.version);
       dialog.set_website ("http://lovebug356.blogspot.com");
       dialog.run ();
       dialog.hide ();

@@ -23,6 +23,8 @@ def configure (conf):
   conf.check_cfg (package='gdk-pixbuf-2.0',mandatory=1, args='--cflags --libs')
   conf.env['VERSION'] = VERSION
   conf.env['srcdir'] = srcdir
+  conf.define ('VERSION', VERSION)
+  conf.write_config_header ('config.h')
 
 def build (bld):
   import Options
