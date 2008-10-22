@@ -1,0 +1,5 @@
+#!/bin/bash
+./waf configure
+./waf
+cp build/default/debian/changelog debian
+dpkg-buildpackage -rfakeroot -b

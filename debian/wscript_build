@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+
+changelog = bld.new_task_gen ('subst')
+changelog.source = 'changelog.in'
+changelog.target = 'changelog'
+changelog.dict = {'VERSION' : bld.env['VERSION']}
+changelog.install_path = bld.env['srcdir'] + "/debian/"

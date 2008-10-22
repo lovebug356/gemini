@@ -1,6 +1,6 @@
 gemini (0.3.1-1) unstable; urgency=low
 
-  * Initial release
+  * Debian/Ubuntu release
 
  -- Thijs Vermeir <thijsvermeir@gmail.com>  Mon, 06 Oct 2008 00:10:35 +0200
 
