@@ -13,7 +13,7 @@
    id="svg2641"
    sodipodi:version="0.32"
    inkscape:version="0.46"
-   sodipodi:docname="galactica.svg"
+   sodipodi:docname="gemini.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs2643">
@@ -47,15 +47,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="7.7781746"
-     inkscape:cx="14.210623"
-     inkscape:cy="41.167006"
+     inkscape:cx="17.494985"
+     inkscape:cy="30.01202"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:document-units="px"
      inkscape:grid-bbox="true"
-     inkscape:window-width="1349"
-     inkscape:window-height="988"
-     inkscape:window-x="134"
+     inkscape:window-width="1280"
+     inkscape:window-height="725"
+     inkscape:window-x="0"
      inkscape:window-y="25" />
   <metadata
      id="metadata2646">
@@ -81,7 +81,7 @@
        sodipodi:rx="26.727272"
        sodipodi:ry="9.545455"
        d="M 25.636363,74.090912 A 26.727272,9.545455 0 1 1 -27.818181,74.090912 A 26.727272,9.545455 0 1 1 25.636363,74.090912 z"
-       transform="matrix(1.1609521,0,0,3.2490283,33.266493,-208.71032)" />
+       transform="matrix(0.9976778,0,0,2.794022,33.588376,-175.51664)" />
     <path
        sodipodi:type="arc"
        style="fill:#555753;fill-opacity:1;stroke:#2e3436;stroke-opacity:1"
@@ -91,28 +91,28 @@
        sodipodi:rx="23.272728"
        sodipodi:ry="20"
        d="M 4,-33.090908 A 23.272728,20 0 1 1 -42.545456,-33.090908 A 23.272728,20 0 1 1 4,-33.090908 z"
-       transform="matrix(1.0750976,0,0,1.2503928,52.720064,73.389784)" />
+       transform="matrix(0.8125415,0,0,0.9456805,48.15989,62.788403)" />
     <text
        xml:space="preserve"
-       style="font-size:31.18867111px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#4e9a06;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier 10 Pitch;-inkscape-font-specification:Courier 10 Pitch Bold"
-       x="14.143248"
-       y="40.644882"
-       id="text3149"
-       transform="scale(1.0002519,0.9997482)"><tspan
+       style="font-size:19.49128532px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#4e9a06;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier 10 Pitch;-inkscape-font-specification:Courier 10 Pitch Bold"
+       x="17.126135"
+       y="36.69553"
+       id="text2396"
+       transform="scale(1.0001536,0.9998464)"><tspan
          sodipodi:role="line"
-         id="tspan3151"
-         x="14.143248"
-         y="40.644882">Ga</tspan></text>
+         id="tspan2398"
+         x="17.126135"
+         y="36.69553">Ge_</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:31.18867111px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier 10 Pitch;-inkscape-font-specification:Courier 10 Pitch Bold"
-       x="13.174012"
-       y="39.462204"
+       style="font-size:19.49128532px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier 10 Pitch;-inkscape-font-specification:Courier 10 Pitch Bold"
+       x="15.713632"
+       y="35.793034"
        id="text2387"
-       transform="scale(1.0002519,0.9997482)"><tspan
+       transform="scale(1.0001536,0.9998464)"><tspan
          sodipodi:role="line"
          id="tspan2389"
-         x="13.174012"
-         y="39.462204">Ga</tspan></text>
+         x="15.713632"
+         y="35.793034">Ge_</tspan></text>
   </g>
 </svg>
