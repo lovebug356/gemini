@@ -21,12 +21,4 @@ def configure (conf):
 
 def build (bld):
   bld.add_subdirs ('src')
-
-def dist ():
-  import os
-  folder = 'build/%s-%s' % (APPNAME, VERSION)
-  os.system ('rm -rf FOLDER ; mkdir FOLDER ; cp waf FOLDER ; cp wscript FOLDER && cd FOLDER && vim wscript -c ":%s/ vala//" -c ":wq"'.replace ('FOLDER', folder))
-  for src_folder in ['src']:
-    os.system ('cp -r SRCFOLDER FOLDER ; for file in `find ./build/default/SRCFOLDER -name "*.[ch]"` ; do cp $file FOLDER/src ; done'.replace('SRCFOLDER', src_folder).replace ('FOLDER', folder))
-  os.system ('for file in `find FOLDER -name "*.vala"` ; do rm -rf $file ; done ; cd build ; tar -zcf APPNAME-VERSION.tar.gz APPNAME-VERSION ; tar -jcf APPNAME-VERSION.tar.bz2 APPNAME-VERSION.tar.bz2 ; rm -rf APPNAME-VERSION'.replace ('APPNAME', APPNAME).replace ('VERSION', VERSION).replace('FOLDER', folder))
-
+  bld.add_subdirs ('share')

@@ -1,0 +1,1 @@
+bld.install_files ('${PREFIX}/share/pixmaps', 'gemini.svg')
