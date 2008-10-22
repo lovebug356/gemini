@@ -114,7 +114,7 @@ namespace Gemini {
 
     void about_action_cb (Gtk.Action action) {
       var dialog = new AboutDialog ();
-      dialog.set_logo_icon_name ("gemini");
+      dialog.set_logo (gemini_logo);
       dialog.set_icon (gemini_logo);
       dialog.set_copyright ("Copyright (c) 2008 Thijs Vermeir");
       dialog.set_program_name ("Gemini Terminal");
