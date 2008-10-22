@@ -7,3 +7,4 @@ utillib.packages = 'gee-1.0'
 utillib.target='util-lib'
 utillib.name='util-lib'
 utillib.threading = True
+utillib.install_path = None

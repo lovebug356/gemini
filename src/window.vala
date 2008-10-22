@@ -314,7 +314,7 @@ namespace Gemini {
       destroy += Gtk.main_quit;
 
       set_default_size (640, 480);
-      string filename = Gemini.File.pixbufs ("gemini.svg");
+      string filename = Gemini.File.pixmaps ("gemini.svg");
       try {
         gemini_logo = new Gdk.Pixbuf.from_file (filename);
         set_icon (gemini_logo);
