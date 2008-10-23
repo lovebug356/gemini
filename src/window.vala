@@ -13,6 +13,7 @@ namespace Gemini {
     Gemini.Layout layout;
 
     Action copy_action;
+    Action search_action;
     ToggleAction fullscreen_action;
     ToggleAction show_menubar_action;
 
@@ -25,6 +26,9 @@ namespace Gemini {
       {"Edit",          null,       "_Edit",          null, null, null},
       {"Copy",          STOCK_COPY, "_Copy",          "<shift><control>c", null, copy_action_cb},
       {"Paste",         STOCK_PASTE,"_Paste",         "<shift><control>v", null, paste_action_cb},
+      {"Search",          null,       "_Search in ...",          null, null, null},
+      {"DevHelp",         null,       "_Devhelp",     null, null, devhelp_action_cb},
+      {"GnomeSearch",         null,       "_Gnome search",     null, null, gnome_search_action_cb},
 
       {"View",          null,       "_View",          null, null, null},
 
@@ -54,6 +58,11 @@ namespace Gemini {
           <menu action="Edit">
             <menuitem action="Copy" />
             <menuitem action="Paste" />
+            <separator />
+            <menu action="Search">
+              <menuitem action="DevHelp" />
+              <menuitem action="GnomeSearch" />
+            </menu>
           </menu>
           <menu action="View">
             <menuitem action="ShowMenubar" />
@@ -64,6 +73,7 @@ namespace Gemini {
             <menuitem action="FocusLastTerminal" />
             <separator />
             <menuitem action="Zoom" />
+            <separator />
           </menu>
           <menu action="Help">
             <menuitem action="About" />
@@ -72,6 +82,11 @@ namespace Gemini {
         <popup name="PopupMenu">
           <menuitem action="Copy" />
           <menuitem action="Paste" />
+          <separator />
+          <menu action="Search">
+            <menuitem action="DevHelp" />
+            <menuitem action="GnomeSearch" />
+          </menu>
           <separator />
           <menuitem action="Zoom" />
           <menuitem action="FocusNextTerminal" />
@@ -82,6 +97,36 @@ namespace Gemini {
         </popup>
       </ui>
     """;
+
+    void gnome_search_request_text_cb (Gtk.Clipboard clipboard, string selection) {
+      try {
+        Process.spawn_command_line_async ("gnome-search-tool --named=\""+selection.strip()+"\" --start");
+      } catch (GLib.SpawnError err) {}
+    }
+
+    void gnome_search_action_cb (Gtk.Action action) {
+      lock (layout) {
+        var terminal = layout.get_active_terminal ();
+        terminal.copy_clipboard ();
+        var clipboard = terminal.get_clipboard (Gdk.SELECTION_CLIPBOARD);
+        clipboard.request_text (gnome_search_request_text_cb);
+      }
+    }
+
+    void dev_help_request_text_cb (Gtk.Clipboard clipboard, string selection) {
+      try {
+        Process.spawn_command_line_async ("devhelp -s \""+selection.strip()+"\"");
+      } catch (GLib.SpawnError err) {}
+    }
+
+    void devhelp_action_cb (Gtk.Action action) {
+      lock (layout) {
+        var terminal = layout.get_active_terminal ();
+        terminal.copy_clipboard ();
+        var clipboard = terminal.get_clipboard (Gdk.SELECTION_CLIPBOARD);
+        clipboard.request_text (dev_help_request_text_cb);
+      }
+    }
 
     void copy_action_cb (Gtk.Action action) {
       lock (layout) {
@@ -160,6 +205,7 @@ namespace Gemini {
       fullscreen_action = (Gtk.ToggleAction) menu_actions.get_action ("Fullscreen");
       show_menubar_action = (Gtk.ToggleAction) menu_actions.get_action ("ShowMenubar");
       copy_action = (Gtk.Action) menu_actions.get_action ("Copy");
+      search_action = (Gtk.Action) menu_actions.get_action ("Search");
       ui_manager.insert_action_group (menu_actions, 0);
       try {
         ui_manager.add_ui_from_string (MAIN_UI, MAIN_UI.length);
@@ -285,7 +331,9 @@ namespace Gemini {
     }
 
     void terminal_selection_changed_cb (Gemini.Terminal terminal) {
-      copy_action.set_sensitive (terminal.get_has_selection ());
+      bool selection = terminal.get_has_selection ();
+      copy_action.set_sensitive (selection);
+      search_action.set_sensitive (selection);
     }
 
     bool terminal_button_press_event_cb (Gemini.Terminal terminal, Gdk.EventButton button) {
