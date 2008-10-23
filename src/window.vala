@@ -12,6 +12,7 @@ namespace Gemini {
 
     Gemini.Layout layout;
 
+    Action copy_action;
     ToggleAction fullscreen_action;
     ToggleAction show_menubar_action;
 
@@ -158,6 +159,7 @@ namespace Gemini {
       menu_actions.add_toggle_actions (toggle_entries, this);
       fullscreen_action = (Gtk.ToggleAction) menu_actions.get_action ("Fullscreen");
       show_menubar_action = (Gtk.ToggleAction) menu_actions.get_action ("ShowMenubar");
+      copy_action = (Gtk.Action) menu_actions.get_action ("Copy");
       ui_manager.insert_action_group (menu_actions, 0);
       try {
         ui_manager.add_ui_from_string (MAIN_UI, MAIN_UI.length);
@@ -282,19 +284,32 @@ namespace Gemini {
       return false;
     }
 
+    void terminal_selection_changed_cb (Gemini.Terminal terminal) {
+      copy_action.set_sensitive (terminal.get_has_selection ());
+    }
+
+    bool terminal_button_press_event_cb (Gemini.Terminal terminal, Gdk.EventButton button) {
+      if (button.button == 3) {
+        popup_menu.popup (null, null, null, button.button, button.time);
+        return true;
+      }
+      return false;
+    }
+
+    bool terminal_focus_in_event_cb (Gemini.Terminal terminal, Gdk.EventFocus focus) {
+      terminal_selection_changed_cb (terminal);
+      return false;
+    }
+
     void add_new_terminal () {
       lock (layout) {
         Gemini.Terminal terminal = new Gemini.Terminal ();
         terminal.key_press_event += key_press_event_cb;
         terminal.child_exited += child_exited_cb;
         terminal.focus_out_event += focus_out_event;
-        terminal.button_press_event += (btn, ev) => {
-          if (ev.button == 3) {
-            popup_menu.popup (null, null, null, ev.button, ev.time);
-            return true;
-          }
-          return false;
-        };
+        terminal.button_press_event += terminal_button_press_event_cb;
+        terminal.selection_changed += terminal_selection_changed_cb;
+        terminal.focus_in_event += terminal_focus_in_event_cb;
         layout.terminal_add (terminal);
       }
     }
