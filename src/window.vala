@@ -92,6 +92,8 @@ namespace Gemini {
           <menuitem action="FocusNextTerminal" />
           <menuitem action="FocusLastTerminal" />
           <separator />
+          <menuitem action="ShowMenubar" />
+          <separator />
           <menuitem action ="NewTerminal" />
           <menuitem action ="CloseTerminal" />
         </popup>
