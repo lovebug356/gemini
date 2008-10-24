@@ -98,33 +98,19 @@ namespace Gemini {
       </ui>
     """;
 
-    void gnome_search_request_text_cb (Gtk.Clipboard clipboard, string selection) {
-      try {
-        Process.spawn_command_line_async ("gnome-search-tool --named=\""+selection.strip()+"\" --start");
-      } catch (GLib.SpawnError err) {}
-    }
-
     void gnome_search_action_cb (Gtk.Action action) {
       lock (layout) {
         var terminal = layout.get_active_terminal ();
-        terminal.copy_clipboard ();
-        var clipboard = terminal.get_clipboard (Gdk.SELECTION_CLIPBOARD);
-        clipboard.request_text (gnome_search_request_text_cb);
+        var search_tool = new GnomeSearch ();
+        search_tool.do_search (terminal);
       }
-    }
-
-    void dev_help_request_text_cb (Gtk.Clipboard clipboard, string selection) {
-      try {
-        Process.spawn_command_line_async ("devhelp -s \""+selection.strip()+"\"");
-      } catch (GLib.SpawnError err) {}
     }
 
     void devhelp_action_cb (Gtk.Action action) {
       lock (layout) {
         var terminal = layout.get_active_terminal ();
-        terminal.copy_clipboard ();
-        var clipboard = terminal.get_clipboard (Gdk.SELECTION_CLIPBOARD);
-        clipboard.request_text (dev_help_request_text_cb);
+        var search_tool = new DevHelpSearch ();
+        search_tool.do_search (terminal);
       }
     }
 
