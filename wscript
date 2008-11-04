@@ -28,7 +28,17 @@ def configure (conf):
 
 def build (bld):
   import Options
-  bld.add_subdirs ('debian')
-  if not Options.options.debian_only:
-    bld.add_subdirs ('src')
-    bld.add_subdirs ('share')
+  if Options.options.debian_only:
+    bld.add_subdirs ('debian')
+    return
+  bld.add_subdirs ('lib')
+  bld.add_subdirs ('src')
+  bld.add_subdirs ('share')
+
+def shutdown ():
+  import UnitTest
+  unittest = UnitTest.unit_test ()
+  unittest.want_to_see_test_output = True
+  unittest.want_to_see_test_error = True
+  unittest.run ()
+  unittest.print_results ()

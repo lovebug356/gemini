@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+libgemini = bld.new_task_gen ('cc', 'staticlib')
+libgemini.find_sources_in_dirs ('.')
+libgemini.uselib='GLIB-2.0 VTE GEE-1.0 GTHREAD GTK+-2.0 GDK-PIXBUF-2.0'
+libgemini.packages = 'vte gee-1.0 gdk-pixbuf-2.0'
+libgemini.vapi_dirs = '.'
+libgemini.target='libgemini'
+libgemini.threading = True
+
+bld.add_subdirs ('test')

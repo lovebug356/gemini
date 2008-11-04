@@ -271,16 +271,12 @@ namespace Gemini {
         if (layout == null || layout.get_type () != new_layout_type) {
           Layout old_layout;
           old_layout = layout;
-          switch (new_layout_type) {
-            case typeof (FullscreenLayout):
-              layout = new FullscreenLayout ();
-              break;
-            case typeof (TileLayout):
-              layout = new TileLayout ();
-              break;
-            default:
-              warning ("Didn't recognize the requested layout type");
-              break;
+          if (new_layout_type == typeof (FullscreenLayout)) {
+            layout = new FullscreenLayout ();
+          } else if (new_layout_type == typeof (TileLayout)) {
+            layout = new TileLayout ();
+          } else {
+            warning ("Didn't recognize the requested layout type");
           }
 
           /* connect the signals */
