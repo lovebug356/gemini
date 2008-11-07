@@ -8,3 +8,4 @@ def make_test (bld, name):
 
 make_test (bld, 'collection')
 make_test (bld, 'terminal')
+make_test (bld, 'layout-tile')
