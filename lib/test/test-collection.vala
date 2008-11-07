@@ -14,6 +14,14 @@ void test_collection_add () {
   assert (collection.size == 2);
 }
 
+void test_collection_add_new_terminal () {
+  var collection = new Gemini.Collection ();
+  collection.add_new_terminal ();
+  assert (collection.size == 1);
+  collection.add_new_terminal ();
+  assert (collection.size == 2);
+}
+
 void test_collection_remove () {
   var collection = new Gemini.Collection ();
   var terminal1 = new Gemini.Terminal ();
@@ -64,6 +72,7 @@ void main (string[] args) {
 
   Test.add_func ("/Gemini/Collection/Create", test_collection_create);
   Test.add_func ("/Gemini/Collection/Add", test_collection_add);
+  Test.add_func ("/Gemini/Collection/AddNewTerminal", test_collection_add_new_terminal);
   Test.add_func ("/Gemini/Collection/Remove", test_collection_remove);
   Test.add_func ("/Gemini/Collection/Get", test_collection_get);
   Test.add_func ("/Gemini/Collection/Zoom", test_collection_zoom);

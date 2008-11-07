@@ -23,6 +23,12 @@ namespace Gemini {
       }
     }
 
+    public void add_new_terminal () {
+      lock (terminals) {
+        terminals.add (new Gemini.Terminal ());
+      }
+    }
+
     public void add (Gemini.Terminal terminal) {
       lock (terminals) {
         terminals.add (terminal);
