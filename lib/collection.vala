@@ -23,16 +23,26 @@ namespace Gemini {
       }
     }
 
-    public void add_new_terminal () {
+    public bool add_new_terminal () {
+      bool added = true;
       lock (terminals) {
-        terminals.add (new Gemini.Terminal ());
+        if (layout == null)
+          added = false;
+        else
+          terminals.add (new Gemini.Terminal ());
       }
+      return added;
     }
 
-    public void add (Gemini.Terminal terminal) {
+    public bool add (Gemini.Terminal terminal) {
+      bool added = true;
       lock (terminals) {
-        terminals.add (terminal);
+        if (layout == null)
+          added = false;
+        else
+          terminals.add (terminal);
       }
+      return added;
     }
 
     public void remove (Gemini.Terminal terminal) {
