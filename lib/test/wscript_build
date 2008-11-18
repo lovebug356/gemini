@@ -6,6 +6,6 @@ def make_test (bld, name):
   test.target = 'test-%s' % name
   test.unit_test = True
 
-make_test (bld, 'collection')
 make_test (bld, 'terminal')
+make_test (bld, 'collection')
 make_test (bld, 'layout-tile')

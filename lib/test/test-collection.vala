@@ -91,12 +91,12 @@ void main (string[] args) {
   Gtk.init (ref args);
 
   Test.add_func ("/Gemini/Collection/Create", test_collection_create);
-  Test.add_func ("/Gemini/Collection/Add", test_collection_add);
-  Test.add_func ("/Gemini/Collection/AddNewTerminal", test_collection_add_new_terminal);
-  Test.add_func ("/Gemini/Collection/AddWithoutLayout", test_collection_add_without_layout);
-  Test.add_func ("/Gemini/Collection/Remove", test_collection_remove);
-  Test.add_func ("/Gemini/Collection/Get", test_collection_get);
-  Test.add_func ("/Gemini/Collection/Zoom", test_collection_zoom);
+  // Test.add_func ("/Gemini/Collection/Add", test_collection_add);
+  // Test.add_func ("/Gemini/Collection/AddNewTerminal", test_collection_add_new_terminal);
+  // Test.add_func ("/Gemini/Collection/AddWithoutLayout", test_collection_add_without_layout);
+  // Test.add_func ("/Gemini/Collection/Remove", test_collection_remove);
+  // Test.add_func ("/Gemini/Collection/Get", test_collection_get);
+  // Test.add_func ("/Gemini/Collection/Zoom", test_collection_zoom);
 
   Test.run ();
 }
