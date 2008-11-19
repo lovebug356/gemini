@@ -6,6 +6,7 @@ namespace Gemini {
     Gemini.Terminal zoom_terminal;
     Gtk.HBox hbox;
     Gtk.VBox stack;
+    ArrayList<Gemini.Terminal> stack_terminals;
     
     construct {
       this.name = "tile";
@@ -18,12 +19,16 @@ namespace Gemini {
       hbox.pack_end (stack, false, false, 0);
       hbox.reorder_child (stack, 1);
 
+      stack_terminals = new ArrayList<Gemini.Terminal> ();
+
       hbox.show ();
       show ();
     }
 
     void terminal_push (Gemini.Terminal terminal) {
       stack.pack_end (terminal, false, false, 0);
+      stack_terminals.insert (0, terminal);
+      stack.reorder_child (terminal, stack_terminals.size - 1);
     }
 
     public void terminal_add_on_top (Gemini.Terminal terminal) {
@@ -50,8 +55,10 @@ namespace Gemini {
       if (position == 0) {
         terminal_add_on_top (terminal);
       } else {
+        int stack_pos = (stack_terminals.size + 1) - (int)position;
         stack.pack_end (terminal, false, false, 0);
-        stack.reorder_child (terminal, (int)position - 1);
+        stack_terminals.insert ((int)position-1, terminal);
+        stack.reorder_child (terminal, stack_pos);
       }
       terminal.show ();
       return true;

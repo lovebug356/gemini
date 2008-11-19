@@ -69,7 +69,13 @@ void test_layout_add_pos_5 () {
   layout.terminal_add (terminal4, 2);
   layout.terminal_add (terminal5, 0);
   
-  assert (false == true);
+  assert (get_zoom_from_layout (layout) == terminal5);
+  var stack = get_stack_from_layout (layout);
+  assert (get_terminal_from_stack (stack, 0) == terminal1);
+  assert (get_terminal_from_stack (stack, 1) == terminal3);
+  assert (get_terminal_from_stack (stack, 2) == terminal4);
+  assert (get_terminal_from_stack (stack, 3) == terminal2);
+
 }
 
 Gtk.VBox get_stack_from_layout (Gemini.Layout layout) {
