@@ -64,8 +64,12 @@ namespace Gemini {
       } else {
         if (terminal == zoom_terminal) {
           terminal_pop ();
-          stack.reorder_child (terminal, stack_terminals.size - (int)position);
         }
+        stack_terminals.remove (terminal);
+        stack_terminals.insert ((int)position -1, terminal);
+
+        int new_pos = stack_terminals.size - (int) position - 1;
+        stack.reorder_child (terminal, (int)new_pos);
       }
       return true;
     }
