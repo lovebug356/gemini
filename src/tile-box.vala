@@ -10,7 +10,7 @@ namespace Gemini {
     }
 
     public int get_length () {
-      weak List<Gemini.Terminal> list = get_children ();
+      List<Gemini.Terminal> list = get_children ();
       return (int) list.length ();
     }
 
@@ -25,7 +25,7 @@ namespace Gemini {
       Gemini.Terminal terminal;
       int length = get_length ();
 
-      weak List<Gemini.Terminal> list = get_children ();
+      List<Gemini.Terminal> list = get_children ();
 
       if (length >= 1) {
         terminal = list.nth_data (0);
@@ -34,18 +34,16 @@ namespace Gemini {
     }
 
     public void remove_all_terminals () {
-      weak List<Gemini.Terminal> list = get_children ();
+      List<Gemini.Terminal> list = get_children ();
       foreach (Gemini.Terminal term in list) {
         remove (term);
       }
     }
 
     public bool set_focus_next () {
-      Gemini.Terminal terminal;
-      int length = get_length ();
       bool found = false;
       bool next_focus = false;
-      weak List<Gemini.Terminal> list = get_children ();
+      List<Gemini.Terminal> list = get_children ();
 
       foreach (Gemini.Terminal term in list) {
         if (!found) {
@@ -61,8 +59,7 @@ namespace Gemini {
     }
 
     public Gemini.Terminal? get_first_terminal () {
-      Gemini.Terminal terminal;
-      weak List<Gemini.Terminal> list = get_children ();
+      List<Gemini.Terminal> list = get_children ();
 
       if (list.length () == 0)
         return null;
