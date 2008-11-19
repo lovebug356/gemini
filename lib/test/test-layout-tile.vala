@@ -344,6 +344,28 @@ void test_layout_remove_all_5 () {
   assert (layout.size == 0);
 }
 
+void test_layout_mixed () {
+  var layout = new Gemini.TileLayout ();
+  var terminal1 = new Gemini.Terminal ();
+  var terminal2 = new Gemini.Terminal ();
+  var terminal3 = new Gemini.Terminal ();
+  var terminal4 = new Gemini.Terminal ();
+  var terminal5 = new Gemini.Terminal ();
+  for (int j = 0; j < 100; j++) {
+    layout.terminal_add (terminal1, 0);
+    layout.terminal_add (terminal2, 0);
+    layout.terminal_add (terminal3, 1);
+    layout.terminal_add (terminal4, 1);
+    layout.terminal_add (terminal5, 3);
+    for (int i=0; i < 1000; i++) {
+      layout.terminal_remove (terminal4);
+      layout.terminal_add (terminal4, 0);
+      layout.terminal_move (terminal4, 3);
+    }
+    layout.all_terminals_remove ();
+  }
+}
+
 void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
@@ -364,6 +386,7 @@ void main (string[] args) {
   Test.add_func ("/Gemini/Layout/Tile/AddAll2", test_layout_add_all_2);
   Test.add_func ("/Gemini/Layout/Tile/RemoveAll1", test_layout_remove_all_1);
   Test.add_func ("/Gemini/Layout/Tile/RemoveAll5", test_layout_remove_all_5);
+  Test.add_func ("/Gemini/Layout/Tile/Mixed", test_layout_mixed);
 
   Test.run ();
 }
