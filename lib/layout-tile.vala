@@ -132,5 +132,13 @@ namespace Gemini {
       }
       return true;
     }
+
+    public override bool all_terminals_remove () {
+      while (size > 0) {
+        var terminal = stack_terminals.get (0);
+        terminal_remove (terminal);
+      }
+      return true;
+    }
   }
 }
