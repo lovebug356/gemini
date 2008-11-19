@@ -32,12 +32,17 @@ namespace Gemini {
     }
 
     void terminal_pop () {
+      if (stack_terminals.size == 0)
+        return;
+
       var terminal = stack_terminals.get (0);
 
-      stack.remove (terminal);
-      stack_terminals.remove (terminal);
+      if (terminal != null) {
+        stack.remove (terminal);
+        stack_terminals.remove (terminal);
 
-      terminal_add_on_top (terminal);
+        terminal_add_on_top (terminal);
+      }
     }
 
     void terminal_add_on_top (Gemini.Terminal terminal) {
@@ -84,6 +89,22 @@ namespace Gemini {
         stack.reorder_child (terminal, stack_pos);
       }
       terminal.show ();
+      return true;
+    }
+
+    public override bool terminal_remove (Gemini.Terminal terminal) {
+      if (!(terminal in stack_terminals) && terminal != zoom_terminal)
+        return false;
+
+      if (terminal == zoom_terminal) {
+        hbox.remove (zoom_terminal);
+        zoom_terminal = null;
+        stack_terminals.remove (terminal);
+        terminal_pop ();
+      } else {
+        stack_terminals.remove (terminal);
+        stack.remove (terminal);
+      }
       return true;
     }
   }

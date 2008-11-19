@@ -191,6 +191,73 @@ void test_layout_move_5 () {
   assert (get_terminal_from_stack (stack, 3) == terminal4);
 }
 
+void test_layout_remove_1 () {
+  var layout = new Gemini.TileLayout ();
+  var terminal1 = new Gemini.Terminal ();
+  layout.terminal_add (terminal1, 0);
+  layout.terminal_remove (terminal1);
+
+  GLib.List children = layout.get_children ();
+  assert (children.length () == 1);
+  Gtk.HBox hbox = (Gtk.HBox) children.nth_data (0);
+  assert (hbox is Gtk.HBox);
+  GLib.List children_hbox = hbox.get_children ();
+  assert (children_hbox.length () == 1);
+  Gtk.VBox stack = (Gtk.VBox) children_hbox.nth_data (0);
+  assert (stack is Gtk.VBox);
+}
+
+void test_layout_remove_2 () {
+  var layout = new Gemini.TileLayout ();
+  var terminal1 = new Gemini.Terminal ();
+  var terminal2 = new Gemini.Terminal ();
+  layout.terminal_add (terminal1, 0);
+  layout.terminal_add (terminal2, 0);
+  layout.terminal_remove (terminal1);
+
+  var layout2 = new Gemini.TileLayout ();
+  var terminal3 = new Gemini.Terminal ();
+  var terminal4 = new Gemini.Terminal ();
+  layout2.terminal_add (terminal3, 0);
+  layout2.terminal_add (terminal4, 0);
+  layout2.terminal_remove (terminal4);
+
+  assert (get_zoom_from_layout (layout) == terminal2);
+  assert (get_zoom_from_layout (layout2) == terminal3);
+}
+
+void test_layout_remove_5 () {
+  var layout = new Gemini.TileLayout ();
+  var terminal1 = new Gemini.Terminal ();
+  var terminal2 = new Gemini.Terminal ();
+  var terminal3 = new Gemini.Terminal ();
+  var terminal4 = new Gemini.Terminal ();
+  var terminal5 = new Gemini.Terminal ();
+  layout.terminal_add (terminal1, 0);
+  layout.terminal_add (terminal2, 0);
+  layout.terminal_add (terminal3, 0);
+  layout.terminal_add (terminal4, 0);
+  layout.terminal_add (terminal5, 0);
+  layout.terminal_remove (terminal1);
+
+  assert (get_zoom_from_layout (layout) == terminal5);
+  var stack = get_stack_from_layout (layout);
+  assert (get_terminal_from_stack (stack, 0) == terminal4);
+  assert (get_terminal_from_stack (stack, 1) == terminal3);
+  assert (get_terminal_from_stack (stack, 2) == terminal2);
+
+  layout.terminal_remove (terminal3);
+  assert (get_zoom_from_layout (layout) == terminal5);
+  stack = get_stack_from_layout (layout);
+  assert (get_terminal_from_stack (stack, 0) == terminal4);
+  assert (get_terminal_from_stack (stack, 1) == terminal2);
+
+  layout.terminal_remove (terminal5);
+  assert (get_zoom_from_layout (layout) == terminal4);
+  stack = get_stack_from_layout (layout);
+  assert (get_terminal_from_stack (stack, 0) == terminal2);
+}
+
 void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
@@ -204,6 +271,9 @@ void main (string[] args) {
   Test.add_func ("/Gemini/Layout/Tile/Move1", test_layout_move_1);
   Test.add_func ("/Gemini/Layout/Tile/Move2", test_layout_move_2);
   Test.add_func ("/Gemini/Layout/Tile/Move5", test_layout_move_5);
+  Test.add_func ("/Gemini/Layout/Tile/Remove1", test_layout_remove_1);
+  Test.add_func ("/Gemini/Layout/Tile/Remove2", test_layout_remove_2);
+  Test.add_func ("/Gemini/Layout/Tile/Remove5", test_layout_remove_5);
 
   Test.run ();
 }
