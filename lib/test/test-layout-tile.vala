@@ -258,6 +258,21 @@ void test_layout_remove_5 () {
   assert (get_terminal_from_stack (stack, 0) == terminal2);
 }
 
+void test_layout_add_all_1 () {
+  var layout = new Gemini.TileLayout ();
+  ArrayList<Gemini.Terminal> list = new ArrayList<Gemini.Terminal> ();
+  var terminal1 = new Gemini.Terminal ();
+  var terminal2 = new Gemini.Terminal ();
+  var terminal3 = new Gemini.Terminal ();
+  var terminal4 = new Gemini.Terminal ();
+  var terminal5 = new Gemini.Terminal ();
+  list.add (terminal1);
+  list.add (terminal2);
+  list.add (terminal3);
+  list.add (terminal4);
+  list.add (terminal5);
+}
+
 void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
@@ -274,6 +289,7 @@ void main (string[] args) {
   Test.add_func ("/Gemini/Layout/Tile/Remove1", test_layout_remove_1);
   Test.add_func ("/Gemini/Layout/Tile/Remove2", test_layout_remove_2);
   Test.add_func ("/Gemini/Layout/Tile/Remove5", test_layout_remove_5);
+  Test.add_func ("/Gemini/Layout/Tile/AddAll1", test_layout_add_all_1);
 
   Test.run ();
 }
