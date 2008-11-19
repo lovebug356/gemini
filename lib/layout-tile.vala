@@ -25,30 +25,32 @@ namespace Gemini {
       show ();
     }
 
-    void terminal_push (Gemini.Terminal terminal) {
+    void stack_push (Gemini.Terminal terminal) {
       stack.pack_end (terminal, false, false, 0);
       stack_terminals.insert (0, terminal);
       stack.reorder_child (terminal, stack_terminals.size - 1);
     }
 
-    void terminal_pop () {
+    Gemini.Terminal? stack_pop () {
       if (stack_terminals.size == 0)
-        return;
+        return null;
 
       var terminal = stack_terminals.get (0);
 
       if (terminal != null) {
         stack.remove (terminal);
         stack_terminals.remove (terminal);
-
-        terminal_add_on_top (terminal);
       }
+      return terminal;
     }
 
-    void terminal_add_on_top (Gemini.Terminal terminal) {
+    void terminal_set_zoom (Gemini.Terminal? terminal) {
+      if (terminal == null)
+        return;
+
       if (zoom_terminal != null) {
         hbox.remove (zoom_terminal);
-        terminal_push (zoom_terminal);
+        stack_push (zoom_terminal);
       }
       hbox.pack_end (terminal, false, false, 0);
       zoom_terminal = terminal;
@@ -63,12 +65,13 @@ namespace Gemini {
           (position > 0 && terminal == stack_terminals.get ((int)position-1)))
         return true;
 
-      if (position == 0 && terminal != zoom_terminal) {
+      if (position == 0) {
         stack.remove (terminal);
-        terminal_add_on_top (terminal);
+        terminal_set_zoom (terminal);
       } else {
         if (terminal == zoom_terminal) {
-          terminal_pop ();
+          var zoom = stack_pop ();
+          terminal_set_zoom (zoom);
         }
         stack_terminals.remove (terminal);
         stack_terminals.insert ((int)position -1, terminal);
@@ -81,7 +84,7 @@ namespace Gemini {
 
     public override bool terminal_add (Gemini.Terminal terminal, uint position) {
       if (position == 0) {
-        terminal_add_on_top (terminal);
+        terminal_set_zoom (terminal);
       } else {
         int stack_pos = (stack_terminals.size + 1) - (int)position;
         stack.pack_end (terminal, false, false, 0);
@@ -100,7 +103,8 @@ namespace Gemini {
         hbox.remove (zoom_terminal);
         zoom_terminal = null;
         stack_terminals.remove (terminal);
-        terminal_pop ();
+        var zoom = stack_pop ();
+        terminal_set_zoom (zoom);
       } else {
         stack_terminals.remove (terminal);
         stack.remove (terminal);
