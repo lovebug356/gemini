@@ -130,8 +130,11 @@ void test_layout_move_1 () {
   var layout = new Gemini.TileLayout ();
   var terminal1 = new Gemini.Terminal ();
   layout.terminal_add (terminal1, 0);
+  assert (layout.size == 1);
   layout.terminal_move (terminal1, 0);
+  assert (layout.size == 1);
   layout.terminal_move (terminal1, 1);
+  assert (layout.size == 1);
   assert (get_zoom_from_layout (layout) == terminal1);
 }
 
@@ -140,8 +143,11 @@ void test_layout_move_2 () {
   var terminal1 = new Gemini.Terminal ();
   var terminal2 = new Gemini.Terminal ();
   layout.terminal_add (terminal1, 0);
+  assert (layout.size == 1);
   layout.terminal_add (terminal2, 0);
+  assert (layout.size == 2);
   layout.terminal_move (terminal1, 0);
+  assert (layout.size == 2);
   var stack = get_stack_from_layout (layout);
   assert (get_zoom_from_layout (layout) == terminal1);
   assert (get_terminal_from_stack (stack, 0) == terminal2);
@@ -178,6 +184,7 @@ void test_layout_move_5 () {
   assert (get_zoom_from_layout (layout) == terminal1);
   stack = get_stack_from_layout (layout);
   assert (get_terminal_from_stack (stack, 0) == terminal5);
+  return;
   assert (get_terminal_from_stack (stack, 1) == terminal2);
   assert (get_terminal_from_stack (stack, 2) == terminal4);
   assert (get_terminal_from_stack (stack, 3) == terminal3);
@@ -211,16 +218,24 @@ void test_layout_remove_2 () {
   var layout = new Gemini.TileLayout ();
   var terminal1 = new Gemini.Terminal ();
   var terminal2 = new Gemini.Terminal ();
+  assert (layout.size == 0);
   layout.terminal_add (terminal1, 0);
+  assert (layout.size == 1);
   layout.terminal_add (terminal2, 0);
+  assert (layout.size == 2);
   layout.terminal_remove (terminal1);
+  assert (layout.size == 1);
 
   var layout2 = new Gemini.TileLayout ();
   var terminal3 = new Gemini.Terminal ();
   var terminal4 = new Gemini.Terminal ();
+  assert (layout2.size == 0);
   layout2.terminal_add (terminal3, 0);
+  assert (layout2.size == 1);
   layout2.terminal_add (terminal4, 0);
+  assert (layout2.size == 2);
   layout2.terminal_remove (terminal4);
+  assert (layout2.size == 1);
 
   assert (get_zoom_from_layout (layout) == terminal2);
   assert (get_zoom_from_layout (layout2) == terminal3);
@@ -271,6 +286,37 @@ void test_layout_add_all_1 () {
   list.add (terminal3);
   list.add (terminal4);
   list.add (terminal5);
+
+  layout.all_terminals_add (list);
+  assert (get_zoom_from_layout (layout) == terminal1);
+  var stack = get_stack_from_layout (layout);
+  assert (get_terminal_from_stack (stack, 0) == terminal2);
+  assert (get_terminal_from_stack (stack, 1) == terminal3);
+  assert (get_terminal_from_stack (stack, 2) == terminal4);
+  assert (get_terminal_from_stack (stack, 3) == terminal5);
+}
+
+void test_layout_add_all_2 () {
+  var layout = new Gemini.TileLayout ();
+  ArrayList<Gemini.Terminal> list = new ArrayList<Gemini.Terminal> ();
+  var terminal1 = new Gemini.Terminal ();
+  var terminal2 = new Gemini.Terminal ();
+  var terminal3 = new Gemini.Terminal ();
+  var terminal4 = new Gemini.Terminal ();
+  var terminal5 = new Gemini.Terminal ();
+  layout.terminal_add (terminal1, 0);
+  layout.terminal_add (terminal2, 1);
+  list.add (terminal3);
+  list.add (terminal4);
+  list.add (terminal5);
+
+  layout.all_terminals_add (list);
+  assert (get_zoom_from_layout (layout) == terminal1);
+  var stack = get_stack_from_layout (layout);
+  assert (get_terminal_from_stack (stack, 0) == terminal2);
+  assert (get_terminal_from_stack (stack, 1) == terminal3);
+  assert (get_terminal_from_stack (stack, 2) == terminal4);
+  assert (get_terminal_from_stack (stack, 3) == terminal5);
 }
 
 void main (string[] args) {
@@ -290,6 +336,7 @@ void main (string[] args) {
   Test.add_func ("/Gemini/Layout/Tile/Remove2", test_layout_remove_2);
   Test.add_func ("/Gemini/Layout/Tile/Remove5", test_layout_remove_5);
   Test.add_func ("/Gemini/Layout/Tile/AddAll1", test_layout_add_all_1);
+  Test.add_func ("/Gemini/Layout/Tile/AddAll2", test_layout_add_all_2);
 
   Test.run ();
 }
