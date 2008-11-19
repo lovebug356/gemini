@@ -75,7 +75,6 @@ void test_layout_add_pos_5 () {
   assert (get_terminal_from_stack (stack, 1) == terminal3);
   assert (get_terminal_from_stack (stack, 2) == terminal4);
   assert (get_terminal_from_stack (stack, 3) == terminal2);
-
 }
 
 Gtk.VBox get_stack_from_layout (Gemini.Layout layout) {
@@ -132,6 +131,7 @@ void test_layout_move_1 () {
   var terminal1 = new Gemini.Terminal ();
   layout.terminal_add (terminal1, 0);
   layout.terminal_move (terminal1, 0);
+  layout.terminal_move (terminal1, 1);
   assert (get_zoom_from_layout (layout) == terminal1);
 }
 
@@ -148,6 +148,9 @@ void test_layout_move_2 () {
   layout.terminal_move (terminal1, 1);
   assert (get_zoom_from_layout (layout) == terminal2);
   assert (get_terminal_from_stack (stack, 0) == terminal1);
+  layout.terminal_move (terminal1, 1);
+  assert (get_zoom_from_layout (layout) == terminal2);
+  assert (get_terminal_from_stack (stack, 0) == terminal1);
 }
 
 void main (string[] args) {
@@ -161,7 +164,7 @@ void main (string[] args) {
   Test.add_func ("/Gemini/Layout/Tile/AddPos2", test_layout_add_pos_2);
   Test.add_func ("/Gemini/Layout/Tile/AddPos5", test_layout_add_pos_5);
   Test.add_func ("/Gemini/Layout/Tile/Move1", test_layout_move_1);
-  // Test.add_func ("/Gemini/Layout/Tile/Move2", test_layout_move_2);
+  Test.add_func ("/Gemini/Layout/Tile/Move2", test_layout_move_2);
 
   Test.run ();
 }

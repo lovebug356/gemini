@@ -31,22 +31,41 @@ namespace Gemini {
       stack.reorder_child (terminal, stack_terminals.size - 1);
     }
 
-    public void terminal_add_on_top (Gemini.Terminal terminal) {
-      if (terminal != zoom_terminal) {
-        if (zoom_terminal != null) {
-          hbox.remove (zoom_terminal);
-          terminal_push (zoom_terminal);
-        }
-        hbox.pack_end (terminal, false, false, 0);
-        zoom_terminal = terminal;
+    void terminal_pop () {
+      var terminal = stack_terminals.get (0);
+
+      stack.remove (terminal);
+      stack_terminals.remove (terminal);
+
+      terminal_add_on_top (terminal);
+    }
+
+    void terminal_add_on_top (Gemini.Terminal terminal) {
+      if (zoom_terminal != null) {
+        hbox.remove (zoom_terminal);
+        terminal_push (zoom_terminal);
       }
+      hbox.pack_end (terminal, false, false, 0);
+      zoom_terminal = terminal;
     }
 
     public override bool terminal_move (Gemini.Terminal terminal, uint position) {
+      if (position > stack_terminals.size) {
+        position = stack_terminals.size;
+      }
+
+      if ((terminal == zoom_terminal && position == 0) ||
+          (position > 0 && terminal == stack_terminals.get ((int)position-1)))
+        return true;
+
       if (position == 0 && terminal != zoom_terminal) {
         stack.remove (terminal);
         terminal_add_on_top (terminal);
       } else {
+        if (terminal == zoom_terminal) {
+          terminal_pop ();
+          stack.reorder_child (terminal, stack_terminals.size - (int)position);
+        }
       }
       return true;
     }
