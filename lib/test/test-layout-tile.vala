@@ -351,13 +351,13 @@ void test_layout_mixed () {
   var terminal3 = new Gemini.Terminal ();
   var terminal4 = new Gemini.Terminal ();
   var terminal5 = new Gemini.Terminal ();
-  for (int j = 0; j < 100; j++) {
+  for (int j = 0; j < 5; j++) {
     layout.terminal_add (terminal1, 0);
     layout.terminal_add (terminal2, 0);
     layout.terminal_add (terminal3, 1);
     layout.terminal_add (terminal4, 1);
     layout.terminal_add (terminal5, 3);
-    for (int i=0; i < 1000; i++) {
+    for (int i=0; i < 5; i++) {
       layout.terminal_remove (terminal4);
       layout.terminal_add (terminal4, 0);
       layout.terminal_move (terminal4, 3);
