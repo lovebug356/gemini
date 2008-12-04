@@ -7,6 +7,7 @@ namespace Gemini {
     Gtk.HBox hbox;
     Gtk.VBox stack;
     ArrayList<Gemini.Terminal> stack_terminals;
+    int stack_width;
     
     public int size {
       get {
@@ -19,20 +20,31 @@ namespace Gemini {
       zoom_terminal = null;
 
       hbox = new Gtk.HBox (false, 0);
-      add (hbox);
+      hbox.set_homogeneous (false);
+      hbox.size_allocate += size_allocate_cb;
+      pack_start (hbox, true, true, 0);
 
-      stack = new Gtk.VBox (false, 0);
+      stack_width = 40;
+      stack = new Gtk.VBox (true, 0);
       hbox.pack_end (stack, false, false, 0);
-      hbox.reorder_child (stack, 1);
+      stack.set_size_request (0, 0);
 
       stack_terminals = new ArrayList<Gemini.Terminal> ();
 
+      stack.show ();
       hbox.show ();
       show ();
     }
 
+    void size_allocate_cb (Gtk.Widget wdg, Gdk.Rectangle alloc) {
+      if (stack_width > 95) {
+        stack_width = 95;
+      }
+      stack.set_size_request ((stack_terminals.size > 1 ? (allocation.width * stack_width) / 100: 0), 0);
+    }
+
     void stack_push (Gemini.Terminal terminal) {
-      stack.pack_end (terminal, false, false, 0);
+      stack.pack_end (terminal, true, true, 0);
       stack_terminals.insert (1, terminal);
       stack.reorder_child (terminal, stack_terminals.size - 1);
     }
@@ -62,7 +74,7 @@ namespace Gemini {
         stack_push (zoom_terminal);
       }
 
-      hbox.pack_end (terminal, false, false, 0);
+      hbox.pack_end (terminal, true, true, 0);
       zoom_terminal = terminal;
     }
 

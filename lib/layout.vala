@@ -3,7 +3,7 @@ using Gee;
 using Gtk;
 
 namespace Gemini {
-  public abstract class Layout : Gtk.Bin {
+  public abstract class Layout : Gtk.VBox {
     public string name {get; set;}
     public string title {get; set;}
 
