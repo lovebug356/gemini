@@ -25,6 +25,7 @@ namespace Gemini {
           } else {
             layout.all_terminals_remove ();
           }
+          _visible = value;
         }
       }
     }

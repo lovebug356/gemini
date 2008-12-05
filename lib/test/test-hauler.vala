@@ -149,6 +149,18 @@ void test_hauler_zoom () {
   assert (hauler.terminal_get_position (terminal3) == 0);
 }
 
+void test_hauler_visible () {
+  var hauler = new Gemini.Hauler (typeof (Gemini.TileLayout));
+  hauler.visible = true;
+  assert (hauler.visible == true);
+  hauler.visible = true;
+  assert (hauler.visible == true);
+  hauler.visible = false;
+  assert (hauler.visible == false);
+  hauler.visible = false;
+  assert (hauler.visible == false);
+}
+
 public static void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
@@ -161,6 +173,7 @@ public static void main (string[] args) {
   Test.add_func ("/Gemini/Hauler/Move", test_hauler_move);
   Test.add_func ("/Gemini/Hauler/Remove", test_hauler_remove);
   Test.add_func ("/Gemini/Hauler/Zoom", test_hauler_zoom);
+  Test.add_func ("/Gemini/Hauler/Visible", test_hauler_visible);
 
   Test.run ();
 }
