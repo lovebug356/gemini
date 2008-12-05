@@ -102,6 +102,45 @@ void test_freighter_terminal_add () {
   assert (f.active_hauler.terminal_get_position (t) == 0);
 }
 
+void test_freighter_terminal_remove () {
+  var f = new Gemini.Freighter ();
+  f.hauler_new (typeof (Gemini.TileLayout));
+
+  var t = new Gemini.Terminal ();
+  var t2 = new Gemini.Terminal ();
+  f.terminal_add (t);
+  f.active_hauler.terminal_set_focus (t);
+  f.terminal_add (t2);
+
+  f.terminal_remove (t);
+  assert (f.active_hauler.terminal_get_position (t) == -1);
+  assert (f.active_hauler.terminal_get_focus () == t2);
+}
+
+void test_freighter_terminal_close () {
+  var f = new Gemini.Freighter ();
+  f.hauler_new (typeof (Gemini.TileLayout));
+  f.hauler_new (typeof (Gemini.TileLayout));
+
+  var h1 = f.hauler_get (0);
+  var h2 = f.hauler_get (1);
+  var t = new Gemini.Terminal ();
+  var t2 = new Gemini.Terminal ();
+
+  f.hauler_show (h1);
+  f.terminal_add (t);
+  f.terminal_add (t2);
+  f.hauler_show (h2);
+  f.terminal_add (t);
+  f.hauler_show (h1);
+
+  assert (f.terminal_size == 2);
+  f.terminal_close (t);
+  assert (f.terminal_size == 2);
+  f.terminal_close (t2);
+  assert (f.terminal_size == 1);
+}
+
 public static void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
@@ -112,6 +151,8 @@ public static void main (string[] args) {
   Test.add_func ("/Gemini/Freighter/HaulerMove", test_freighter_hauler_move);
   Test.add_func ("/Gemini/Freighter/HaulerShow", test_freighter_hauler_show);
   Test.add_func ("/Gemini/Freighter/TerminalAdd", test_freighter_terminal_add);
+  Test.add_func ("/Gemini/Freighter/TerminalRemove", test_freighter_terminal_remove);
+  Test.add_func ("/Gemini/Freighter/TerminalClose", test_freighter_terminal_close);
 
   Test.run ();
 }

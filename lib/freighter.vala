@@ -19,6 +19,10 @@ namespace Gemini {
       get {return haulers.size;}
     }
 
+    public int terminal_size {
+      get {return terminals.size;}
+    }
+
     public void hauler_new (GLib.Type layout_type) {
       lock (haulers) {
         var hauler = new Gemini.Hauler (layout_type);
@@ -82,6 +86,30 @@ namespace Gemini {
         if (!(terminal in terminals))
           terminals.add (terminal);
         active_hauler.terminal_add (terminal, 0);
+      }
+    }
+
+    public void terminal_remove (Gemini.Terminal terminal) {
+      lock (haulers) {
+        terminals.remove (terminal);
+        foreach (Hauler h in haulers)
+          h.terminal_remove (terminal);
+      }
+    }
+
+    public void terminal_close (Gemini.Terminal terminal) {
+      lock (haulers) {
+        bool more = false;
+        foreach (Hauler h in haulers) {
+          if (h != active_hauler && h.terminal_get_position (terminal) != -1) {
+            more = true;
+            break;
+          }
+        }
+        if (!more)
+          terminals.remove (terminal);
+
+        active_hauler.terminal_remove (terminal);
       }
     }
   }

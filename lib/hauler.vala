@@ -20,13 +20,22 @@ namespace Gemini {
       }
       set {
         lock (terminals) {
-          if (value) {
-            layout.all_terminals_add (terminals);
-          } else {
-            layout.all_terminals_remove ();
+          if (value != _visible) {
+            if (value) {
+              layout.all_terminals_add (terminals);
+            } else {
+              layout.all_terminals_remove ();
+              focus_terminal = null;
+            }
+            _visible = value;
           }
-          _visible = value;
         }
+      }
+    }
+
+    public int size {
+      get {
+        return terminals.size;
       }
     }
 
@@ -66,18 +75,19 @@ namespace Gemini {
       return true;
     }
 
-    public bool set_terminal_focus (Gemini.Terminal terminal) {
+    public bool terminal_set_focus (Gemini.Terminal terminal) {
       bool ret = false;
       lock (terminals) {
         if (terminal in terminals) {
           focus_terminal = terminal;
+          focus_terminal.grab_focus ();
           ret = true;
         }
       }
       return ret;
     }
 
-    public Gemini.Terminal get_terminal_focus () {
+    public Gemini.Terminal terminal_get_focus () {
       return focus_terminal;
     }
 
@@ -112,11 +122,14 @@ namespace Gemini {
         terminals.remove (terminal);
         if (visible)
           layout.terminal_remove (terminal);
+        if (terminal == focus_terminal && terminals.size > 0)
+          terminal_set_focus (terminals.get (0));
       }
     }
 
     public void terminal_zoom (Gemini.Terminal terminal) {
       terminal_move (terminal, 0);
+      terminal_set_focus (terminal);
     }
   }
 }

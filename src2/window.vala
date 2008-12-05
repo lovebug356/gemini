@@ -22,7 +22,16 @@ namespace Gemini {
       lock (freighter) {
         var terminal = new Gemini.Terminal ();
         terminal.key_press_event += key_press_event_cb;
+        terminal.child_exited += terminal_child_exited_cb;
         freighter.terminal_add (terminal);
+        freighter.active_hauler.terminal_set_focus (terminal);
+      }
+    }
+
+    void terminal_child_exited_cb (Gemini.Terminal terminal) {
+      lock (freighter) {
+        message ("clossing");
+        freighter.terminal_remove (terminal);
       }
     }
 
@@ -59,12 +68,25 @@ namespace Gemini {
           case "o":
             terminal_new ();
             break;
-            /*case "Return":*/
-            /*layout.virt_terminal_zoom (terminal);*/
-            /*break;*/
-            /*case "x":*/
-            /*layout.terminal_close (terminal);*/
-            /*break;*/
+          case "x":
+            lock (freighter) {
+              freighter.terminal_close (freighter.active_hauler.terminal_get_focus ());
+            }
+            break;
+          case "Return":
+            lock (freighter) {
+              if (freighter.active_hauler.size > 1) {
+                var t1 = freighter.active_hauler.terminals.get (0);
+                var t2 = freighter.active_hauler.terminals.get (1);
+                var active = freighter.active_hauler.terminal_get_focus ();
+
+                if (t1 == active)
+                  freighter.active_hauler.terminal_zoom (t2);
+                else
+                  freighter.active_hauler.terminal_zoom (active);
+              }
+            }
+            break;
             /*case "l":*/
             /*layout.virt_terminal_resize (terminal, 30, 0);*/
             /*break;*/

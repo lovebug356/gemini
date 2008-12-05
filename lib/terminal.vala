@@ -14,6 +14,10 @@ namespace Gemini {
       button_release_event += button_release_event_cb;
     }
 
+    ~Terminal () {
+      message ("Im duing");
+    }
+
     bool button_release_event_cb (Gemini.Terminal terminal, Gdk.EventButton button) {
       if (button.type == Gdk.EventType.BUTTON_RELEASE &&
           button.button == 1) {

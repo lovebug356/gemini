@@ -47,13 +47,13 @@ void test_hauler_focus () {
   hauler.terminal_add (terminal1, 0);
   hauler.terminal_add (terminal2, 0);
 
-  assert (hauler.get_terminal_focus () == null);
-  assert (hauler.set_terminal_focus (terminal1));
-  assert (hauler.get_terminal_focus () == terminal1);
-  assert (hauler.set_terminal_focus (terminal2));
-  assert (hauler.get_terminal_focus () == terminal2);
-  assert (hauler.set_terminal_focus (terminal3) == false);
-  assert (hauler.get_terminal_focus () == terminal2);
+  assert (hauler.terminal_get_focus () == null);
+  assert (hauler.terminal_set_focus (terminal1));
+  assert (hauler.terminal_get_focus () == terminal1);
+  assert (hauler.terminal_set_focus (terminal2));
+  assert (hauler.terminal_get_focus () == terminal2);
+  assert (hauler.terminal_set_focus (terminal3) == false);
+  assert (hauler.terminal_get_focus () == terminal2);
 }
 
 void test_hauler_position () {
@@ -124,6 +124,7 @@ void test_hauler_remove () {
   assert (hauler.terminal_get_position (terminal1) == -1);
   assert (hauler.terminal_get_position (terminal2) == -1);
   assert (hauler.terminal_get_position (terminal3) == -1);
+  /*assert (hauler.terminal_get_focus () == null);*/
 }
 
 void test_hauler_zoom () {
@@ -151,6 +152,8 @@ void test_hauler_zoom () {
 
 void test_hauler_visible () {
   var hauler = new Gemini.Hauler (typeof (Gemini.TileLayout));
+  var t = new Gemini.Terminal ();
+  hauler.terminal_add (t, 0);
   hauler.visible = true;
   assert (hauler.visible == true);
   hauler.visible = true;
