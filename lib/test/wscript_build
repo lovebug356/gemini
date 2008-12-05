@@ -7,6 +7,6 @@ def make_test (bld, name):
   test.unit_test = True
 
 make_test (bld, 'terminal')
-make_test (bld, 'collection')
 make_test (bld, 'layout-tile')
 make_test (bld, 'hauler')
+make_test (bld, 'freighter')

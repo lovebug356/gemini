@@ -2,7 +2,7 @@
 
 def make_example (bld, name):
   example = bld.new_task_gen ('cc', 'program')
-  example.sources = name + '.vala'
+  example.source = name + '.vala'
   example.uselib='GLIB-2.0 VTE GEE-1.0 GTHREAD GTK+-2.0 GDK-PIXBUF-2.0'
   example.packages = 'vte gee-1.0 gdk-pixbuf-2.0'
   example.vapi_dirs = '.'
