@@ -110,7 +110,7 @@ namespace Gemini {
         terminal_set_zoom (terminal);
       } else {
         int stack_pos = (stack_terminals.size) - (int)position;
-        stack.pack_end (terminal, false, false, 0);
+        stack.pack_end (terminal, true, true, 0);
         stack_terminals.insert ((int)position, terminal);
         stack.reorder_child (terminal, stack_pos);
       }
@@ -151,6 +151,16 @@ namespace Gemini {
         terminal_remove (terminal);
       }
       return true;
+    }
+
+    public override void width_change (int delta) {
+      stack_width += delta;
+      if (stack_width > 95) {
+        stack_width = 95;
+      } else if (stack_width < 5) {
+        stack_width = 5;
+      }
+      stack.set_size_request ((stack_terminals.size > 1 ? (allocation.width * stack_width) / 100: 0), 0);
     }
   }
 }

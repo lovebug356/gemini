@@ -9,6 +9,8 @@ namespace Gemini {
     public ArrayList<Terminal> terminals;
     Gemini.Terminal focus_terminal;
 
+    public signal void all_terminals_exited ();
+
     public Hauler (GLib.Type layout_type) {
       layout = get_layout (layout_type);
     }
@@ -23,6 +25,8 @@ namespace Gemini {
           if (value != _visible) {
             if (value) {
               layout.all_terminals_add (terminals);
+              if (terminals.size > 0)
+                terminal_set_focus (terminals.get (0));
             } else {
               layout.all_terminals_remove ();
               focus_terminal = null;
@@ -124,12 +128,51 @@ namespace Gemini {
           layout.terminal_remove (terminal);
         if (terminal == focus_terminal && terminals.size > 0)
           terminal_set_focus (terminals.get (0));
+
+        if (terminals.size == 0)
+          all_terminals_exited ();
       }
     }
 
     public void terminal_zoom (Gemini.Terminal terminal) {
       terminal_move (terminal, 0);
       terminal_set_focus (terminal);
+    }
+
+    public void terminal_focus_left () {
+      lock (terminals) {
+        var index = terminals.index_of (focus_terminal);
+        if (index > 0) {
+          terminal_set_focus (terminals.get (0));
+        }
+      }
+    }
+
+    public void terminal_focus_right () {
+      lock (terminals) {
+        var index = terminals.index_of (focus_terminal);
+        if (index == 0 && terminals.size > 0) {
+          terminal_set_focus (terminals.get (1));
+        }
+      }
+    }
+
+    public void terminal_focus_down () {
+      lock (terminals) {
+        var index = terminals.index_of (focus_terminal);
+        if (index > 0 && index < (terminals.size-1)) {
+          terminal_set_focus (terminals.get (index + 1));
+        }
+      }
+    }
+
+    public void terminal_focus_up () {
+      lock (terminals) {
+        var index = terminals.index_of (focus_terminal);
+        if (index > 1) {
+          terminal_set_focus (terminals.get (index - 1));
+        }
+      }
     }
   }
 }

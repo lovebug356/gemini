@@ -8,6 +8,7 @@ namespace Gemini {
     public Gemini.Hauler active_hauler;
 
     public signal void hauler_change ();
+    public signal void all_terminals_exited ();
 
     construct {
       terminals = new ArrayList<Gemini.Terminal> ();
@@ -25,12 +26,22 @@ namespace Gemini {
 
     public void hauler_new (GLib.Type layout_type) {
       lock (haulers) {
-        var hauler = new Gemini.Hauler (layout_type);
+        hauler_add (new Gemini.Hauler (layout_type));
+      }
+    }
+
+    public void hauler_add (Gemini.Hauler hauler) {
+      lock (haulers) {
         haulers.add (hauler);
+        hauler.all_terminals_exited += hauler_all_terminals_exited_cb;
         if (active_hauler == null) {
           hauler_show (hauler);
         }
       }
+    }
+
+    public void hauler_all_terminals_exited_cb (Gemini.Hauler h) {
+      hauler_remove (h);
     }
 
     public Gemini.Hauler? hauler_get (uint position) {
@@ -74,9 +85,9 @@ namespace Gemini {
           if (active_hauler != null)
             active_hauler.visible = false;
           active_hauler = hauler_2;
+          hauler_change ();
           if (active_hauler != null)
             active_hauler.visible = true;
-          hauler_change ();
         }
       }
     }
@@ -91,14 +102,28 @@ namespace Gemini {
 
     public void terminal_remove (Gemini.Terminal terminal) {
       lock (haulers) {
+        ArrayList<Gemini.Hauler> empty_haulers = new ArrayList<Gemini.Hauler> ();
         terminals.remove (terminal);
-        foreach (Hauler h in haulers)
+        foreach (Hauler h in haulers) {
+          if (terminal in h.terminals) {
+            if (h.size == 1)
+              empty_haulers.add (h);
+            else
+              h.terminal_remove (terminal);
+          }
+        }
+
+        foreach (Hauler h in empty_haulers)
           h.terminal_remove (terminal);
+
+        if (terminals.size == 0)
+          all_terminals_exited ();
       }
     }
 
     public void terminal_close (Gemini.Terminal terminal) {
       lock (haulers) {
+
         bool more = false;
         foreach (Hauler h in haulers) {
           if (h != active_hauler && h.terminal_get_position (terminal) != -1) {
@@ -106,10 +131,14 @@ namespace Gemini {
             break;
           }
         }
+
         if (!more)
           terminals.remove (terminal);
 
         active_hauler.terminal_remove (terminal);
+
+        if (terminals.size == 0)
+          all_terminals_exited ();
       }
     }
   }
