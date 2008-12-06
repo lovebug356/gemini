@@ -5,6 +5,7 @@ namespace Gemini {
   public class GeminiTile : Gtk.Window {
     Gemini.Freighter freighter;
     Gemini.Layout layout;
+    Gdk.Pixbuf gemini_logo;
 
     construct {
       layout = null;
@@ -16,8 +17,29 @@ namespace Gemini {
       terminal_new ();
 
       set_default_size (640, 480);
+      string filename = Gemini.File.pixmaps ("gemini.svg");
+      try {
+        gemini_logo = new Gdk.Pixbuf.from_file (filename);
+        set_icon (gemini_logo);
+      } catch (Error e) {
+        gemini_logo = null;
+      }
       show ();
     }
+
+    /*void about_action_cb (Gtk.Action action) {*/
+    /*var dialog = new AboutDialog ();*/
+    /*dialog.set_logo (gemini_logo);                                                                                                       */
+    /*dialog.set_icon (gemini_logo);*/
+    /*dialog.set_copyright ("Copyright (c) 2008 Thijs Vermeir");*/
+    /*dialog.set_program_name ("Gemini Terminal");*/
+    /**//* FIXME the version number needs to come from the build system */
+    /*dialog.set_version (Gemini.version);*/
+    /*dialog.set_website ("http://lovebug356.blogspot.com");*/
+    /*dialog.run ();*/
+    /*dialog.hide ();*/
+    /*dialog.destroy ();*/
+    /*}*/
 
     void all_terminals_exited_cb (Gemini.Freighter f) {
       Gtk.main_quit ();
