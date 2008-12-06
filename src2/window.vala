@@ -47,7 +47,10 @@ namespace Gemini {
 
     void terminal_new () {
       lock (freighter) {
-        var terminal = new Gemini.Terminal ();
+        string working_dir = null;
+        if (freighter.active_hauler != null && freighter.active_hauler.size > 0)
+          working_dir = freighter.active_hauler.terminal_get_focus ().get_working_dir ();
+        var terminal = new Gemini.Terminal (working_dir);
         terminal.key_press_event += key_press_event_cb;
         terminal.child_exited += terminal_child_exited_cb;
         terminal.focus_in_event += terminal_focus_in_event_cb;
