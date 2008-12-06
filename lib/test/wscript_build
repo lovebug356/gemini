@@ -5,6 +5,7 @@ def make_test (bld, name):
   test.uselib_local = 'libgemini'
   test.target = 'test-%s' % name
   test.unit_test = True
+  test.install_path = None
 
 make_test (bld, 'terminal')
 make_test (bld, 'layout-tile')

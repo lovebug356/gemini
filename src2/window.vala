@@ -28,9 +28,17 @@ namespace Gemini {
         var terminal = new Gemini.Terminal ();
         terminal.key_press_event += key_press_event_cb;
         terminal.child_exited += terminal_child_exited_cb;
+        terminal.focus_in_event += terminal_focus_in_event_cb;
         freighter.terminal_add (terminal);
         freighter.active_hauler.terminal_set_focus (terminal);
       }
+    }
+
+    bool terminal_focus_in_event_cb (Gemini.Terminal terminal, Gdk.EventFocus focus) {
+      lock (freighter) {
+        freighter.active_hauler.terminal_set_focus (terminal);
+      }
+      return false;
     }
 
     void terminal_child_exited_cb (Gemini.Terminal terminal) {

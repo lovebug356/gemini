@@ -9,3 +9,4 @@ gemini.vapi_dirs = '.'
 gemini.target='gemini'
 gemini.uselib_local = 'util-lib'
 gemini.threading = True
+gemini.install_path = None

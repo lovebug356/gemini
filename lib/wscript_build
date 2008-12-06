@@ -6,6 +6,7 @@ libgemini.packages = 'vte gee-1.0 gdk-pixbuf-2.0'
 libgemini.vapi_dirs = '.'
 libgemini.target='libgemini'
 libgemini.threading = True
+libgemini.install_path = None
 
 bld.add_subdirs ('test')
 bld.add_subdirs ('examples')

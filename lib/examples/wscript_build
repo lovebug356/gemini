@@ -9,6 +9,7 @@ def make_example (bld, name):
   example.target=name
   example.uselib_local = 'libgemini'
   example.threading = True
+  example.install_path = None
 
 make_example (bld, 'terminal-window')
 make_example (bld, 'tile-layout-window')
