@@ -74,7 +74,7 @@ namespace Gemini {
 
     void hauler_show (uint position) {
       lock (freighter) {
-        if (freighter.size >= position) {
+        if (position < freighter.size) {
           freighter.hauler_show (freighter.hauler_get (position));
         }
       }

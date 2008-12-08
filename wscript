@@ -32,7 +32,6 @@ def build (bld):
     bld.add_subdirs ('debian')
     return
   bld.add_subdirs ('lib')
-  bld.add_subdirs ('src')
   bld.add_subdirs ('src2')
   bld.add_subdirs ('share')
 

@@ -7,7 +7,7 @@ namespace Gemini {
     public signal void selection (bool active);
     int child_pid;
 
-    public Terminal (string? working_dir) {
+    public Terminal (string? working_dir=null) {
       child_pid = fork_command (null, null, null, working_dir, false, false, false);
     }
 

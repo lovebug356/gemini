@@ -60,6 +60,8 @@ namespace Gemini {
           haulers.remove (hauler);
 
         if (active_hauler == hauler) {
+          active_hauler.visible = false;
+          active_hauler = null;
           hauler_show (null);
         }
       }
@@ -76,7 +78,7 @@ namespace Gemini {
       lock (haulers) {
         Gemini.Hauler hauler_2;
 
-        if (hauler == null && haulers.size > 0)
+        if (hauler == null && haulers.size > 0 && active_hauler == null)
           hauler_2 = haulers.get (0);
         else
           hauler_2 = hauler;
