@@ -1,11 +1,13 @@
 using GLib;
 using Gee;
+using Gtk;
 
 namespace Gemini {
   public class Freighter : GLib.Object {
     ArrayList<Gemini.Terminal> terminals;
     ArrayList<Gemini.Hauler> haulers;
     public Gemini.Hauler active_hauler;
+    public VBox vbox;
 
     public signal void hauler_change ();
     public signal void all_terminals_exited ();
@@ -14,6 +16,8 @@ namespace Gemini {
       terminals = new ArrayList<Gemini.Terminal> ();
       haulers = new ArrayList<Gemini.Hauler> ();
       active_hauler = null;
+      vbox = new VBox (false, 0);
+      vbox.show ();
     }
 
     public int size {
@@ -60,8 +64,6 @@ namespace Gemini {
           haulers.remove (hauler);
 
         if (active_hauler == hauler) {
-          active_hauler.visible = false;
-          active_hauler = null;
           hauler_show (null);
         }
       }
@@ -78,18 +80,22 @@ namespace Gemini {
       lock (haulers) {
         Gemini.Hauler hauler_2;
 
-        if (hauler == null && haulers.size > 0 && active_hauler == null)
+        if (hauler == null && haulers.size > 0)
           hauler_2 = haulers.get (0);
         else
           hauler_2 = hauler;
 
         if (hauler_2 != active_hauler) {
-          if (active_hauler != null)
+          if (active_hauler != null) {
+            vbox.remove (active_hauler.layout);
             active_hauler.visible = false;
+          }
           active_hauler = hauler_2;
-          hauler_change ();
-          if (active_hauler != null)
+          if (active_hauler != null) {
+            vbox.pack_start (active_hauler.layout, true, true, 0);
             active_hauler.visible = true;
+          }
+          hauler_change ();
         }
       }
     }

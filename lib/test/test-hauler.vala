@@ -77,7 +77,6 @@ void test_hauler_move () {
   var terminal1 = new Gemini.Terminal ();
   var terminal2 = new Gemini.Terminal ();
   var terminal3 = new Gemini.Terminal ();
-  var terminal4 = new Gemini.Terminal ();
   hauler.terminal_add (terminal2, 0);
   hauler.terminal_add (terminal1, 0);
   hauler.terminal_add (terminal3, 2);

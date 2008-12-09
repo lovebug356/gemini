@@ -4,11 +4,9 @@ using GLib;
 namespace Gemini {
   public class GeminiTile : Gtk.Window {
     Gemini.Freighter freighter;
-    Gemini.Layout layout;
     Gdk.Pixbuf gemini_logo;
 
     construct {
-      layout = null;
       freighter = new Gemini.Freighter ();
       freighter.hauler_change += hauler_change_cb;
       freighter.hauler_new (typeof (Gemini.TileLayout));
@@ -24,6 +22,7 @@ namespace Gemini {
       } catch (Error e) {
         gemini_logo = null;
       }
+      add (freighter.vbox);
       show ();
     }
 
@@ -84,12 +83,6 @@ namespace Gemini {
       lock (freighter) {
         if (freighter.active_hauler == null) {
           all_terminals_exited_cb (f);
-        } else if (freighter.active_hauler.layout != layout) {
-          if (layout != null) {
-            remove (layout);
-          }
-          layout = freighter.active_hauler.layout;
-          add (layout);
         }
       }
     }
