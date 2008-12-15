@@ -3,8 +3,71 @@ using GLib;
 
 namespace Gemini {
   public class GeminiTile : Gtk.Window {
+    /* menu stuff */
+    UIManager ui_manager;
+    ActionGroup menu_actions;
+    Gtk.Widget menu_bar;
+    ToggleAction fullscreen_action;
+
     Gemini.Freighter freighter;
     Gdk.Pixbuf gemini_logo;
+
+    static const string MAIN_UI = """
+      <ui>
+        <menubar name="MenuBar">
+          <menu action="Terminal">
+            <menuitem action="TerminalNew" />
+            <menuitem action="TerminalClose" />
+            <separator />
+            <menuitem action="Quit" />
+          </menu>
+          <menu action="View">
+            <menuitem action="Fullscreen" />
+          </menu>
+          <menu action="Help">
+            <menuitem action="About" />
+          </menu>
+        </menubar>
+      </ui>
+    """;
+
+    const ActionEntry[] action_entries = {
+      {"Terminal", null, "_Terminal", null, null, null},
+      {"TerminalNew", null, "_New Terminal", null, null, terminal_new_cb},
+      {"TerminalClose", null, "_Close Terminal", null, null, terminal_close_cb},
+
+      {"View", null, "_View", null, null, null},
+
+      {"Help", null, "_Help", null, null, null},
+      {"About", STOCK_ABOUT, "_About", null, null, about_action_cb},
+
+      {"Quit", STOCK_QUIT, "_Quit", null, null, quit_action_cb}
+    };
+
+    const ToggleActionEntry[] toggle_entries = {
+      {"Fullscreen", null, "_Full screen", "F11", null, fullscreen_action_cb, false}
+    };
+
+    void quit_action_cb (Gtk.Action action) {
+      Gtk.main_quit ();
+    }
+
+    void terminal_new_cb (Gtk.Action action) {
+      terminal_new ();
+    }
+
+    void terminal_close_cb (Gtk.Action action) {
+      lock (freighter) {
+        freighter.terminal_close (freighter.active_hauler.terminal_get_focus ());
+      }
+    }
+
+    void fullscreen_action_cb (Gtk.Action action) {
+      if (fullscreen_action.get_active ())
+        fullscreen ();
+      else
+        unfullscreen ();
+    }
 
     construct {
       freighter = new Gemini.Freighter ();
@@ -14,6 +77,8 @@ namespace Gemini {
 
       terminal_new ();
 
+      setup_ui_manager ();
+
       set_default_size (640, 480);
       string filename = Gemini.File.pixmaps ("gemini.svg");
       try {
@@ -22,23 +87,42 @@ namespace Gemini {
       } catch (Error e) {
         gemini_logo = null;
       }
-      add (freighter.vbox);
+      var vbox = new VBox (false, 0);
+      menu_bar = ui_manager.get_widget ("/MenuBar");
+      vbox.pack_start (menu_bar, false, false, 0);
+      vbox.pack_start (freighter.vbox, true, true, 0);
+      vbox.show_all ();
+      add (vbox);
+      destroy += Gtk.main_quit;
       show ();
     }
 
-    /*void about_action_cb (Gtk.Action action) {*/
-    /*var dialog = new AboutDialog ();*/
-    /*dialog.set_logo (gemini_logo);                                                                                                       */
-    /*dialog.set_icon (gemini_logo);*/
-    /*dialog.set_copyright ("Copyright (c) 2008 Thijs Vermeir");*/
-    /*dialog.set_program_name ("Gemini Terminal");*/
-    /**//* FIXME the version number needs to come from the build system */
-    /*dialog.set_version (Gemini.version);*/
-    /*dialog.set_website ("http://lovebug356.blogspot.com");*/
-    /*dialog.run ();*/
-    /*dialog.hide ();*/
-    /*dialog.destroy ();*/
-    /*}*/
+    void setup_ui_manager () {
+      ui_manager = new UIManager ();
+      menu_actions = new ActionGroup ("Actions");
+      menu_actions.add_actions (action_entries, this);
+      menu_actions.add_toggle_actions (toggle_entries, this);
+      ui_manager.insert_action_group (menu_actions, 0);
+      fullscreen_action = (Gtk.ToggleAction) menu_actions.get_action ("Fullscreen");
+      try {
+        ui_manager.add_ui_from_string (MAIN_UI, MAIN_UI.length);
+      } catch (GLib.Error err) {
+        warning ("Error while reading the main ui: %s", err.message);
+      }
+      add_accel_group (ui_manager.get_accel_group ());
+    }
+
+    void about_action_cb (Gtk.Action action) {
+      var dialog = new AboutDialog ();
+      dialog.set_logo (gemini_logo);                                                                                                       
+      dialog.set_icon (gemini_logo);
+      dialog.set_copyright ("Copyright (c) 2008 Thijs Vermeir");
+      dialog.set_program_name ("Gemini Terminal");
+      dialog.set_version (Gemini.version);
+      dialog.run ();
+      dialog.hide ();
+      dialog.destroy ();
+    }
 
     void all_terminals_exited_cb (Gemini.Freighter f) {
       Gtk.main_quit ();
@@ -209,6 +293,9 @@ namespace Gemini {
             break;
           case "9":
             hauler_show (8);
+            break;
+          case "m":
+            menu_bar.visible = !menu_bar.visible;
             break;
             /*case "l":*/
             /*layout.virt_terminal_resize (terminal, 30, 0);*/
