@@ -9,4 +9,3 @@ libgemini.threading = True
 libgemini.install_path = None
 
 bld.add_subdirs ('test')
-bld.add_subdirs ('examples')
