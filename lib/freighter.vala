@@ -8,6 +8,7 @@ namespace Gemini {
     ArrayList<Gemini.Hauler> haulers;
     public Gemini.Hauler active_hauler;
     public VBox vbox;
+    public Label statusbar;
 
     public signal void hauler_change ();
     public signal void all_terminals_exited ();
@@ -17,7 +18,31 @@ namespace Gemini {
       haulers = new ArrayList<Gemini.Hauler> ();
       active_hauler = null;
       vbox = new VBox (false, 0);
+      statusbar = new Label ("statusbar");
+      statusbar.show ();
+      vbox.pack_end (statusbar, false, false, 0);
       vbox.show ();
+    }
+
+    public bool statusbar_visible {
+      get {
+        return statusbar.visible;
+      }
+      set {
+        if (value) {
+          statusbar.show ();
+          statusbar_update ();
+        } else {
+          statusbar.hide ();
+        }
+      }
+    }
+
+    void statusbar_update () {
+      lock (haulers) {
+        if (statusbar.visible)
+          statusbar.set_text ("[%d/%d]".printf (haulers.index_of (active_hauler) + 1, haulers.size));
+      }
     }
 
     public int size {
@@ -41,6 +66,7 @@ namespace Gemini {
         if (active_hauler == null) {
           hauler_show (hauler);
         }
+        statusbar_update ();
       }
     }
 
@@ -66,6 +92,7 @@ namespace Gemini {
         if (active_hauler == hauler) {
           hauler_show (null);
         }
+        statusbar_update ();
       }
     }
 
@@ -97,6 +124,7 @@ namespace Gemini {
           }
           hauler_change ();
         }
+        statusbar_update ();
       }
     }
 

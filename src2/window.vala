@@ -8,6 +8,7 @@ namespace Gemini {
     ActionGroup menu_actions;
     Gtk.Widget menu_bar;
     ToggleAction fullscreen_action;
+    ToggleAction statusbar_action;
 
     Gemini.Freighter freighter;
     Gdk.Pixbuf gemini_logo;
@@ -22,6 +23,7 @@ namespace Gemini {
             <menuitem action="Quit" />
           </menu>
           <menu action="View">
+            <menuitem action="Statusbar" />
             <menuitem action="Fullscreen" />
           </menu>
           <menu action="Help">
@@ -45,6 +47,7 @@ namespace Gemini {
     };
 
     const ToggleActionEntry[] toggle_entries = {
+      {"Statusbar", null, "_Statusbar", null, null, statusbar_action_cb, true},
       {"Fullscreen", null, "_Full screen", "F11", null, fullscreen_action_cb, false}
     };
 
@@ -67,6 +70,10 @@ namespace Gemini {
         fullscreen ();
       else
         unfullscreen ();
+    }
+
+    void statusbar_action_cb (Gtk.Action action) {
+      freighter.statusbar_visible = statusbar_action.get_active ();
     }
 
     construct {
@@ -104,6 +111,7 @@ namespace Gemini {
       menu_actions.add_toggle_actions (toggle_entries, this);
       ui_manager.insert_action_group (menu_actions, 0);
       fullscreen_action = (Gtk.ToggleAction) menu_actions.get_action ("Fullscreen");
+      statusbar_action = (Gtk.ToggleAction) menu_actions.get_action ("Statusbar");
       try {
         ui_manager.add_ui_from_string (MAIN_UI, MAIN_UI.length);
       } catch (GLib.Error err) {
@@ -296,6 +304,9 @@ namespace Gemini {
             break;
           case "m":
             menu_bar.visible = !menu_bar.visible;
+            break;
+          case "s":
+            statusbar_action.activate ();
             break;
             /*case "l":*/
             /*layout.virt_terminal_resize (terminal, 30, 0);*/
