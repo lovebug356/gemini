@@ -73,8 +73,11 @@ namespace Gemini {
       lock (terminals) {
         terminals.insert (position, terminal);
 
-        if (visible)
+        if (visible) {
           layout.terminal_add (terminal, position);
+          if (focus_terminal == null)
+            terminal_set_focus (terminal);
+        }
       }
       return true;
     }
@@ -151,7 +154,7 @@ namespace Gemini {
     public void terminal_focus_right () {
       lock (terminals) {
         var index = terminals.index_of (focus_terminal);
-        if (index == 0 && terminals.size > 0) {
+        if (index == 0 && terminals.size > 1) {
           terminal_set_focus (terminals.get (1));
         }
       }
