@@ -14,5 +14,9 @@ namespace Gemini {
     public virtual bool all_terminals_remove () {return false;}
     public virtual void width_change (int delta) {}
     public virtual void height_change (int delta) {}
+
+    public virtual void terminal_grab_focus (Gemini.Terminal terminal) {
+      terminal.grab_focus ();
+    }
   }
 }

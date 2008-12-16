@@ -6,6 +6,7 @@ namespace Gemini {
   public class Freighter : GLib.Object {
     ArrayList<Gemini.Terminal> terminals;
     ArrayList<Gemini.Hauler> haulers;
+    Gemini.Layout my_layout;
     public Gemini.Hauler active_hauler;
     public VBox vbox;
     public Label statusbar;
@@ -17,6 +18,7 @@ namespace Gemini {
       terminals = new ArrayList<Gemini.Terminal> ();
       haulers = new ArrayList<Gemini.Hauler> ();
       active_hauler = null;
+      my_layout = null;
       vbox = new VBox (false, 0);
       statusbar = new Label ("statusbar");
       statusbar.show ();
@@ -40,8 +42,15 @@ namespace Gemini {
 
     void statusbar_update () {
       lock (haulers) {
-        if (statusbar.visible)
-          statusbar.set_text ("[%d/%d]".printf (haulers.index_of (active_hauler) + 1, haulers.size));
+        if (statusbar.visible) {
+          string s_hauler;
+          if (active_hauler != null)
+            s_hauler = "%s: %d %s".printf (active_hauler.layout.name, active_hauler.size, (active_hauler.size > 1 ? "terminals" : "terminal"));
+          else
+            s_hauler = null;
+          string s_freighter = "%d/%d".printf (haulers.index_of (active_hauler) + 1, haulers.size);
+          statusbar.set_text ("[%s][%s]".printf (s_freighter, s_hauler));
+        }
       }
     }
 
@@ -62,11 +71,19 @@ namespace Gemini {
     public void hauler_add (Gemini.Hauler hauler) {
       lock (haulers) {
         haulers.add (hauler);
+        hauler.layout_changed += layout_changed_cb;
         hauler.all_terminals_exited += hauler_all_terminals_exited_cb;
         if (active_hauler == null) {
           hauler_show (hauler);
         }
         statusbar_update ();
+      }
+    }
+
+    void layout_changed_cb (Gemini.Hauler hauler) {
+      lock (haulers) {
+        active_hauler = null;
+        hauler_show (hauler);
       }
     }
 
@@ -113,13 +130,16 @@ namespace Gemini {
           hauler_2 = hauler;
 
         if (hauler_2 != active_hauler) {
-          if (active_hauler != null) {
-            vbox.remove (active_hauler.layout);
-            active_hauler.visible = false;
+          if (my_layout != null) {
+            vbox.remove (my_layout);
+            if (active_hauler != null) {
+              active_hauler.visible = false;
+            }
           }
           active_hauler = hauler_2;
           if (active_hauler != null) {
-            vbox.pack_start (active_hauler.layout, true, true, 0);
+            my_layout = active_hauler.layout;
+            vbox.pack_start (my_layout, true, true, 0);
             active_hauler.visible = true;
           }
           hauler_change ();
@@ -134,6 +154,7 @@ namespace Gemini {
           terminals.add (terminal);
         active_hauler.terminal_add (terminal, 0);
       }
+      statusbar_update ();
     }
 
     public void terminal_remove (Gemini.Terminal terminal) {
@@ -155,6 +176,7 @@ namespace Gemini {
         if (terminals.size == 0)
           all_terminals_exited ();
       }
+      statusbar_update ();
     }
 
     public void terminal_close (Gemini.Terminal terminal) {
@@ -176,6 +198,7 @@ namespace Gemini {
         if (terminals.size == 0)
           all_terminals_exited ();
       }
+      statusbar_update ();
     }
   }
 }

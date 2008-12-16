@@ -308,6 +308,16 @@ namespace Gemini {
           case "s":
             statusbar_action.activate ();
             break;
+          case "f":
+            lock (freighter) {
+              freighter.active_hauler.layout_switch (typeof (FullscreenLayout));
+            }
+            break;
+          case "space":
+            lock (freighter) {
+              freighter.active_hauler.layout_switch (typeof (TileLayout));
+            }
+            break;
             /*case "l":*/
             /*layout.virt_terminal_resize (terminal, 30, 0);*/
             /*break;*/

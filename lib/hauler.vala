@@ -10,6 +10,7 @@ namespace Gemini {
     Gemini.Terminal focus_terminal;
 
     public signal void all_terminals_exited ();
+    public signal void layout_changed ();
 
     public Hauler (GLib.Type layout_type) {
       layout = get_layout (layout_type);
@@ -46,11 +47,25 @@ namespace Gemini {
 
     Gemini.Layout get_layout (GLib.Type layout_type) {
 
-      if (layout_type is Gemini.TileLayout) {
-          return new Gemini.TileLayout ();
+      if (layout_type == typeof (Gemini.TileLayout)) {
+        return new Gemini.TileLayout ();
+      } else if (layout_type == typeof (Gemini.FullscreenLayout)) {
+        return new Gemini.FullscreenLayout ();
       }
 
       return new Gemini.TileLayout ();
+    }
+
+    public bool layout_switch (GLib.Type new_layout_type) {
+      lock (terminals) {
+        if (new_layout_type != layout.get_type ()) {
+          visible = false;
+          layout = get_layout (new_layout_type);
+          visible = true;
+          layout_changed ();
+        }
+      }
+      return true;
     }
 
     construct {
@@ -88,7 +103,7 @@ namespace Gemini {
       lock (terminals) {
         if (terminal in terminals) {
           focus_terminal = terminal;
-          focus_terminal.grab_focus ();
+          layout.terminal_grab_focus (focus_terminal);
           ret = true;
         }
       }
@@ -97,13 +112,6 @@ namespace Gemini {
 
     public Gemini.Terminal terminal_get_focus () {
       return focus_terminal;
-    }
-
-    public bool layout_switch (GLib.Type new_layout_type) {
-      if (new_layout_type != layout.get_type ()) {
-        return true;
-      }
-      return false;
     }
 
     public int terminal_get_position (Gemini.Terminal terminal) {
