@@ -25,11 +25,12 @@ namespace Gemini {
           if (value != _visible) {
             if (value) {
               layout.all_terminals_add (terminals);
-              if (terminals.size > 0)
+              if (focus_terminal != null) {
+                terminal_set_focus (focus_terminal);
+              } else if (terminals.size > 0)
                 terminal_set_focus (terminals.get (0));
             } else {
               layout.all_terminals_remove ();
-              focus_terminal = null;
             }
             _visible = value;
           }
