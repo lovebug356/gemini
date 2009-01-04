@@ -57,15 +57,16 @@ namespace Gemini {
     }
 
     public bool layout_switch (GLib.Type new_layout_type) {
+      bool ret = false;
       lock (terminals) {
         if (new_layout_type != layout.get_type ()) {
           visible = false;
           layout = get_layout (new_layout_type);
-          visible = true;
           layout_changed ();
+          ret = true;
         }
       }
-      return true;
+      return ret;
     }
 
     construct {
@@ -108,6 +109,13 @@ namespace Gemini {
         }
       }
       return ret;
+    }
+
+    public void terminal_refocus () {
+      lock (terminals) {
+        if (focus_terminal != null)
+          layout.terminal_grab_focus (focus_terminal);
+      }
     }
 
     public Gemini.Terminal terminal_get_focus () {

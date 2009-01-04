@@ -141,6 +141,7 @@ namespace Gemini {
             my_layout = active_hauler.layout;
             vbox.pack_start (my_layout, true, true, 0);
             active_hauler.visible = true;
+            active_hauler.terminal_refocus ();
           }
           hauler_change ();
         }

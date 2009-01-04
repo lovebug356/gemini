@@ -4,92 +4,75 @@ using Gemini;
 
 namespace Gemini {
   public class FullscreenLayout : Layout {
-    ArrayList<Terminal> terminals;
     Terminal fullscreen;
 
     construct {
       name = "fullscreen";
-      terminals = new ArrayList<Terminal> ();
+      fullscreen = null;
       show ();
     }
 
     /* ONLY for debugging */
     public int size {
       get {
-        return terminals.size;
+        var temp = get_children ();
+        return (int) temp.length ();
       }
     }
 
     /* always called under the terminals lock */
     void terminal_fullscreen (Terminal? terminal) {
-      if (fullscreen != terminal) {
-        if (fullscreen != null) {
-          remove (fullscreen);
-        }
-        fullscreen = terminal;
-        if (fullscreen != null) {
-          pack_start (terminal, true, true, 0);
-          terminal.show ();
+      lock (fullscreen) {
+        if (fullscreen != terminal) {
+          if (fullscreen != null) {
+            fullscreen.hide ();
+          }
+          fullscreen = terminal;
+          if (fullscreen != null) {
+            terminal.show ();
+            terminal.grab_focus ();
+          }
         }
       }
     }
 
     public override void terminal_grab_focus (Terminal terminal) {
-      lock (terminals) {
-        if (fullscreen != terminal &&
-          terminal in terminals) {
-          terminal_fullscreen (terminal);
-        }
-      }
+      terminal_fullscreen (terminal);
     }
 
     public override bool terminal_add (Terminal terminal, uint position) {
-      lock (terminals) {
-        terminals.insert ((int)position, terminal);
-        if (fullscreen == null)
-          terminal_fullscreen (terminal);
+      lock (fullscreen) {
+        pack_start (terminal, true, true, 0);
       }
       return true;
     }
     
     public override bool terminal_move (Terminal terminal, uint position) {
-      lock (terminals) {
-        if (terminal in terminals) {
-          terminals.remove (terminal);
-          terminals.insert ((int)position, terminal);
-        }
-      }
       return true;
     }
 
     public override bool terminal_remove (Terminal terminal) {
-      lock (terminals) {
-        if (terminal in terminals) {
-          terminals.remove (terminal);
-          if (terminal == fullscreen) {
-            if (terminals.size > 0)
-              terminal_fullscreen (terminals.get (0));
-            else
-              terminal_fullscreen (null);
-          }
-        }
+      lock (fullscreen) {
+        remove (terminal);
       }
       return true;
     }
 
     public override bool all_terminals_add (ArrayList<Gemini.Terminal> terminals) {
-      lock (this.terminals) {
+      lock (fullscreen) {
         foreach (Terminal t in terminals) {
-          terminal_add (t, this.terminals.size);
+          terminal_add (t, 0);
+          t.hide ();
         }
       }
       return true;
     }
 
     public override bool all_terminals_remove () {
-      lock (terminals) {
-        while (terminals.size > 0) {
-          terminal_remove (terminals.get (0));
+      lock (fullscreen) {
+        GLib.List<Terminal> children = get_children ();
+        foreach (Terminal t in children) {
+          remove (t);
         }
       }
       return true;

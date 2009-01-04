@@ -36,7 +36,34 @@ void test_hauler_copy () {
 void test_hauler_switch () {
   var hauler = new Gemini.Hauler (typeof (Gemini.TileLayout));
   assert (hauler.layout_switch (typeof (Gemini.TileLayout)) == false);
-  /* FIXME add test to check if we can switch to another layout */
+  assert (hauler.layout_switch (typeof (Gemini.FullscreenLayout)) == true);
+}
+
+void test_hauler_get_focus_after_visible () {
+  var hauler = new Gemini.Hauler (typeof (Gemini.TileLayout));
+  var terminal1 = new Gemini.Terminal ();
+  var terminal2 = new Gemini.Terminal ();
+  var terminal3 = new Gemini.Terminal ();
+  hauler.terminal_add (terminal1, 0);
+  hauler.terminal_add (terminal2, 0);
+  hauler.terminal_add (terminal3, 0);
+  hauler.visible = true;
+
+  assert (hauler.terminal_get_focus () == terminal3);
+}
+
+void test_hauler_switch_2 () {
+  var hauler = new Gemini.Hauler (typeof (Gemini.TileLayout));
+  var terminal1 = new Gemini.Terminal ();
+  var terminal2 = new Gemini.Terminal ();
+  var terminal3 = new Gemini.Terminal ();
+  hauler.terminal_add (terminal1, 0);
+  hauler.terminal_add (terminal2, 0);
+  hauler.terminal_add (terminal3, 0);
+  hauler.visible = true;
+
+  assert (hauler.layout_switch (typeof (Gemini.FullscreenLayout)) == true);
+  assert (hauler.layout is Gemini.FullscreenLayout);
 }
 
 void test_hauler_focus () {
@@ -185,6 +212,7 @@ public static void main (string[] args) {
 
   Test.add_func ("/Gemini/Hauler/Create", test_hauler_create);
   Test.add_func ("/Gemini/Hauler/Switch", test_hauler_switch);
+  Test.add_func ("/Gemini/Hauler/Switch_2", test_hauler_switch_2);
   Test.add_func ("/Gemini/Hauler/Copy", test_hauler_copy);
   Test.add_func ("/Gemini/Hauler/Focus", test_hauler_focus);
   Test.add_func ("/Gemini/Hauler/Position", test_hauler_position);
@@ -193,6 +221,7 @@ public static void main (string[] args) {
   Test.add_func ("/Gemini/Hauler/Zoom", test_hauler_zoom);
   Test.add_func ("/Gemini/Hauler/Visible", test_hauler_visible);
   Test.add_func ("/Gemini/Hauler/FocusRight", test_hauler_focus_right);
+  Test.add_func ("/Gemini/Hauler/FocusAfterVisible", test_hauler_get_focus_after_visible);
 
   Test.run ();
 }

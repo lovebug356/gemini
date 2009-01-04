@@ -142,14 +142,31 @@ namespace Gemini {
         terminal_add (terminal, position);
         position += 1;
       }
+      /*foreach (Terminal t in list)*/
+      /*stack_terminals.add (t);*/
+
+      /*if (zoom_terminal == null)*/
+      /*terminal_set_zoom (stack_terminals.get (0));*/
+
+      /*foreach (Terminal t in list) {*/
+      /*if (t != zoom_terminal) {*/
+      /*stack.pack_end (t, true, true, 0);*/
+      /*stack.reorder_child (t, 0);*/
+      /*}*/
+      /*}*/
       return true;
     }
 
     public override bool all_terminals_remove () {
-      while (size > 0) {
-        var terminal = stack_terminals.get (0);
-        terminal_remove (terminal);
+      if (zoom_terminal != null) {
+        hbox.remove (zoom_terminal);
+        stack_terminals.remove (zoom_terminal);
+        zoom_terminal = null;
       }
+      foreach (Terminal t in stack_terminals) {
+        stack.remove (t);
+      }
+      stack_terminals = new ArrayList<Gemini.Terminal> ();
       return true;
     }
 
