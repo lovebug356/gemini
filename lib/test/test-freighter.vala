@@ -171,6 +171,8 @@ void test_hauler_copy (GLib.Type layout_type) {
 
   var h2 = f.active_hauler.copy ();
 
+  assert (h2.terminal_get_focus () == f.active_hauler.terminal_get_focus ());
+
   f.hauler_add (h2);
   f.hauler_show (h2);
 }
@@ -178,6 +180,39 @@ void test_hauler_copy (GLib.Type layout_type) {
 void test_freighter_hauler_copy () {
   test_hauler_copy (typeof (TileLayout));
   test_hauler_copy (typeof (FullscreenLayout));
+}
+
+void test_freighter_hauler_switch () {
+  var f = new Gemini.Freighter ();
+  f.hauler_new (typeof (TileLayout));
+
+  var t1 = new Terminal ();
+  var t2 = new Terminal ();
+  var t3 = new Terminal ();
+
+  f.terminal_add (t1);
+  f.terminal_add (t2);
+  f.terminal_add (t3);
+
+  var h1 = f.active_hauler;
+  var h2 = h1.copy ();
+  f.hauler_add (h2);
+  f.hauler_show (h2);
+  h2.layout_switch (typeof (FullscreenLayout));
+
+  /* all terminals are visible in the tile layout */
+  f.hauler_show (h1);
+  assert (h1.terminal_get_focus () == t1);
+  assert (t1.visible == true);
+  assert (t2.visible == true);
+  assert (t3.visible == true);
+
+  /* there is only one terminal visible in the fullscreen layout */
+  f.hauler_show (h2);
+  assert (h2.terminal_get_focus () == t1);
+  assert (t1.visible == true);
+  assert (t2.visible == false);
+  assert (t3.visible == false);
 }
 
 public static void main (string[] args) {
@@ -194,6 +229,7 @@ public static void main (string[] args) {
   Test.add_func ("/Gemini/Freighter/TerminalClose", test_freighter_terminal_close);
   Test.add_func ("/Gemini/Freighter/HaulerRememberFocus", test_freighter_hauler_remember_focus);
   Test.add_func ("/Gemini/Freighter/Copy", test_freighter_hauler_copy);
+  Test.add_func ("/Gemini/Freighter/SwitchHaulers", test_freighter_hauler_switch);
 
   Test.run ();
 }

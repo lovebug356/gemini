@@ -20,7 +20,6 @@ namespace Gemini {
       }
     }
 
-    /* always called under the terminals lock */
     void terminal_fullscreen (Terminal? terminal) {
       lock (fullscreen) {
         if (fullscreen != terminal) {
@@ -43,6 +42,11 @@ namespace Gemini {
     public override bool terminal_add (Terminal terminal, uint position) {
       lock (fullscreen) {
         pack_start (terminal, true, true, 0);
+        if (get_children ().length () != 1) {
+          terminal.hide ();
+        } else {
+          terminal_fullscreen (terminal);
+        }
       }
       return true;
     }
@@ -62,7 +66,6 @@ namespace Gemini {
       lock (fullscreen) {
         foreach (Terminal t in terminals) {
           terminal_add (t, 0);
-          t.hide ();
         }
       }
       return true;
@@ -74,6 +77,7 @@ namespace Gemini {
         foreach (Terminal t in children) {
           remove (t);
         }
+        fullscreen = null;
       }
       return true;
     }

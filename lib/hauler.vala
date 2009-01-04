@@ -80,8 +80,11 @@ namespace Gemini {
       int counter = 0;
       var hp = new Hauler (layout.get_type ());
       hp.title = title;
-      foreach (Gemini.Terminal terminal in terminals) {
-        hp.terminal_add (terminal, counter++);
+      lock (terminals) {
+        hp.focus_terminal = focus_terminal;
+        foreach (Gemini.Terminal terminal in terminals) {
+          hp.terminal_add (terminal, counter++);
+        }
       }
       return hp;
     }

@@ -88,6 +88,25 @@ void test_layout_all_terminals_remove () {
   layout.all_terminals_remove ();
 }
 
+void test_visible_true () {
+  var layout = new FullscreenLayout ();
+
+  var t1 = new Terminal ();
+  var t2 = new Terminal ();
+  var t3 = new Terminal ();
+  var t4 = new Terminal ();
+
+  layout.terminal_add (t1, 0);
+  layout.terminal_add (t2, 0);
+  layout.terminal_add (t3, 0);
+  layout.terminal_add (t4, 0);
+
+  assert (t1.visible == true);
+  assert (t2.visible == false);
+  assert (t3.visible == false);
+  assert (t4.visible == false);
+}
+
 void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
@@ -98,6 +117,7 @@ void main (string[] args) {
   Test.add_func ("/Gemini/Layout/Fullscreen/GrabFocus", test_layout_grab_focus);
   Test.add_func ("/Gemini/Layout/Fullscreen/Remove", test_layout_remove);
   Test.add_func ("/Gemini/Layout/Fullscreen/AllTerminalsRemove", test_layout_all_terminals_remove);
+  Test.add_func ("/Gemini/Layout/Fullscreen/Visible", test_visible_true);
 
   Test.run ();
 }
