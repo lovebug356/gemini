@@ -77,6 +77,17 @@ void test_layout_remove () {
   layout.terminal_remove (terminal2);
 }
 
+void test_layout_all_terminals_remove () {
+  var layout = new Gemini.FullscreenLayout ();
+
+  layout.terminal_add (new Terminal (), 0);
+  layout.terminal_add (new Terminal (), 0);
+  layout.terminal_add (new Terminal (), 0);
+  layout.terminal_add (new Terminal (), 0);
+
+  layout.all_terminals_remove ();
+}
+
 void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
@@ -86,6 +97,7 @@ void main (string[] args) {
   Test.add_func ("/Gemini/Layout/Fullscreen/Add2", test_layout_add_2);
   Test.add_func ("/Gemini/Layout/Fullscreen/GrabFocus", test_layout_grab_focus);
   Test.add_func ("/Gemini/Layout/Fullscreen/Remove", test_layout_remove);
+  Test.add_func ("/Gemini/Layout/Fullscreen/AllTerminalsRemove", test_layout_all_terminals_remove);
 
   Test.run ();
 }

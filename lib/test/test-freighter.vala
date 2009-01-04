@@ -161,6 +161,25 @@ void test_freighter_hauler_remember_focus () {
   assert (h2.terminal_get_focus () == t1);
 }
 
+void test_hauler_copy (GLib.Type layout_type) {
+  var f = new Gemini.Freighter ();
+  f.hauler_new (layout_type);
+
+  f.terminal_add (new Terminal ());
+  f.terminal_add (new Terminal ());
+  f.terminal_add (new Terminal ());
+
+  var h2 = f.active_hauler.copy ();
+
+  f.hauler_add (h2);
+  f.hauler_show (h2);
+}
+
+void test_freighter_hauler_copy () {
+  test_hauler_copy (typeof (TileLayout));
+  test_hauler_copy (typeof (FullscreenLayout));
+}
+
 public static void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
@@ -174,6 +193,7 @@ public static void main (string[] args) {
   Test.add_func ("/Gemini/Freighter/TerminalRemove", test_freighter_terminal_remove);
   Test.add_func ("/Gemini/Freighter/TerminalClose", test_freighter_terminal_close);
   Test.add_func ("/Gemini/Freighter/HaulerRememberFocus", test_freighter_hauler_remember_focus);
+  Test.add_func ("/Gemini/Freighter/Copy", test_freighter_hauler_copy);
 
   Test.run ();
 }

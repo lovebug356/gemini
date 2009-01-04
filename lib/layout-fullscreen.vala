@@ -70,7 +70,7 @@ namespace Gemini {
 
     public override bool all_terminals_remove () {
       lock (fullscreen) {
-        GLib.List<Terminal> children = get_children ();
+        GLib.List<unowned Terminal> children = get_children ();
         foreach (Terminal t in children) {
           remove (t);
         }
