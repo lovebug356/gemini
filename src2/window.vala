@@ -240,16 +240,6 @@ namespace Gemini {
               freighter.active_hauler.terminal_focus_down ();
             }
             break;
-          case "h":
-            lock (freighter) {
-              freighter.active_hauler.terminal_focus_left ();
-            }
-            break;
-          case "l":
-            lock (freighter) {
-              freighter.active_hauler.terminal_focus_right ();
-            }
-            break;
           case "H":
             lock (freighter) {
               freighter.active_hauler.layout.width_change (5);

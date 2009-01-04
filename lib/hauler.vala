@@ -162,28 +162,10 @@ namespace Gemini {
       terminal_set_focus (terminal);
     }
 
-    public void terminal_focus_left () {
-      lock (terminals) {
-        var index = terminals.index_of (focus_terminal);
-        if (index > 0) {
-          terminal_set_focus (terminals.get (0));
-        }
-      }
-    }
-
-    public void terminal_focus_right () {
-      lock (terminals) {
-        var index = terminals.index_of (focus_terminal);
-        if (index == 0 && terminals.size > 1) {
-          terminal_set_focus (terminals.get (1));
-        }
-      }
-    }
-
     public void terminal_focus_down () {
       lock (terminals) {
         var index = terminals.index_of (focus_terminal);
-        if (index > 0 && index < (terminals.size-1)) {
+        if (index < (terminals.size-1)) {
           terminal_set_focus (terminals.get (index + 1));
         }
       }
@@ -192,7 +174,7 @@ namespace Gemini {
     public void terminal_focus_up () {
       lock (terminals) {
         var index = terminals.index_of (focus_terminal);
-        if (index > 1) {
+        if (index > 0) {
           terminal_set_focus (terminals.get (index - 1));
         }
       }

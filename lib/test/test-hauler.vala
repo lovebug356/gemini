@@ -190,22 +190,6 @@ void test_hauler_visible () {
   assert (hauler.visible == false);
 }
 
-void test_hauler_focus_right () {
-  var hauler = new Gemini.Hauler (typeof (Gemini.TileLayout));
-  var terminal1 = new Gemini.Terminal ();
-  hauler.visible = true;
-
-  assert (hauler.size == 0);
-  assert (hauler.terminal_get_focus () == null);
-
-  hauler.terminal_add (terminal1, 0);
-  assert (hauler.size == 1);
-  assert (hauler.terminal_get_focus () == terminal1);
-  
-  hauler.terminal_focus_right ();
-  assert (hauler.terminal_get_focus () == terminal1);
-}
-
 public static void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
@@ -220,7 +204,6 @@ public static void main (string[] args) {
   Test.add_func ("/Gemini/Hauler/Remove", test_hauler_remove);
   Test.add_func ("/Gemini/Hauler/Zoom", test_hauler_zoom);
   Test.add_func ("/Gemini/Hauler/Visible", test_hauler_visible);
-  Test.add_func ("/Gemini/Hauler/FocusRight", test_hauler_focus_right);
   Test.add_func ("/Gemini/Hauler/FocusAfterVisible", test_hauler_get_focus_after_visible);
 
   Test.run ();
