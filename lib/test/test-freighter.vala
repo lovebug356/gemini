@@ -226,17 +226,45 @@ void test_freighter_move_terminal () {
   var h1 = f.hauler_get (0);
   var h2 = f.hauler_get (1);
 
+  /* remove the active terminal from the active hauler and
+   * place the terminal in hauler 2 */
   f.terminal_hauler_move (h2);
 
-  assert (h2.size == 1);
   assert (h1.size == 1);
+  assert (h2.size == 1);
 
   /* there is no hauler at pos 2 */
   var h3 = f.hauler_get (2);
   f.terminal_hauler_move (h3);
 
-  assert (h2.size == 1);
   assert (h1.size == 1);
+  assert (h2.size == 1);
+}
+
+void test_freighter_copy_terminal () {
+  var f = new Freighter ();
+  f.hauler_new (typeof (TileLayout));
+  var t1 = new Terminal ();
+  var t2 = new Terminal ();
+  f.terminal_add (t1);
+  f.terminal_add (t2);
+  f.hauler_new (typeof (TileLayout));
+  var h1 = f.hauler_get (0);
+  var h2 = f.hauler_get (1);
+
+  /* the same as the move but don't remove the terminal from the
+   * active hauler */
+  f.terminal_hauler_copy (h2);
+
+  assert (h1.size == 2);
+  assert (h2.size == 1);
+
+  /* there is no hauler at pos 2 */
+  var h3 = f.hauler_get (2);
+  f.terminal_hauler_move (h3);
+
+  assert (h1.size == 2);
+  assert (h2.size == 1);
 }
 
 public static void main (string[] args) {
@@ -255,6 +283,7 @@ public static void main (string[] args) {
   Test.add_func ("/Gemini/Freighter/Copy", test_freighter_hauler_copy);
   Test.add_func ("/Gemini/Freighter/SwitchHaulers", test_freighter_hauler_switch);
   Test.add_func ("/Gemini/Freighter/TerminalHaulerMove", test_freighter_move_terminal);
+  Test.add_func ("/Gemini/Freighter/TerminalHaulerCopy", test_freighter_copy_terminal);
 
   Test.run ();
 }

@@ -184,25 +184,61 @@ namespace Gemini {
       if ((event_key.state & Gdk.ModifierType.MOD1_MASK) == Gdk.ModifierType.MOD1_MASK)
       {
         string name = Gdk.keyval_name (event_key.keyval);
-        switch (name) {
-          case "Return":
-            lock (freighter) {
-              freighter.active_hauler.terminal_focus_up ();
-            }
-            break;
-          case "h":
-            lock (freighter) {
-              freighter.active_hauler.layout.width_change (5);
-            }
-            break;
-          case "l":
-            lock (freighter) {
-              freighter.active_hauler.layout.width_change (-5);
-            }
-            break;
-          default:
-            valid = false;
-            break;
+        if ((event_key.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK) {
+          message ("there is a double mask and the key is -%s-", name);
+          switch (name) {
+            case "1":
+              freighter.terminal_hauler_copy (freighter.hauler_get (0));
+              break;
+            case "2":
+              freighter.terminal_hauler_copy (freighter.hauler_get (1));
+              break;
+            case "3":
+              freighter.terminal_hauler_copy (freighter.hauler_get (2));
+              break;
+            case "4":
+              freighter.terminal_hauler_copy (freighter.hauler_get (3));
+              break;
+            case "5":
+              freighter.terminal_hauler_copy (freighter.hauler_get (4));
+              break;
+            case "6":
+              freighter.terminal_hauler_copy (freighter.hauler_get (5));
+              break;
+            case "7":
+              freighter.terminal_hauler_copy (freighter.hauler_get (6));
+              break;
+            case "8":
+              freighter.terminal_hauler_copy (freighter.hauler_get (7));
+              break;
+            case "9":
+              freighter.terminal_hauler_copy (freighter.hauler_get (8));
+              break;
+            default:
+              valid = false;
+              break;
+          }
+        } else {
+          switch (name) {
+            case "Return":
+              lock (freighter) {
+                freighter.active_hauler.terminal_focus_up ();
+              }
+              break;
+            case "h":
+              lock (freighter) {
+                freighter.active_hauler.layout.width_change (5);
+              }
+              break;
+            case "l":
+              lock (freighter) {
+                freighter.active_hauler.layout.width_change (-5);
+              }
+              break;
+            default:
+              valid = false;
+              break;
+          }
         }
       } else if ((event_key.state & Gdk.ModifierType.MOD4_MASK) == Gdk.ModifierType.MOD4_MASK)
       {
