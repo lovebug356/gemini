@@ -185,7 +185,6 @@ namespace Gemini {
       {
         string name = Gdk.keyval_name (event_key.keyval);
         if ((event_key.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK) {
-          message ("there is a double mask and the key is -%s-", name);
           switch (name) {
             case "1":
               freighter.terminal_hauler_copy (freighter.hauler_get (0));
