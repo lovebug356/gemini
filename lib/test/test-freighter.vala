@@ -215,6 +215,30 @@ void test_freighter_hauler_switch () {
   assert (t3.visible == false);
 }
 
+void test_freighter_move_terminal () {
+  var f = new Freighter ();
+  f.hauler_new (typeof (TileLayout));
+  var t1 = new Terminal ();
+  var t2 = new Terminal ();
+  f.terminal_add (t1);
+  f.terminal_add (t2);
+  f.hauler_new (typeof (TileLayout));
+  var h1 = f.hauler_get (0);
+  var h2 = f.hauler_get (1);
+
+  f.terminal_hauler_move (h2);
+
+  assert (h2.size == 1);
+  assert (h1.size == 1);
+
+  /* there is no hauler at pos 2 */
+  var h3 = f.hauler_get (2);
+  f.terminal_hauler_move (h3);
+
+  assert (h2.size == 1);
+  assert (h1.size == 1);
+}
+
 public static void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
@@ -230,6 +254,7 @@ public static void main (string[] args) {
   Test.add_func ("/Gemini/Freighter/HaulerRememberFocus", test_freighter_hauler_remember_focus);
   Test.add_func ("/Gemini/Freighter/Copy", test_freighter_hauler_copy);
   Test.add_func ("/Gemini/Freighter/SwitchHaulers", test_freighter_hauler_switch);
+  Test.add_func ("/Gemini/Freighter/TerminalHaulerMove", test_freighter_move_terminal);
 
   Test.run ();
 }

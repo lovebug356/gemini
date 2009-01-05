@@ -158,6 +158,17 @@ namespace Gemini {
       statusbar_update ();
     }
 
+    public void terminal_hauler_move (Gemini.Hauler? hauler) {
+      lock (haulers) {
+        if (hauler != null && hauler != active_hauler) {
+          var terminal = active_hauler.terminal_get_focus ();
+          hauler.terminal_add (terminal, 0);
+          active_hauler.terminal_remove (terminal);
+          statusbar_update ();
+        }
+      }
+    }
+
     public void terminal_remove (Gemini.Terminal terminal) {
       lock (haulers) {
         ArrayList<Gemini.Hauler> empty_haulers = new ArrayList<Gemini.Hauler> ();
