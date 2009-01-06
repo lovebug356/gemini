@@ -40,7 +40,7 @@ namespace Gemini {
 
       {"View", null, "_View", null, null, null},
 
-      {"Help", null, "_Help", null, null, null},
+      {"Help", null, "H_elp", null, null, null},
       {"About", STOCK_ABOUT, "_About", null, null, about_action_cb},
 
       {"Quit", STOCK_QUIT, "_Quit", null, null, quit_action_cb}
