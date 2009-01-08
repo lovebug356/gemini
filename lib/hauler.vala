@@ -167,6 +167,8 @@ namespace Gemini {
         var index = terminals.index_of (focus_terminal);
         if (index < (terminals.size-1)) {
           terminal_set_focus (terminals.get (index + 1));
+        } else if (index == terminals.size - 1) {
+          terminal_set_focus (terminals.get (0));
         }
       }
     }
@@ -176,6 +178,8 @@ namespace Gemini {
         var index = terminals.index_of (focus_terminal);
         if (index > 0) {
           terminal_set_focus (terminals.get (index - 1));
+        } else if (index == 0) {
+          terminal_set_focus (terminals.get (terminals.size - 1));
         }
       }
     }
