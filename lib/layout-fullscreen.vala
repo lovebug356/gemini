@@ -73,8 +73,9 @@ namespace Gemini {
 
     public override bool all_terminals_remove () {
       lock (fullscreen) {
-        GLib.List<unowned Terminal> children = get_children ();
-        foreach (Terminal t in children) {
+        GLib.List<weak Gtk.Widget> children = get_children ();
+        foreach (Gtk.Widget w in children) {
+          Terminal t = (Terminal) w;
           remove (t);
         }
         fullscreen = null;
