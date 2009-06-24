@@ -35,7 +35,7 @@ def build (bld):
   bld.add_subdirs ('src')
   bld.add_subdirs ('share')
 
-def shutdown ():
+def check (context):
   import UnitTest
   unittest = UnitTest.unit_test ()
   unittest.want_to_see_test_output = True
