@@ -130,9 +130,9 @@ namespace Gemini {
 
     void about_action_cb (Gtk.Action action) {
       var dialog = new AboutDialog ();
-      dialog.set_logo (gemini_logo);                                                                                                       
+      dialog.set_logo (gemini_logo);
       dialog.set_icon (gemini_logo);
-      dialog.set_copyright ("Copyright (c) 2008 Thijs Vermeir");
+      dialog.set_copyright ("Copyright (c) 2008, 2009 Thijs Vermeir");
       dialog.set_program_name ("Gemini Terminal");
       dialog.set_version (Gemini.version);
       dialog.run ();
@@ -351,29 +351,6 @@ namespace Gemini {
               freighter.active_hauler.layout_switch (typeof (TileLayout));
             }
             break;
-            /*case "l":*/
-            /*layout.virt_terminal_resize (terminal, 30, 0);*/
-            /*break;*/
-            /*case "h":*/
-            /*layout.virt_terminal_resize (terminal, -30, 0);*/
-            /*break;*/
-            /*case "j":*/
-            /*layout.virt_terminal_resize (terminal, 0, -30);*/
-            /*break;*/
-            /*case "k":*/
-            /*layout.virt_terminal_resize (terminal, 0, 30);*/
-            /*break;*/
-            /*case "f":*/
-            /*change_layout (typeof (FullscreenLayout));*/
-            /*layout.virt_terminal_focus (terminal);*/
-            /*break;*/
-            /*case "space":*/
-            /*change_layout (typeof (TileLayout));*/
-            /*layout.virt_terminal_focus (terminal);*/
-            /*break;*/
-            /*case "b":*/
-            /*layout.terminal_focus_back ();*/
-            /*break;*/
           default:
             valid = false;
             break;

@@ -17,6 +17,23 @@ namespace Gemini {
       show ();
       button_release_event += button_release_event_cb;
       get_working_dir ();
+
+      /* set the zenburn colors */
+      Gdk.Color foreground = Gdk.Color ();
+      Gdk.Color background = Gdk.Color ();
+      Gdk.Color temp = Gdk.Color ();
+      Gdk.Color[] palette = new Gdk.Color[16];
+
+      Gdk.Color.parse ("#dcdccc", out foreground);
+      Gdk.Color.parse ("#3f3f3f", out background);
+
+      string palette_colors = "#3F3F3F3F3F3F:#FFFF00000000:#EFEFEFEFEFEF:#E3E3CECEABAB:#DFDFAFAF8F8F:#CCCC93939393:#7F7F9F9F7F7F:#DCDCDCDCCCCC:#3F3F3F3F3F3F:#FFFFCFCFCFCF:#EFEFEFEFEFEF:#E3E3CECEABAB:#DFDFAFAF8F8F:#CCCC93939393:#7F7F9F9F7F7F:#DCDCDCDCCCCC";
+      string[] palette_color = palette_colors.split (":");
+      for(int i=0; i < 16; i++) {
+        Gdk.Color.parse (palette_color[i], out temp);
+        palette[i] = temp;
+      }
+      set_colors (foreground, background, palette);
     }
 
     public string get_working_dir () {
