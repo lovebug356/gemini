@@ -1,7 +1,7 @@
 [freighter]
-statusbar = false
-menubar = false
-fullscreen = true
+statusbar = true
+menubar = true
+fullscreen = false
 
 [terminal]
 audible_bell = false
