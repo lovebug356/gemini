@@ -2,7 +2,7 @@ Source: gemini
 Section: unknown
 Priority: extra
 Maintainer: Thijs Vermeir <thijsvermeir@gmail.com>
-Build-Depends: debhelper (>= 5)
+Build-Depends: debhelper (>= 5), python
 Standards-Version: 3.7.2
 
 Package: gemini
