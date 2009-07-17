@@ -144,6 +144,7 @@ namespace Gemini {
       dialog.set_copyright ("Copyright (c) 2008, 2009 Thijs Vermeir");
       dialog.set_program_name ("Gemini Terminal");
       dialog.set_version (Gemini.version);
+      dialog.set_website ("http://gemini.digitalmediaplanet.net");
       dialog.run ();
       dialog.hide ();
       dialog.destroy ();
