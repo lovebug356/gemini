@@ -1,2 +1,3 @@
 bld.install_files ('${PREFIX}/share/pixmaps', 'gemini.svg')
 bld.install_files ('${PREFIX}/share/applications', 'gemini.desktop')
+bld.install_files ('${PREFIX}/share/gemini', 'gemini.rc')

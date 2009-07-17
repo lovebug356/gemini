@@ -1,0 +1,20 @@
+[freighter]
+statusbar = false
+menubar = false
+fullscreen = true
+
+[terminal]
+audible_bell = false
+visible_bell = false
+allow_bold = false
+scroll_on_output = false
+scroll_on_keystroke = false
+cursor_blinks = false
+opacity = 65535
+scrollback_lines = 1000
+font = normal 10
+
+[color]
+foreground = #dcdccc
+background = #3f3f3f
+palette = #3F3F3F3F3F3F:#FFFF00000000:#EFEFEFEFEFEF:#E3E3CECEABAB:#DFDFAFAF8F8F:#CCCC93939393:#7F7F9F9F7F7F:#DCDCDCDCCCCC:#3F3F3F3F3F3F:#FFFFCFCFCFCF:#EFEFEFEFEFEF:#E3E3CECEABAB:#DFDFAFAF8F8F:#CCCC93939393:#7F7F9F9F7F7F:#DCDCDCDCCCCC

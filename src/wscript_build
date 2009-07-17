@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 
-bld.add_subdirs ('util')
-
 gemini = bld.new_task_gen ('cc', 'program')
 gemini.find_sources_in_dirs ('.')
 gemini.uselib='GLIB-2.0 VTE GEE-1.0 GTHREAD GTK+-2.0 GDK-PIXBUF-2.0'
 gemini.packages = 'vte gee-1.0 gdk-pixbuf-2.0 config'
 gemini.vapi_dirs = '.'
 gemini.target='gemini'
-gemini.uselib_local = 'libgemini util-lib'
+gemini.uselib_local = 'libgemini'
 gemini.threading = True

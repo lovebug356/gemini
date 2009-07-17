@@ -84,6 +84,10 @@ namespace Gemini {
     }
 
     construct {
+      /* Load the configuration */
+      Gemini.configuration = new Gemini.Configuration ();
+
+      /* Build the UI */
       freighter = new Gemini.Freighter ();
       freighter.hauler_change += hauler_change_cb;
       freighter.hauler_new (typeof (Gemini.TileLayout));
@@ -108,6 +112,11 @@ namespace Gemini {
       vbox.show_all ();
       add (vbox);
       destroy += Gtk.main_quit;
+      /* set actions from configuration */
+      statusbar_action.set_active (Gemini.configuration.statusbar);
+      menubar_action.set_active (Gemini.configuration.menubar);
+      fullscreen_action.set_active (Gemini.configuration.fullscreen);
+
       show ();
     }
 
