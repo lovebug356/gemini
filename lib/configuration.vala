@@ -23,9 +23,9 @@ public class Gemini.Configuration : GLib.Object {
   public uint scrollback_lines = 1000;
 
   /* color */
-  public string background_color = "";
-  public string foreground_color = "";
-  public string color_palette = "";
+  public Gdk.Color foreground_color;
+  public Gdk.Color background_color;
+  public Gdk.Color[] color_palette;
 
   string configuration_filename;
 
@@ -91,8 +91,15 @@ public class Gemini.Configuration : GLib.Object {
     scrollback_lines = get_int (file, "terminal", "scrollback_lines", 1000);
 
     /* color */
-    foreground_color = get_string (file, "color", "foreground", "#ffffff");
-    background_color = get_string (file, "color", "background", "#000000");
-    color_palette = get_string (file, "color", "palette", "#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff");
+    Gdk.Color.parse (get_string (file, "color", "foreground", "#ffffff"), out foreground_color);
+    Gdk.Color.parse (get_string (file, "color", "background", "#000000"), out background_color);
+    Gdk.Color tempc = Gdk.Color ();
+    string temp = get_string (file, "color", "palette", "#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff:#ffffff");
+    color_palette = new Gdk.Color[16];
+    string[] palette_color = temp.split (":");
+    for(int i=0; i < 16; i++) {
+      Gdk.Color.parse (palette_color[i], out tempc);
+      color_palette[i] = tempc;
+    }
   }
 }

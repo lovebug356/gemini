@@ -26,21 +26,7 @@ public class Gemini.Terminal : Vte.Terminal {
     set_opacity ((uint16)Gemini.configuration.opacity);
     set_scrollback_lines (Gemini.configuration.scrollback_lines);
     set_font_from_string (Gemini.configuration.font);
-
-    /* set the colors from the configuration */
-    Gdk.Color foreground = Gdk.Color ();
-    Gdk.Color background = Gdk.Color ();
-    Gdk.Color temp = Gdk.Color ();
-    Gdk.Color[] palette = new Gdk.Color[16];
-    Gdk.Color.parse (Gemini.configuration.foreground_color, out foreground);
-    Gdk.Color.parse (Gemini.configuration.background_color, out background);
-    string palette_colors = Gemini.configuration.color_palette;
-    string[] palette_color = palette_colors.split (":");
-    for(int i=0; i < 16; i++) {
-      Gdk.Color.parse (palette_color[i], out temp);
-      palette[i] = temp;
-    }
-    set_colors (foreground, background, palette);
+    set_colors (Gemini.configuration.foreground_color, Gemini.configuration.background_color, Gemini.configuration.color_palette);
   }
 
   public string get_working_dir () {
