@@ -10,6 +10,8 @@ void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
 
+  Gemini.configuration = new Gemini.Configuration ();
+
   Test.add_func ("/Gemini/Terminal/Create", test_terminal_create);
 
   Test.run ();

@@ -370,6 +370,8 @@ void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
 
+  Gemini.configuration = new Gemini.Configuration ();
+
   Test.add_func ("/Gemini/Layout/Tile/Create", test_layout_create);
   Test.add_func ("/Gemini/Layout/Tile/Add1", test_layout_add_1);
   Test.add_func ("/Gemini/Layout/Tile/Add2", test_layout_add_2);

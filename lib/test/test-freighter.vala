@@ -271,6 +271,8 @@ public static void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
 
+  Gemini.configuration = new Gemini.Configuration ();
+
   Test.add_func ("/Gemini/Freighter/Create", test_freighter_create);
   Test.add_func ("/Gemini/Freighter/AddHauler", test_freighter_add_hauler);
   Test.add_func ("/Gemini/Freighter/HaulerRemove", test_freighter_remove_hauler);

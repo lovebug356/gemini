@@ -194,6 +194,8 @@ public static void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
 
+  Gemini.configuration = new Gemini.Configuration ();
+
   Test.add_func ("/Gemini/Hauler/Create", test_hauler_create);
   Test.add_func ("/Gemini/Hauler/Switch", test_hauler_switch);
   Test.add_func ("/Gemini/Hauler/Switch_2", test_hauler_switch_2);

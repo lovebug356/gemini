@@ -40,6 +40,8 @@ public static void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
 
+  Gemini.configuration = new Gemini.Configuration ();
+
   Test.add_func ("/Gemini/Freighter/HaulerCopy", test_hauler_copy);
 
   Test.run ();
