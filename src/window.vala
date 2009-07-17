@@ -45,7 +45,7 @@ namespace Gemini {
       {"Help", null, "H_elp", null, null, null},
       {"About", STOCK_ABOUT, "_About", null, null, about_action_cb},
 
-      {"Quit", STOCK_QUIT, "_Quit", null, null, quit_action_cb}
+      {"Quit", null, "_Quit", null, null, quit_action_cb}
     };
 
     const ToggleActionEntry[] toggle_entries = {
@@ -55,7 +55,7 @@ namespace Gemini {
     };
 
     void quit_action_cb (Gtk.Action action) {
-      Gtk.main_quit ();
+      delete_cb ();
     }
 
     void terminal_new_cb (Gtk.Action action) {
@@ -111,13 +111,27 @@ namespace Gemini {
       vbox.pack_start (freighter.vbox, true, true, 0);
       vbox.show_all ();
       add (vbox);
-      destroy += Gtk.main_quit;
+      delete_event.connect (delete_cb);
       /* set actions from configuration */
       statusbar_action.set_active (Gemini.configuration.statusbar);
       menubar_action.set_active (Gemini.configuration.menubar);
       fullscreen_action.set_active (Gemini.configuration.fullscreen);
 
       show ();
+    }
+
+    bool delete_cb () {
+      /* throw a warning that we will close all the terminals */
+      var dialog = new MessageDialog (this, DialogFlags.DESTROY_WITH_PARENT, MessageType.QUESTION, ButtonsType.OK_CANCEL,
+                  "Do you really want to close gemini-terminal ?");
+      dialog.set_default_response (ResponseType.YES);
+      if (dialog.run () == ResponseType.OK) {
+        Gtk.main_quit ();
+        dialog.destroy ();
+        return false;
+      }
+      dialog.destroy ();
+      return true;
     }
 
     void setup_ui_manager () {
