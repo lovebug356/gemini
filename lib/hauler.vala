@@ -7,7 +7,7 @@ namespace Gemini {
     public Layout layout;
     public string title;
     public ArrayList<Terminal> terminals;
-    Gemini.Terminal focus_terminal;
+    public ArrayList<Terminal> focus_terminals;
 
     public signal void all_terminals_exited ();
     public signal void layout_changed ();
@@ -15,6 +15,7 @@ namespace Gemini {
     public Hauler (GLib.Type layout_type) {
       layout = get_layout (layout_type);
     }
+
 
     bool _visible;
     public bool visible {
@@ -26,8 +27,8 @@ namespace Gemini {
           if (value != _visible) {
             if (value) {
               layout.all_terminals_add (terminals);
-              if (focus_terminal != null) {
-                terminal_set_focus (focus_terminal);
+              if (get_focus_terminal () != null) {
+                terminal_set_focus (get_focus_terminal ());
               } else if (terminals.size > 0)
                 terminal_set_focus (terminals.get (0));
             } else {
@@ -42,6 +43,23 @@ namespace Gemini {
     public int size {
       get {
         return terminals.size;
+      }
+    }
+
+    public Gemini.Terminal get_focus_terminal () {
+      Gemini.Terminal temp = null;
+      if (focus_terminals.size != 0) {
+        temp = focus_terminals.get (0);
+      }
+      return temp;
+    }
+
+    public void set_focus_terminal (Gemini.Terminal? focus_terminal) {
+      if (focus_terminal != null) {
+        if (focus_terminal in focus_terminals) {
+          focus_terminals.remove (focus_terminal);
+        }
+        focus_terminals.insert (0, focus_terminal);
       }
     }
 
@@ -72,8 +90,8 @@ namespace Gemini {
     construct {
       title = "";
       terminals = new ArrayList<Terminal> ();
+      focus_terminals = new ArrayList<Terminal> ();
       _visible = false;
-      focus_terminal = null;
     }
 
     public Hauler copy () {
@@ -81,7 +99,7 @@ namespace Gemini {
       var hp = new Hauler (layout.get_type ());
       hp.title = title;
       lock (terminals) {
-        hp.focus_terminal = focus_terminal;
+        hp.set_focus_terminal (get_focus_terminal ());
         foreach (Gemini.Terminal terminal in terminals) {
           hp.terminal_add (terminal, counter++);
         }
@@ -95,7 +113,7 @@ namespace Gemini {
 
         if (visible) {
           layout.terminal_add (terminal, position);
-          if (focus_terminal == null)
+          if (get_focus_terminal () == null)
             terminal_set_focus (terminal);
         }
       }
@@ -106,8 +124,8 @@ namespace Gemini {
       bool ret = false;
       lock (terminals) {
         if (terminal in terminals) {
-          focus_terminal = terminal;
-          layout.terminal_grab_focus (focus_terminal);
+          set_focus_terminal (terminal);
+          layout.terminal_grab_focus (terminal);
           ret = true;
         }
       }
@@ -116,13 +134,13 @@ namespace Gemini {
 
     public void terminal_refocus () {
       lock (terminals) {
-        if (focus_terminal != null)
-          layout.terminal_grab_focus (focus_terminal);
+        if (get_focus_terminal () != null)
+          layout.terminal_grab_focus (get_focus_terminal ());
       }
     }
 
     public Gemini.Terminal terminal_get_focus () {
-      return focus_terminal;
+      return get_focus_terminal ();
     }
 
     public int terminal_get_position (Gemini.Terminal terminal) {
@@ -149,8 +167,17 @@ namespace Gemini {
         terminals.remove (terminal);
         if (visible)
           layout.terminal_remove (terminal);
-        if (terminal == focus_terminal && terminals.size > 0)
-          terminal_set_focus (terminals.get (0));
+
+        if (terminal == get_focus_terminal ()) {
+          focus_terminals.remove (terminal);
+          if (focus_terminals.size > 0) {
+            terminal_set_focus (focus_terminals.get (0));
+          } else if (terminals.size > 0) {
+            terminal_set_focus (terminals.get (0));
+          }
+        } else if (terminal in focus_terminals) {
+          focus_terminals.remove (terminal);
+        }
 
         if (terminals.size == 0)
           all_terminals_exited ();
@@ -164,7 +191,7 @@ namespace Gemini {
 
     public void terminal_focus_down () {
       lock (terminals) {
-        var index = terminals.index_of (focus_terminal);
+        var index = terminals.index_of (get_focus_terminal ());
         if (index < (terminals.size-1)) {
           terminal_set_focus (terminals.get (index + 1));
         } else if (index == terminals.size - 1) {
@@ -175,7 +202,7 @@ namespace Gemini {
 
     public void terminal_focus_up () {
       lock (terminals) {
-        var index = terminals.index_of (focus_terminal);
+        var index = terminals.index_of (get_focus_terminal ());
         if (index > 0) {
           terminal_set_focus (terminals.get (index - 1));
         } else if (index == 0) {

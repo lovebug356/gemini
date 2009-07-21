@@ -38,7 +38,7 @@ public class Gemini.Configuration : GLib.Object {
     if (this.configuration_filename == "") {
       stderr.printf ("WARNING: configuration file not found\n");
     } else {
-      stdout.printf ("using configuration file: %s\n", this.configuration_filename);
+      /*stdout.printf ("using configuration file: %s\n", this.configuration_filename);*/
       load_configuration ();
     }
   }

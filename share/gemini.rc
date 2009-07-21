@@ -1,6 +1,6 @@
 [freighter]
 statusbar = true
-menubar = true
+menubar = false
 fullscreen = false
 
 [terminal]
@@ -8,8 +8,8 @@ audible_bell = false
 visible_bell = false
 allow_bold = false
 scroll_on_output = false
-scroll_on_keystroke = false
-cursor_blinks = false
+scroll_on_keystroke = true
+cursor_blinks = true
 opacity = 65535
 scrollback_lines = 1000
 font = normal 10

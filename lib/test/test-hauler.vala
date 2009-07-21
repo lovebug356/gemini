@@ -190,6 +190,43 @@ void test_hauler_visible () {
   assert (hauler.visible == false);
 }
 
+void test_hauler_focus_order () {
+  var hauler = new Gemini.Hauler (typeof (Gemini.TileLayout));
+  var terminal1 = new Gemini.Terminal ();
+  var terminal2 = new Gemini.Terminal ();
+  var terminal3 = new Gemini.Terminal ();
+
+  hauler.terminal_add (terminal2, 0);
+  hauler.terminal_add (terminal1, 0);
+  hauler.terminal_add (terminal3, 2);
+  hauler.terminal_set_focus (terminal1);
+  hauler.terminal_set_focus (terminal2);
+  hauler.terminal_set_focus (terminal3);
+
+  assert (hauler.terminal_get_focus () == terminal3);
+  hauler.terminal_remove (terminal3);
+  assert (hauler.terminal_get_focus () == terminal2);
+  hauler.terminal_remove (terminal2);
+  assert (hauler.terminal_get_focus () == terminal1);
+  hauler.terminal_remove (terminal1);
+
+  hauler.terminal_add (terminal2, 0);
+  hauler.terminal_add (terminal1, 0);
+  hauler.terminal_add (terminal3, 2);
+  hauler.terminal_set_focus (terminal1);
+  hauler.terminal_set_focus (terminal2);
+  hauler.terminal_set_focus (terminal3);
+
+  assert (hauler.terminal_get_focus () == terminal3);
+  hauler.terminal_remove (terminal2);
+  assert (hauler.terminal_get_focus () == terminal3);
+  hauler.terminal_remove (terminal3);
+  assert (hauler.terminal_get_focus () == terminal1);
+  hauler.terminal_remove (terminal1);
+
+  /* TODO check if the copy of a hauler still keeps the correct order */
+}
+
 public static void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
@@ -207,6 +244,7 @@ public static void main (string[] args) {
   Test.add_func ("/Gemini/Hauler/Zoom", test_hauler_zoom);
   Test.add_func ("/Gemini/Hauler/Visible", test_hauler_visible);
   Test.add_func ("/Gemini/Hauler/FocusAfterVisible", test_hauler_get_focus_after_visible);
+  Test.add_func ("/Gemini/Hauler/FocusOrder", test_hauler_focus_order);
 
   Test.run ();
 }
