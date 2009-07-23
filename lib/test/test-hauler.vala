@@ -224,7 +224,58 @@ void test_hauler_focus_order () {
   assert (hauler.terminal_get_focus () == terminal1);
   hauler.terminal_remove (terminal1);
 
-  /* TODO check if the copy of a hauler still keeps the correct order */
+}
+
+void test_hauler_focus_order_copy () {
+  var hauler = new Gemini.Hauler (typeof (Gemini.TileLayout));
+  var terminal1 = new Gemini.Terminal ();
+  var terminal2 = new Gemini.Terminal ();
+  var terminal3 = new Gemini.Terminal ();
+
+  hauler.terminal_add (terminal1, 0);
+  hauler.terminal_add (terminal2, 0);
+  hauler.terminal_add (terminal3, 0);
+  hauler.terminal_set_focus (terminal1);
+  hauler.terminal_set_focus (terminal2);
+  hauler.terminal_set_focus (terminal3);
+  
+  var h2 = hauler.copy ();
+  assert (h2.terminal_get_focus () == terminal3);
+  h2.terminal_remove (terminal3);
+  assert (h2.terminal_get_focus () == terminal2);
+  h2.terminal_remove (terminal2);
+  assert (h2.terminal_get_focus () == terminal1);
+  h2.terminal_remove (terminal1);
+
+  hauler.terminal_add (terminal1, 0);
+  hauler.terminal_add (terminal2, 0);
+  hauler.terminal_add (terminal3, 0);
+  hauler.terminal_set_focus (terminal1);
+  hauler.terminal_set_focus (terminal3);
+  hauler.terminal_set_focus (terminal2);
+  
+  h2 = hauler.copy ();
+  assert (h2.terminal_get_focus () == terminal2);
+  h2.terminal_remove (terminal2);
+  assert (h2.terminal_get_focus () == terminal3);
+  h2.terminal_remove (terminal3);
+  assert (h2.terminal_get_focus () == terminal1);
+  h2.terminal_remove (terminal1);
+
+  hauler.terminal_add (terminal1, 0);
+  hauler.terminal_add (terminal2, 0);
+  hauler.terminal_add (terminal3, 0);
+  hauler.terminal_set_focus (terminal1);
+  hauler.terminal_set_focus (terminal3);
+  hauler.terminal_set_focus (terminal2);
+  
+  h2 = hauler.copy ();
+  assert (h2.terminal_get_focus () == terminal2);
+  h2.terminal_remove (terminal3);
+  assert (h2.terminal_get_focus () == terminal2);
+  h2.terminal_remove (terminal2);
+  assert (h2.terminal_get_focus () == terminal1);
+  h2.terminal_remove (terminal1);
 }
 
 public static void main (string[] args) {
@@ -245,6 +296,7 @@ public static void main (string[] args) {
   Test.add_func ("/Gemini/Hauler/Visible", test_hauler_visible);
   Test.add_func ("/Gemini/Hauler/FocusAfterVisible", test_hauler_get_focus_after_visible);
   Test.add_func ("/Gemini/Hauler/FocusOrder", test_hauler_focus_order);
+  Test.add_func ("/Gemini/Hauler/FocusOrderCopy", test_hauler_focus_order_copy);
 
   Test.run ();
 }
