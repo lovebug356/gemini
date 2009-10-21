@@ -7,7 +7,7 @@ namespace Gemini {
       /* Load the configuration */
       Gemini.configuration = new Gemini.Configuration ();
       set_default_size (640, 480);
-      connect ("delete_event", Gtk.main_quit);
+      destroy += Gtk.main_quit;
       var t = new Gemini.Terminal ();
       t.window_title_changed += (term) => {
         Gtk.Window toplevel = (Gtk.Window) get_toplevel(); toplevel.set_title( term.window_title );
