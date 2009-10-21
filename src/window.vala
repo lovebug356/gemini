@@ -111,7 +111,7 @@ namespace Gemini {
       vbox.pack_start (freighter.vbox, true, true, 0);
       vbox.show_all ();
       add (vbox);
-      delete_event.connect (delete_cb);
+      connect ("delete_event", delete_cb);
       /* set actions from configuration */
       statusbar_action.set_active (Gemini.configuration.statusbar);
       menubar_action.set_active (Gemini.configuration.menubar);

@@ -278,6 +278,30 @@ void test_hauler_focus_order_copy () {
   h2.terminal_remove (terminal1);
 }
 
+void test_hauler_focus_order_copy2 () {
+  var hauler = new Gemini.Hauler (typeof (Gemini.TileLayout));
+  var terminal1 = new Gemini.Terminal ();
+  var terminal2 = new Gemini.Terminal ();
+  var terminal3 = new Gemini.Terminal ();
+  var terminal4 = new Gemini.Terminal ();
+
+  hauler.terminal_add (terminal1, 0);
+  hauler.terminal_add (terminal2, 0);
+  hauler.terminal_add (terminal3, 0);
+  hauler.terminal_add (terminal4, 0);
+  hauler.terminal_set_focus (terminal3);
+  hauler.terminal_set_focus (terminal4);
+  hauler.terminal_set_focus (terminal2);
+  hauler.terminal_set_focus (terminal1);
+  var h2 = hauler.copy ();
+  h2.terminal_remove (terminal1);
+  assert (h2.terminal_get_focus () == terminal2);
+  h2.terminal_remove (terminal2);
+  assert (h2.terminal_get_focus () == terminal4);
+  h2.terminal_remove (terminal4);
+  assert (h2.terminal_get_focus () == terminal3);
+}
+
 public static void main (string[] args) {
   Test.init (ref args);
   Gtk.init (ref args);
@@ -297,6 +321,7 @@ public static void main (string[] args) {
   Test.add_func ("/Gemini/Hauler/FocusAfterVisible", test_hauler_get_focus_after_visible);
   Test.add_func ("/Gemini/Hauler/FocusOrder", test_hauler_focus_order);
   Test.add_func ("/Gemini/Hauler/FocusOrderCopy", test_hauler_focus_order_copy);
+  Test.add_func ("/Gemini/Hauler/FocusOrderCopy2", test_hauler_focus_order_copy2);
 
   Test.run ();
 }

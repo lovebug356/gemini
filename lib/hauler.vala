@@ -171,8 +171,10 @@ namespace Gemini {
         if (terminal == get_focus_terminal ()) {
           focus_terminals.remove (terminal);
           if (focus_terminals.size > 0) {
+            message ("settings terminals from from");
             terminal_set_focus (focus_terminals.get (0));
           } else if (terminals.size > 0) {
+            message ("settings terminals from size");
             terminal_set_focus (terminals.get (0));
           }
         } else if (terminal in focus_terminals) {
