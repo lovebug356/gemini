@@ -99,9 +99,12 @@ namespace Gemini {
       var hp = new Hauler (layout.get_type ());
       hp.title = title;
       lock (terminals) {
-        hp.set_focus_terminal (get_focus_terminal ());
+        /*hp.set_focus_terminal (get_focus_terminal ());*/
         foreach (Gemini.Terminal terminal in terminals) {
           hp.terminal_add (terminal, counter++);
+        }
+        for (int i=focus_terminals.size; i>0; i--) {
+          hp.set_focus_terminal (focus_terminals[i-1]);
         }
       }
       return hp;
@@ -171,10 +174,8 @@ namespace Gemini {
         if (terminal == get_focus_terminal ()) {
           focus_terminals.remove (terminal);
           if (focus_terminals.size > 0) {
-            message ("settings terminals from from");
             terminal_set_focus (focus_terminals.get (0));
           } else if (terminals.size > 0) {
-            message ("settings terminals from size");
             terminal_set_focus (terminals.get (0));
           }
         } else if (terminal in focus_terminals) {
