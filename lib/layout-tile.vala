@@ -21,7 +21,7 @@ namespace Gemini {
 
       hbox = new Gtk.HBox (false, 0);
       hbox.set_homogeneous (false);
-      hbox.size_allocate += size_allocate_cb;
+      hbox.size_allocate.connect (size_allocate_cb);
       pack_start (hbox, true, true, 0);
 
       stack_width = 40;

@@ -309,19 +309,19 @@ public static void main (string[] args) {
 
   Gemini.configuration = new Gemini.Configuration ();
 
-  /*Test.add_func ("/Gemini/Hauler/Create", test_hauler_create);*/
-  /*Test.add_func ("/Gemini/Hauler/Switch", test_hauler_switch);*/
-  /*Test.add_func ("/Gemini/Hauler/Switch_2", test_hauler_switch_2);*/
-  /*Test.add_func ("/Gemini/Hauler/Copy", test_hauler_copy);*/
-  /*Test.add_func ("/Gemini/Hauler/Focus", test_hauler_focus);*/
-  /*Test.add_func ("/Gemini/Hauler/Position", test_hauler_position);*/
-  /*Test.add_func ("/Gemini/Hauler/Move", test_hauler_move);*/
-  /*Test.add_func ("/Gemini/Hauler/Remove", test_hauler_remove);*/
-  /*Test.add_func ("/Gemini/Hauler/Zoom", test_hauler_zoom);*/
-  /*Test.add_func ("/Gemini/Hauler/Visible", test_hauler_visible);*/
-  /*Test.add_func ("/Gemini/Hauler/FocusAfterVisible", test_hauler_get_focus_after_visible);*/
-  /*Test.add_func ("/Gemini/Hauler/FocusOrder", test_hauler_focus_order);*/
-  /*Test.add_func ("/Gemini/Hauler/FocusOrderCopy", test_hauler_focus_order_copy);*/
+  Test.add_func ("/Gemini/Hauler/Create", test_hauler_create);
+  Test.add_func ("/Gemini/Hauler/Switch", test_hauler_switch);
+  Test.add_func ("/Gemini/Hauler/Switch_2", test_hauler_switch_2);
+  Test.add_func ("/Gemini/Hauler/Copy", test_hauler_copy);
+  Test.add_func ("/Gemini/Hauler/Focus", test_hauler_focus);
+  Test.add_func ("/Gemini/Hauler/Position", test_hauler_position);
+  Test.add_func ("/Gemini/Hauler/Move", test_hauler_move);
+  Test.add_func ("/Gemini/Hauler/Remove", test_hauler_remove);
+  Test.add_func ("/Gemini/Hauler/Zoom", test_hauler_zoom);
+  Test.add_func ("/Gemini/Hauler/Visible", test_hauler_visible);
+  Test.add_func ("/Gemini/Hauler/FocusAfterVisible", test_hauler_get_focus_after_visible);
+  Test.add_func ("/Gemini/Hauler/FocusOrder", test_hauler_focus_order);
+  Test.add_func ("/Gemini/Hauler/FocusOrderCopy", test_hauler_focus_order_copy);
   Test.add_func ("/Gemini/Hauler/FocusOrderCopy2", test_hauler_focus_order_copy2);
 
   Test.run ();

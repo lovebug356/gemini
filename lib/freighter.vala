@@ -71,8 +71,8 @@ namespace Gemini {
     public void hauler_add (Gemini.Hauler hauler) {
       lock (haulers) {
         haulers.add (hauler);
-        hauler.layout_changed += layout_changed_cb;
-        hauler.all_terminals_exited += hauler_all_terminals_exited_cb;
+        hauler.layout_changed.connect (layout_changed_cb);
+        hauler.all_terminals_exited.connect (hauler_all_terminals_exited_cb);
         if (active_hauler == null) {
           hauler_show (hauler);
         }

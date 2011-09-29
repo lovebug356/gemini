@@ -4,7 +4,6 @@ using Gtk;
 
 namespace Gemini {
   public abstract class Layout : Gtk.VBox {
-    public string name {get; set;}
     public string title {get; set;}
 
     public virtual bool terminal_add (Gemini.Terminal terminal, uint position) {return false;}
