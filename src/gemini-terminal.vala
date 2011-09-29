@@ -5,7 +5,7 @@ namespace Gemini {
   public class GeminiTile : Gtk.Window {
     /* menu stuff */
     UIManager ui_manager;
-    ActionGroup menu_actions;
+    Gtk.ActionGroup menu_actions;
     Gtk.Widget menu_bar;
     ToggleAction fullscreen_action;
     ToggleAction statusbar_action;
@@ -136,7 +136,7 @@ namespace Gemini {
 
     void setup_ui_manager () {
       ui_manager = new UIManager ();
-      menu_actions = new ActionGroup ("Actions");
+      menu_actions = new Gtk.ActionGroup ("Actions");
       menu_actions.add_actions (action_entries, this);
       menu_actions.add_toggle_actions (toggle_entries, this);
       ui_manager.insert_action_group (menu_actions, 0);
@@ -157,7 +157,7 @@ namespace Gemini {
       dialog.set_icon (gemini_logo);
       dialog.set_copyright ("Copyright (c) 2008, 2009 Thijs Vermeir");
       dialog.set_program_name ("Gemini Terminal");
-      dialog.set_version (Gemini.version);
+      dialog.set_version ("0.10");
       dialog.set_website ("http://gemini.digitalmediaplanet.net");
       dialog.run ();
       dialog.hide ();

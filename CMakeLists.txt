@@ -39,4 +39,4 @@ enable_testing ()
 
 add_subdirectory (lib)
 add_subdirectory (tests)
-#add_subdirectory (src)
+add_subdirectory (src)
