@@ -43,7 +43,7 @@ namespace Gemini {
       {"View", null, "_View", null, null, null},
 
       {"Help", null, "H_elp", null, null, null},
-      {"About", STOCK_ABOUT, "_About", null, null, about_action_cb},
+      {"About", Stock.ABOUT, "_About", null, null, about_action_cb},
 
       {"Quit", null, "_Quit", null, null, quit_action_cb}
     };
@@ -89,9 +89,9 @@ namespace Gemini {
 
       /* Build the UI */
       freighter = new Gemini.Freighter ();
-      freighter.hauler_change += hauler_change_cb;
+      freighter.hauler_change.connect (hauler_change_cb);
       freighter.hauler_new (typeof (Gemini.TileLayout));
-      freighter.all_terminals_exited += all_terminals_exited_cb;
+      freighter.all_terminals_exited.connect (all_terminals_exited_cb);
 
       terminal_new ();
 
@@ -111,13 +111,11 @@ namespace Gemini {
       vbox.pack_start (freighter.vbox, true, true, 0);
       vbox.show_all ();
       add (vbox);
-      connect ("delete_event", delete_cb);
+      delete_event.connect (delete_cb);
       /* set actions from configuration */
       statusbar_action.set_active (Gemini.configuration.statusbar);
       menubar_action.set_active (Gemini.configuration.menubar);
       fullscreen_action.set_active (Gemini.configuration.fullscreen);
-
-      show ();
     }
 
     bool delete_cb () {
@@ -174,23 +172,25 @@ namespace Gemini {
         if (freighter.active_hauler != null && freighter.active_hauler.size > 0)
           working_dir = freighter.active_hauler.terminal_get_focus ().get_working_dir ();
         var terminal = new Gemini.Terminal (working_dir);
-        terminal.key_press_event += key_press_event_cb;
-        terminal.child_exited += terminal_child_exited_cb;
-        terminal.focus_in_event += terminal_focus_in_event_cb;
+        terminal.key_press_event.connect (key_press_event_cb);
+        terminal.child_exited.connect (terminal_child_exited_cb);
+        terminal.focus_in_event.connect (terminal_focus_in_event_cb);
         freighter.terminal_add (terminal);
         freighter.active_hauler.terminal_set_focus (terminal);
       }
     }
 
-    bool terminal_focus_in_event_cb (Gemini.Terminal terminal, Gdk.EventFocus focus) {
+    bool terminal_focus_in_event_cb (Gtk.Widget sender, Gdk.EventFocus focus) {
       lock (freighter) {
+        Terminal terminal = sender as Terminal;
         freighter.active_hauler.terminal_set_focus (terminal);
       }
       return false;
     }
 
-    void terminal_child_exited_cb (Gemini.Terminal terminal) {
+    void terminal_child_exited_cb (Vte.Terminal sender) {
       lock (freighter) {
+        Terminal terminal = sender as Gemini.Terminal;
         freighter.terminal_remove (terminal);
       }
     }
@@ -211,7 +211,7 @@ namespace Gemini {
       }
     }
 
-    bool key_press_event_cb (Gemini.Terminal terminal, Gdk.EventKey event_key) {
+    bool key_press_event_cb (Gdk.EventKey event_key) {
       bool valid = true;
       if ((event_key.state & Gdk.ModifierType.MOD1_MASK) == Gdk.ModifierType.MOD1_MASK)
       {
@@ -422,6 +422,7 @@ namespace Gemini {
   public static void main (string[] args) {
     Gtk.init (ref args);
     var gemini = new Gemini.GeminiTile ();
+    gemini.show ();
     Gtk.main ();
   }
 }
