@@ -14,7 +14,7 @@ public class Gemini.Terminal : Vte.Terminal {
     set_size_request (0, 0);
     set_size (80, 24);
     show ();
-    button_release_event += button_release_event_cb;
+    button_release_event.connect (button_release_event_cb);
     get_working_dir ();
 
     set_audible_bell (Gemini.configuration.audible_bell);
@@ -40,7 +40,7 @@ public class Gemini.Terminal : Vte.Terminal {
     return content;
   }
 
-  bool button_release_event_cb (Gemini.Terminal terminal, Gdk.EventButton button) {
+  bool button_release_event_cb (Gtk.Widget sender, Gdk.EventButton button) {
     if (button.type == Gdk.EventType.BUTTON_RELEASE &&
         button.button == 1) {
       selection (get_has_selection ());

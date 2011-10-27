@@ -39,7 +39,11 @@ public class Gemini.Configuration : GLib.Object {
       stderr.printf ("WARNING: configuration file not found\n");
     } else {
       /*stdout.printf ("using configuration file: %s\n", this.configuration_filename);*/
-      load_configuration ();
+      try {
+        load_configuration ();
+      } catch (Error e) {
+        stderr.printf ("failed to load configuration: " + e.message);
+      }
     }
   }
 
@@ -70,7 +74,7 @@ public class Gemini.Configuration : GLib.Object {
     }
   }
 
-  void load_configuration () {
+  void load_configuration () throws KeyFileError, FileError {
     var file = new KeyFile ();
     file.load_from_file (configuration_filename, KeyFileFlags.NONE);
 
