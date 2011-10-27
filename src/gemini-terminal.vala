@@ -256,16 +256,6 @@ namespace Gemini {
                 freighter.active_hauler.terminal_focus_up ();
               }
               break;
-            case "h":
-              lock (freighter) {
-                freighter.active_hauler.layout.width_change (5);
-              }
-              break;
-            case "l":
-              lock (freighter) {
-                freighter.active_hauler.layout.width_change (-5);
-              }
-              break;
             default:
               valid = false;
               break;
@@ -295,6 +285,16 @@ namespace Gemini {
                 else
                   freighter.active_hauler.terminal_zoom (active);
               }
+            }
+            break;
+          case "h":
+            lock (freighter) {
+              freighter.active_hauler.layout.width_change (5);
+            }
+            break;
+          case "l":
+            lock (freighter) {
+              freighter.active_hauler.layout.width_change (-5);
             }
             break;
           case "k":
