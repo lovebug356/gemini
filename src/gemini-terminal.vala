@@ -35,7 +35,7 @@ namespace Gemini {
       </ui>
     """;
 
-    const ActionEntry[] action_entries = {
+    const Gtk.ActionEntry[] action_entries = {
       {"Terminal", null, "_Terminal", null, null, null},
       {"TerminalNew", null, "_New Terminal", null, null, terminal_new_cb},
       {"TerminalClose", null, "_Close Terminal", null, null, terminal_close_cb},
