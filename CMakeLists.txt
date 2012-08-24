@@ -13,6 +13,7 @@ ensure_vala_version("0.10.0" MINIMUM)
 
 pkg_check_modules (GLIB REQUIRED glib-2.0)
 pkg_check_modules (GOBJECT REQUIRED gobject-2.0)
+pkg_check_modules (GTHREAD REQUIRED gthread-2.0)
 pkg_check_modules (GEE REQUIRED gee-1.0)
 pkg_check_modules (GTK gtk+-2.0)
 pkg_check_modules (VTE vte)
@@ -20,6 +21,7 @@ pkg_check_modules (VTE vte)
 set (CFLAGS
   ${GLIB_CFLAGS}
   ${GOBJECT_CFLAGS}
+  ${GTHREAD_CFLAGS}
   ${GEE_CFLAGS}
   ${GTK_CFLAGS}
   ${VTE_CFLAGS}
@@ -29,6 +31,7 @@ add_definitions (${CFLAGS} "-O0 -g3")
 set (LIBS
   ${GLIB_LIBRARIES}
   ${GOBJECT_LIBRARIES}
+  ${GTHREAD_LIBRARIES}
   ${GEE_LIBRARIES}
   ${GTK_LIBRARIES}
   ${VTE_LIBRARIES}
